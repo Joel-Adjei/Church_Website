@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useSermons, useList } from "@/services/queries";
+import { useSermons, useSeries } from "@/services/queries";
 import { format } from "date-fns";
 import { SectionHeading } from "@/components/SectionHeading";
 import heroImg from "@/assets/sermon_bg.jpg";
@@ -17,7 +17,7 @@ import { youtubeThumbnail } from "@/lib/utils";
 
 export default function SermonsIndex() {
   const { data: sermons = [], isLoading } = useSermons();
-  const { data: series = [] } = useList("series");
+  const { data: series = [] } = useSeries();
   const [q, setQ] = useState("");
   const [preacher, setPreacher] = useState<string>("all");
 

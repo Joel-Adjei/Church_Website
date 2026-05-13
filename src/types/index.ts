@@ -19,29 +19,32 @@ export type Sermon = {
 
 export type SermonSeries = {
   id: ID;
-  slug: string;
   title: string;
   description: string;
+  image: string;
+  thoughts: ID[];
+  available_sermons: string;
 };
 
 export type ChurchEvent = {
   id: ID;
-  slug: string;
-  title: string;
+  name: string;
   description: string;
-  startAt: string;
-  endAt: string;
+  flyer: string;
   location: string;
-  bannerImageUrl: string;
+  date: string;
+  end_date: string;
+  days: number;
+  start_time: string;
+  end_time: string;
+  created_at: string;
 };
 
 export type Announcement = {
   id: ID;
-  slug: string;
   title: string;
-  body: string;
-  imageUrl?: string;
-  publishAt: string;
+  content: string;
+  date: string;
 };
 
 export type GalleryProgram = {

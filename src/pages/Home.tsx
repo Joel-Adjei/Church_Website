@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { SectionHeading } from "@/components/SectionHeading";
 import { Dialog, DialogContent, DialogTitle, DialogHeader } from "@/components/ui/dialog";
 import { settings } from "@/utils/mockData";
-import { useList, useSermons } from "@/services/queries";
+import { useEvents, useSermons, useSeries, useAnnouncements } from "@/services/queries";
 import { format } from "date-fns";
 
 const STORY_VIDEO_ID = "ScMzIvxBSi4";
@@ -26,9 +26,9 @@ const testimonials = [
 
 export default function Home() {
   const { data: sermons = [] } = useSermons();
-  const { data: events = [] } = useList("events");
-  const { data: announcements = [] } = useList("announcements");
-  const { data: series = [] } = useList("series");
+  const { data: events = [] } = useEvents();
+  const { data: announcements = [] } = useAnnouncements();
+  const { data: series = [] } = useSeries();
 
   const latest = sermons[0];
   const upcoming = events.slice(0, 3);
@@ -161,16 +161,18 @@ export default function Home() {
           </div>
           <div className="grid gap-6 md:grid-cols-3">
             {upcoming.map((e) => (
-              <Link key={e.id} to={`/events/${e.slug}`} className="group block overflow-hidden rounded-2xl bg-card border border-border shadow-card hover:shadow-elevated transition-shadow">
-                <div className="aspect-[4/3] overflow-hidden">
-                  <img src={e.bannerImageUrl} alt={e.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                </div>
+              <Link key={e.id} to={`/events/${e.id}`} className="group block overflow-hidden rounded-2xl bg-card border border-border shadow-card hover:shadow-elevated transition-shadow">
+                {e.flyer && (
+                  <div className="aspect-4/3 overflow-hidden">
+                    <img src={e.flyer} alt={e.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  </div>
+                )}
                 <div className="p-6">
                   <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-accent font-semibold">
                     <Calendar className="h-3.5 w-3.5" />
-                    {format(new Date(e.startAt), "MMM d · h:mm a")}
+                    {format(new Date(e.date), "MMM d")} · {e.start_time.slice(0, 5)}
                   </div>
-                  <h3 className="mt-3 font-display text-2xl text-ink leading-tight group-hover:text-primary transition-colors">{e.title}</h3>
+                  <h3 className="mt-3 font-display text-2xl text-ink leading-tight group-hover:text-primary transition-colors">{e.name}</h3>
                   <div className="mt-2 flex items-center gap-1.5 text-sm text-ink-muted"><MapPin className="h-3.5 w-3.5" /> {e.location}</div>
                 </div>
               </Link>
@@ -186,10 +188,10 @@ export default function Home() {
         </div>
         <div className="grid gap-8 md:grid-cols-3">
           {news.map((n) => (
-            <Link key={n.id} to={`/announcements/${n.slug}`} className="group block">
-              <div className="text-xs text-ink-muted mb-3">{format(new Date(n.publishAt), "MMMM d, yyyy")}</div>
+            <Link key={n.id} to={`/announcements/${n.id}`} className="group block">
+              <div className="text-xs text-ink-muted mb-3">{format(new Date(n.date), "MMMM d, yyyy")}</div>
               <h3 className="font-display text-2xl text-ink leading-snug group-hover:text-primary transition-colors">{n.title}</h3>
-              <p className="mt-3 text-ink-muted line-clamp-3">{n.body}</p>
+              <p className="mt-3 text-ink-muted line-clamp-3">{n.content}</p>
               <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-accent">Read more <ArrowRight className="h-3.5 w-3.5" /></span>
             </Link>
           ))}

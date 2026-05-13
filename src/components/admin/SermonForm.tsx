@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useCreateSermon, useUpdateSermon, useList } from "@/services/queries";
+import { useCreateSermon, useUpdateSermon, useSeries } from "@/services/queries";
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
 import type { Sermon } from "@/types";
@@ -25,7 +25,7 @@ export type SermonFormValues = z.infer<typeof schema>;
 
 export function SermonForm({ initial, mode }: { initial?: Sermon; mode: "new" | "edit" }) {
   const navigate = useNavigate();
-  const { data: series = [] } = useList("series");
+  const { data: series = [] } = useSeries();
   const create = useCreateSermon();
   const update = useUpdateSermon();
 

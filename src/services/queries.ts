@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, BASE_URL } from "./api";
-import type { Announcement, ChurchEvent, Devotion, GalleryProgram, Resource, Sermon, SermonSeries } from "@/types";
+import type { Announcement, ChurchEvent, Devotion, GalleryProgram, Giving, LiveStatus, PrayerRequest, Resource, Sermon, SermonSeries, Settings } from "@/types";
 
 type Paginated<T> = { count: number; next: string | null; previous: string | null; results: T[] };
 
@@ -42,6 +42,129 @@ export function useDeleteSermon() {
   return useMutation({
     mutationFn: (id: string) => api(`${BASE_URL}/sermons/${id}/update/`, { method: "DELETE", auth: true }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["sermons"] }),
+  });
+}
+
+export function useSeries() {
+  return useQuery({
+    queryKey: ["series"],
+    queryFn: () => api<Paginated<SermonSeries>>(`${BASE_URL}/series/`).then((r) => r.results),
+  });
+}
+
+export function useSeriesById(id: string | undefined) {
+  return useQuery({
+    queryKey: ["series", id],
+    queryFn: () => api<SermonSeries>(`${BASE_URL}/series/${id}/`),
+    enabled: !!id,
+  });
+}
+
+export function useCreateSeries() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (body: Pick<SermonSeries, "title" | "description" | "image">) =>
+      api<SermonSeries>(`${BASE_URL}/series/create/`, { method: "POST", body: JSON.stringify(body), auth: true }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["series"] }),
+  });
+}
+
+export function useUpdateSeries() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, ...body }: Pick<SermonSeries, "title" | "description" | "image"> & { id: string }) =>
+      api<SermonSeries>(`${BASE_URL}/series/${id}/update/`, { method: "PUT", body: JSON.stringify(body), auth: true }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["series"] }),
+  });
+}
+
+export function useEvents() {
+  return useQuery({
+    queryKey: ["events"],
+    queryFn: () => api<Paginated<ChurchEvent>>(`${BASE_URL}/events/`).then((r) => r.results),
+  });
+}
+
+export function useEventById(id: string | undefined) {
+  return useQuery({
+    queryKey: ["events", id],
+    queryFn: () => api<ChurchEvent>(`${BASE_URL}/events/${id}/`),
+    enabled: !!id,
+  });
+}
+
+export function useCreateEvent() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (body: Omit<ChurchEvent, "id" | "created_at">) =>
+      api<ChurchEvent>(`${BASE_URL}/events/create/`, { method: "POST", body: JSON.stringify(body), auth: true }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["events"] }),
+  });
+}
+
+export function useUpdateEvent() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, ...body }: Partial<Omit<ChurchEvent, "created_at">> & { id: string }) =>
+      api<ChurchEvent>(`${BASE_URL}/events/${id}/update/`, { method: "PUT", body: JSON.stringify(body), auth: true }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["events"] }),
+  });
+}
+
+export function useAnnouncements() {
+  return useQuery({
+    queryKey: ["announcements"],
+    queryFn: () => api<Paginated<Announcement>>(`${BASE_URL}/announcements/`).then((r) => r.results),
+  });
+}
+
+export function useAnnouncementById(id: string | undefined) {
+  return useQuery({
+    queryKey: ["announcements", id],
+    queryFn: () => api<Announcement>(`${BASE_URL}/announcements/${id}/`),
+    enabled: !!id,
+  });
+}
+
+export function useCreateAnnouncement() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (body: Pick<Announcement, "title" | "content">) =>
+      api<Announcement>(`${BASE_URL}/announcements/create/`, { method: "POST", body: JSON.stringify(body), auth: true }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["announcements"] }),
+  });
+}
+
+export function useUpdateAnnouncement() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, ...body }: Pick<Announcement, "title" | "content"> & { id: string }) =>
+      api<Announcement>(`${BASE_URL}/announcements/${id}/update/`, { method: "PUT", body: JSON.stringify(body), auth: true }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["announcements"] }),
+  });
+}
+
+export function useDeleteAnnouncement() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => api(`${BASE_URL}/announcements/${id}/update/`, { method: "DELETE", auth: true }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["announcements"] }),
+  });
+}
+
+export function useDeleteEvent() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => api(`${BASE_URL}/events/${id}/update/`, { method: "DELETE", auth: true }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["events"] }),
+  });
+}
+
+export function useDeleteSeries() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => api(`${BASE_URL}/series/${id}/update/`, { method: "DELETE", auth: true }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["series"] }),
   });
 }
 
@@ -95,8 +218,6 @@ export function useRemove<K extends keyof Resources>(key: K) {
     onSuccess: () => qc.invalidateQueries({ queryKey: [key] }),
   });
 }
-
-import type { Giving, LiveStatus, PrayerRequest, Settings } from "@/types";
 
 export function useSettings() {
   return useQuery({ queryKey: ["settings"], queryFn: () => api<Settings>("/api/settings") });
