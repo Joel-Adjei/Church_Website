@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useList, useRemove } from "@/services/queries";
+import { useSermons, useDeleteSermon, useList } from "@/services/queries";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { DeleteConfirm } from "@/components/admin/DeleteConfirm";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -9,9 +9,9 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 
 export default function Sermons() {
-  const { data: sermons = [], isLoading } = useList("sermons");
+  const { data: sermons = [], isLoading } = useSermons();
   const { data: series = [] } = useList("series");
-  const remove = useRemove("sermons");
+  const remove = useDeleteSermon();
   const seriesTitle = (id?: string | null) => series.find((s) => s.id === id)?.title ?? "—";
 
   return (
@@ -22,7 +22,7 @@ export default function Sermons() {
           <TableHeader>
             <TableRow>
               <TableHead>Title</TableHead>
-              <TableHead>Speaker</TableHead>
+              <TableHead>Preacher</TableHead>
               <TableHead>Series</TableHead>
               <TableHead>Date</TableHead>
               <TableHead className="text-right">Actions</TableHead>
@@ -36,9 +36,9 @@ export default function Sermons() {
             {sermons.map((s) => (
               <TableRow key={s.id}>
                 <TableCell className="font-medium">{s.title}</TableCell>
-                <TableCell>{s.speaker}</TableCell>
-                <TableCell className="text-ink-muted">{seriesTitle(s.seriesId)}</TableCell>
-                <TableCell className="text-ink-muted">{format(new Date(s.sermonDate), "MMM d, yyyy")}</TableCell>
+                <TableCell>{s.preacher}</TableCell>
+                <TableCell className="text-ink-muted">{seriesTitle(s.series)}</TableCell>
+                <TableCell className="text-ink-muted">{format(new Date(s.date), "MMM d, yyyy")}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-1">
                     <Button asChild variant="ghost" size="sm" className="gap-1.5">

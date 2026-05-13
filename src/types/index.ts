@@ -2,14 +2,19 @@ export type ID = string;
 
 export type Sermon = {
   id: ID;
-  slug: string;
   title: string;
   description: string;
-  sermonDate: string;
-  speaker: string;
-  seriesId?: ID | null;
-  youtubeId: string;
-  thumbnailUrl: string;
+  date: string;
+  preacher: string;
+  series: ID | null;
+  video_link: string;
+  podcast_link: string;
+  likes: number;
+  comments: string;
+  next_sermon: ID | null;
+  previous_sermon: ID | null;
+  resource: ID | null;
+  resource_details: unknown | null;
 };
 
 export type SermonSeries = {
@@ -96,8 +101,68 @@ export type Devotion = {
   createdAt: string;
 };
 
-export type GivingCategory = "tithe" | "offering" | "missions" | "building-fund" | "benevolence" | "other";
-export type GivingFrequency = "one-time" | "weekly" | "monthly";
+export type ResourceCategory =
+  | "books"
+  | "clothing"
+  | "food"
+  | "equipment"
+  | "digital"
+  | "stationery"
+  | "other";
+export type ResourceCondition = "new" | "like-new" | "good" | "fair";
+export type ResourceAvailability = "available" | "limited" | "claimed";
+
+export type Resource = {
+  id: ID;
+  slug: string;
+  title: string;
+  description: string;
+  category: ResourceCategory;
+  condition: ResourceCondition;
+  availability: ResourceAvailability;
+  imageUrl?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  pickupLocation?: string;
+  quantity?: number;
+  featured: boolean;
+  createdAt: string;
+};
+
+export type PrayerCategory =
+  | "healing"
+  | "family"
+  | "finances"
+  | "guidance"
+  | "salvation"
+  | "relationships"
+  | "thanksgiving"
+  | "other";
+export type PrayerPrivacy = "public" | "private" | "anonymous";
+export type PrayerStatus = "new" | "praying" | "answered";
+
+export type PrayerRequest = {
+  id: ID;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone?: string;
+  category: PrayerCategory;
+  subject: string;
+  request: string;
+  privacy: PrayerPrivacy;
+  status: PrayerStatus;
+  adminNote?: string;
+  createdAt: string;
+};
+
+export type GivingCategory =
+  | "tithe"
+  | "offering"
+  | "missions"
+  | "building-fund"
+  | "benevolence"
+  | "other";
 export type GivingStatus = "completed" | "pending";
 
 export type Giving = {
@@ -109,7 +174,6 @@ export type Giving = {
   amount: number;
   currency: string;
   category: GivingCategory;
-  frequency: GivingFrequency;
   message?: string;
   anonymous: boolean;
   status: GivingStatus;

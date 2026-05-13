@@ -13,7 +13,7 @@ function unauth() {
   return HttpResponse.json({ error: "Unauthorized" }, { status: 401 });
 }
 
-type Key = keyof Pick<Store, "sermons" | "series" | "events" | "announcements" | "gallery" | "devotions" | "givings">;
+type Key = keyof Pick<Store, "sermons" | "series" | "events" | "announcements" | "gallery" | "devotions" | "givings" | "prayerRequests" | "resources">;
 
 function listHandler(key: Key) {
   return http.get(`/api/${key}`, () => {
@@ -118,6 +118,42 @@ export const handlers = [
   ...crud("announcements"),
   ...crud("gallery"),
   ...crud("devotions"),
+  ...crud("resources"),
+
+  // Prayer Requests — public POST (no auth), admin GET (auth), admin PUT for status, admin DELETE
+  http.get("/api/prayer-requests", ({ request }) => {
+    if (!auth(request)) return unauth();
+    const s = loadStore();
+    const sorted = [...s.prayerRequests].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    return HttpResponse.json(sorted);
+  }),
+  http.post("/api/prayer-requests", async ({ request }) => {
+    const body = (await request.json()) as Record<string, unknown>;
+    const s = loadStore();
+    const item = { id: newId(), status: "new", createdAt: new Date().toISOString(), ...body };
+    s.prayerRequests.unshift(item as never);
+    saveStore(s);
+    return HttpResponse.json(item, { status: 201 });
+  }),
+  http.put("/api/prayer-requests/:id", async ({ request, params }) => {
+    if (!auth(request)) return unauth();
+    const body = (await request.json()) as Record<string, unknown>;
+    const s = loadStore();
+    const idx = s.prayerRequests.findIndex((p) => p.id === params.id);
+    if (idx === -1) return HttpResponse.json({ error: "Not found" }, { status: 404 });
+    s.prayerRequests[idx] = { ...s.prayerRequests[idx], ...body, id: s.prayerRequests[idx].id } as never;
+    saveStore(s);
+    return HttpResponse.json(s.prayerRequests[idx]);
+  }),
+  http.delete("/api/prayer-requests/:id", ({ request, params }) => {
+    if (!auth(request)) return unauth();
+    const s = loadStore();
+    const idx = s.prayerRequests.findIndex((p) => p.id === params.id);
+    if (idx === -1) return HttpResponse.json({ error: "Not found" }, { status: 404 });
+    s.prayerRequests.splice(idx, 1);
+    saveStore(s);
+    return new HttpResponse(null, { status: 204 });
+  }),
 
   // Givings — public POST (no auth), admin GET (auth), admin DELETE
   http.get("/api/givings", ({ request }) => {

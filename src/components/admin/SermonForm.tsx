@@ -7,40 +7,53 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useCreate, useList, useUpdate } from "@/services/queries";
-import { slugify } from "@/store/store";
+import { useCreateSermon, useUpdateSermon, useList } from "@/services/queries";
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
 import type { Sermon } from "@/types";
-import { TitleSlugFields } from "./TitleSlugFields";
 
 const schema = z.object({
   title: z.string().trim().min(2, "Title is required").max(200),
-  slug: z.string().trim().min(2, "Slug is required").max(200).regex(/^[a-z0-9-]+$/, "Lowercase, numbers, hyphens only"),
-  speaker: z.string().trim().min(2, "Speaker is required").max(120),
+  preacher: z.string().trim().min(2, "Preacher is required").max(120),
   description: z.string().trim().min(10, "Description is too short").max(4000),
-  sermonDate: z.string().min(1, "Date is required"),
-  seriesId: z.string().optional(),
-  youtubeId: z.string().trim().min(3, "YouTube ID required").max(40),
-  thumbnailUrl: z.string().trim().url("Must be a valid URL"),
+  date: z.string().min(1, "Date is required"),
+  series: z.string().optional(),
+  video_link: z.string().trim().url("Must be a valid YouTube URL").or(z.literal("")),
+  podcast_link: z.string().trim().url("Must be a valid URL").or(z.literal("")).optional(),
 });
 export type SermonFormValues = z.infer<typeof schema>;
 
 export function SermonForm({ initial, mode }: { initial?: Sermon; mode: "new" | "edit" }) {
   const navigate = useNavigate();
   const { data: series = [] } = useList("series");
-  const create = useCreate("sermons");
-  const update = useUpdate("sermons");
+  const create = useCreateSermon();
+  const update = useUpdateSermon();
 
   const form = useForm<SermonFormValues>({
     resolver: zodResolver(schema),
     defaultValues: initial
-      ? { ...initial, seriesId: initial.seriesId ?? "none" }
-      : { title: "", slug: "", speaker: "", description: "", sermonDate: new Date().toISOString().slice(0, 10), seriesId: "none", youtubeId: "", thumbnailUrl: "" },
+      ? {
+          title: initial.title,
+          preacher: initial.preacher,
+          description: initial.description,
+          date: initial.date.slice(0, 10),
+          series: initial.series ?? "none",
+          video_link: initial.video_link,
+          podcast_link: initial.podcast_link ?? "",
+        }
+      : {
+          title: "",
+          preacher: "",
+          description: "",
+          date: new Date().toISOString().slice(0, 10),
+          series: "none",
+          video_link: "",
+          podcast_link: "",
+        },
   });
 
   async function onSubmit(values: SermonFormValues) {
-    const payload = { ...values, seriesId: values.seriesId === "none" ? null : values.seriesId };
+    const payload = { ...values, series: values.series === "none" ? null : (values.series ?? null), podcast_link: values.podcast_link ?? "" };
     try {
       if (mode === "new") {
         await create.mutateAsync(payload);
@@ -62,40 +75,42 @@ export function SermonForm({ initial, mode }: { initial?: Sermon; mode: "new" | 
       </Button>
       <h1 className="font-display text-3xl text-ink mb-8">{mode === "new" ? "New sermon" : "Edit sermon"}</h1>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 max-w-2xl bg-background border border-border rounded-2xl p-6" noValidate>
-        <TitleSlugFields form={form} mode={mode} titleField="title" slugField="slug" />
+        <div className="space-y-2">
+          <Label htmlFor="title">Title</Label>
+          <Input id="title" {...form.register("title")} />
+          {form.formState.errors.title && <p className="text-xs text-destructive">{form.formState.errors.title.message}</p>}
+        </div>
         <div className="grid sm:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="speaker">Speaker</Label>
-            <Input id="speaker" {...form.register("speaker")} />
-            {form.formState.errors.speaker && <p className="text-xs text-destructive">{form.formState.errors.speaker.message}</p>}
+            <Label htmlFor="preacher">Preacher</Label>
+            <Input id="preacher" {...form.register("preacher")} />
+            {form.formState.errors.preacher && <p className="text-xs text-destructive">{form.formState.errors.preacher.message}</p>}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="sermonDate">Date</Label>
-            <Input id="sermonDate" type="date" {...form.register("sermonDate")} />
-            {form.formState.errors.sermonDate && <p className="text-xs text-destructive">{form.formState.errors.sermonDate.message}</p>}
+            <Label htmlFor="date">Date</Label>
+            <Input id="date" type="date" {...form.register("date")} />
+            {form.formState.errors.date && <p className="text-xs text-destructive">{form.formState.errors.date.message}</p>}
           </div>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="seriesId">Series</Label>
-          <Select value={form.watch("seriesId")} onValueChange={(v) => form.setValue("seriesId", v)}>
-            <SelectTrigger id="seriesId"><SelectValue /></SelectTrigger>
+          <Label htmlFor="series">Series</Label>
+          <Select value={form.watch("series")} onValueChange={(v) => form.setValue("series", v)}>
+            <SelectTrigger id="series"><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value="none">No series</SelectItem>
               {series.map((s) => <SelectItem key={s.id} value={s.id}>{s.title}</SelectItem>)}
             </SelectContent>
           </Select>
         </div>
-        <div className="grid sm:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="youtubeId">YouTube ID</Label>
-            <Input id="youtubeId" placeholder="e.g. dQw4w9WgXcQ" {...form.register("youtubeId")} />
-            {form.formState.errors.youtubeId && <p className="text-xs text-destructive">{form.formState.errors.youtubeId.message}</p>}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="thumbnailUrl">Thumbnail URL</Label>
-            <Input id="thumbnailUrl" type="url" {...form.register("thumbnailUrl")} />
-            {form.formState.errors.thumbnailUrl && <p className="text-xs text-destructive">{form.formState.errors.thumbnailUrl.message}</p>}
-          </div>
+        <div className="space-y-2">
+          <Label htmlFor="video_link">Video Link</Label>
+          <Input id="video_link" type="url" placeholder="https://www.youtube.com/watch?v=..." {...form.register("video_link")} />
+          {form.formState.errors.video_link && <p className="text-xs text-destructive">{form.formState.errors.video_link.message}</p>}
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="podcast_link">Podcast Link <span className="text-ink-muted font-normal">(optional)</span></Label>
+          <Input id="podcast_link" type="url" placeholder="https://..." {...form.register("podcast_link")} />
+          {form.formState.errors.podcast_link && <p className="text-xs text-destructive">{form.formState.errors.podcast_link.message}</p>}
         </div>
         <div className="space-y-2">
           <Label htmlFor="description">Description</Label>

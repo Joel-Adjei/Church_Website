@@ -4,7 +4,22 @@ import { useAuth } from "@/store/auth";
 import { getToken } from "@/services/api";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from "@/components/ui/sheet";
-import { LogOut, LayoutDashboard, Mic, BookMarked, CalendarDays, Megaphone, Images, Settings as SettingsIcon, Radio, Menu, BookOpen, HandCoins } from "lucide-react";
+import {
+  LogOut,
+  LayoutDashboard,
+  Mic,
+  BookMarked,
+  CalendarDays,
+  Megaphone,
+  Images,
+  Settings as SettingsIcon,
+  Radio,
+  Menu,
+  BookOpen,
+  HandCoins,
+  HeartHandshake,
+  Package,
+} from "lucide-react";
 import { cn } from "@/utils/utils";
 
 const navItems = [
@@ -16,6 +31,8 @@ const navItems = [
   { to: "/admin/announcements", label: "Announcements", icon: Megaphone },
   { to: "/admin/gallery", label: "Gallery", icon: Images },
   { to: "/admin/givings", label: "Givings", icon: HandCoins },
+  { to: "/admin/prayer-requests", label: "Prayer Requests", icon: HeartHandshake },
+  { to: "/admin/resources", label: "Resources", icon: Package },
   { to: "/admin/live", label: "Live stream", icon: Radio },
   { to: "/admin/settings", label: "Settings", icon: SettingsIcon },
 ];
@@ -33,7 +50,9 @@ function NavList({ pathname, onNavigate }: { pathname: string; onNavigate?: () =
             onClick={onNavigate}
             className={cn(
               "flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors",
-              active ? "bg-primary text-primary-foreground" : "text-ink-muted hover:bg-secondary hover:text-ink",
+              active
+                ? "bg-primary text-primary-foreground"
+                : "text-ink-muted hover:bg-secondary hover:text-ink",
             )}
           >
             <Icon className="h-4 w-4" />
@@ -51,7 +70,9 @@ export default function AdminLayout() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
-  useEffect(() => { setOpen(false); }, [pathname]);
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   if (!getToken() && pathname !== "/admin/login") {
     return <Navigate to={`/admin/login?redirect=${encodeURIComponent(pathname)}`} replace />;
@@ -63,7 +84,9 @@ export default function AdminLayout() {
     <>
       <div className="h-16 border-b border-border flex items-center px-6">
         <Link to="/" className="flex items-center gap-2" onClick={onNav}>
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-display">G</div>
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-display">
+            G
+          </div>
           <span className="font-display text-lg">Admin</span>
         </Link>
       </div>
@@ -74,7 +97,10 @@ export default function AdminLayout() {
           variant="ghost"
           size="sm"
           className="w-full justify-start gap-2"
-          onClick={() => { logout(); navigate("/admin/login"); }}
+          onClick={() => {
+            logout();
+            navigate("/admin/login");
+          }}
         >
           <LogOut className="h-4 w-4" /> Sign out
         </Button>
@@ -83,8 +109,8 @@ export default function AdminLayout() {
   );
 
   return (
-    <div className="min-h-screen lg:flex bg-surface-elevated">
-      <aside className="hidden lg:flex w-64 shrink-0 border-r border-border bg-background flex-col">
+    <div className="min-h-screen relative lg:flex bg-surface-elevated">
+      <aside className="hidden h-screen fixed lg:flex w-64 shrink-0 border-r border-border bg-background flex-col">
         {sidebarInner()}
       </aside>
 
@@ -96,18 +122,24 @@ export default function AdminLayout() {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="p-0 w-72 flex flex-col">
-            <SheetHeader className="sr-only"><SheetTitle>Admin navigation</SheetTitle></SheetHeader>
+            <SheetHeader className="sr-only">
+              <SheetTitle>Admin navigation</SheetTitle>
+            </SheetHeader>
             {sidebarInner(() => setOpen(false))}
           </SheetContent>
         </Sheet>
         <Link to="/" className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground font-display text-sm">G</div>
+          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground font-display text-sm">
+            G
+          </div>
           <span className="font-display">Admin</span>
         </Link>
       </header>
 
-      <div className="flex-1 min-w-0">
-        <main className="p-4 sm:p-6 lg:p-8 max-w-6xl"><Outlet /></main>
+      <div className="flex-1 lg:pl-64  min-w-0">
+        <main className="p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto">
+          <Outlet />
+        </main>
       </div>
     </div>
   );

@@ -5,6 +5,8 @@ import AdminLayout from "@/layouts/AdminLayout";
 import Home from "@/pages/Home";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
+import PrayerRequest from "@/pages/PrayerRequest";
+import ResourcesIndex from "@/pages/resources/Index";
 import Give from "@/pages/Give";
 import Live from "@/pages/Live";
 import NotFound from "@/pages/NotFound";
@@ -41,6 +43,10 @@ import AdminDevotions from "@/pages/admin/Devotions";
 import AdminDevotionNew from "@/pages/admin/DevotionNew";
 import AdminDevotionEdit from "@/pages/admin/DevotionEdit";
 import AdminGivings from "@/pages/admin/Givings";
+import AdminPrayerRequests from "@/pages/admin/PrayerRequests";
+import AdminResources from "@/pages/admin/Resources";
+import AdminResourceNew from "@/pages/admin/ResourceNew";
+import AdminResourceEdit from "@/pages/admin/ResourceEdit";
 import AdminLive from "@/pages/admin/LiveStream";
 import AdminSettings from "@/pages/admin/Settings";
 
@@ -54,7 +60,7 @@ export const router = createBrowserRouter([
       { path: "contact", element: <Contact /> },
       { path: "live", element: <Live /> },
       { path: "sermons", element: <SermonsIndex /> },
-      { path: "sermons/:slug", element: <SermonDetail /> },
+      { path: "sermons/:id", element: <SermonDetail /> },
       { path: "events", element: <EventsIndex /> },
       { path: "events/:slug", element: <EventDetail /> },
       { path: "announcements", element: <AnnouncementsIndex /> },
@@ -64,6 +70,8 @@ export const router = createBrowserRouter([
       { path: "devotions", element: <DevotionsIndex /> },
       { path: "devotions/:slug", element: <DevotionDetail /> },
       { path: "give", element: <Give /> },
+      { path: "prayer-request", element: <PrayerRequest /> },
+      { path: "resources", element: <ResourcesIndex /> },
     ],
   },
   {
@@ -91,6 +99,10 @@ export const router = createBrowserRouter([
       { path: "devotions/new", element: <AdminDevotionNew /> },
       { path: "devotions/:id", element: <AdminDevotionEdit /> },
       { path: "givings", element: <AdminGivings /> },
+      { path: "prayer-requests", element: <AdminPrayerRequests /> },
+      { path: "resources", element: <AdminResources /> },
+      { path: "resources/new", element: <AdminResourceNew /> },
+      { path: "resources/:id", element: <AdminResourceEdit /> },
       { path: "live", element: <AdminLive /> },
       { path: "settings", element: <AdminSettings /> },
     ],
