@@ -1,3 +1,5 @@
+export const BASE_URL = "https://elevation-church-1.onrender.com/api";
+
 const TOKEN_KEY = "church-admin-token";
 
 export function getToken(): string | null {

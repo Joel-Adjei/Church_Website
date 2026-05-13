@@ -9,23 +9,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useList } from "@/services/queries";
+import { useSermons, useList } from "@/services/queries";
 import { format } from "date-fns";
 import { SectionHeading } from "@/components/SectionHeading";
 import heroImg from "@/assets/sermon_bg.jpg";
+import { youtubeThumbnail } from "@/lib/utils";
 
 export default function SermonsIndex() {
-  const { data: sermons = [], isLoading } = useList("sermons");
+  const { data: sermons = [], isLoading } = useSermons();
   const { data: series = [] } = useList("series");
   const [q, setQ] = useState("");
-  const [speaker, setSpeaker] = useState<string>("all");
+  const [preacher, setPreacher] = useState<string>("all");
 
-  const speakers = useMemo(() => Array.from(new Set(sermons.map((s) => s.speaker))), [sermons]);
+  const preachers = useMemo(() => Array.from(new Set(sermons.map((s) => s.preacher))), [sermons]);
+
   const seriesTitle = (id?: string | null) => series.find((x) => x.id === id)?.title;
 
   const filtered = sermons.filter((s) => {
-    if (speaker !== "all" && s.speaker !== speaker) return false;
-    if (q && !`${s.title} ${s.description} ${s.speaker}`.toLowerCase().includes(q.toLowerCase()))
+    if (preacher !== "all" && s.preacher !== preacher) return false;
+    if (q && !`${s.title} ${s.description} ${s.preacher}`.toLowerCase().includes(q.toLowerCase()))
       return false;
     return true;
   });
@@ -53,20 +55,20 @@ export default function SermonsIndex() {
             <Input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="Search sermons, speakers, topics…"
+              placeholder="Search sermons, preachers, topics…"
               className="pl-10 h-11"
               aria-label="Search sermons"
             />
           </div>
-          <Select value={speaker} onValueChange={setSpeaker}>
+          <Select value={preacher} onValueChange={setPreacher}>
             <SelectTrigger className="md:w-64 h-11">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All speakers</SelectItem>
-              {speakers.map((s) => (
-                <SelectItem key={s} value={s}>
-                  {s}
+              <SelectItem value="all">All preachers</SelectItem>
+              {preachers.map((p) => (
+                <SelectItem key={p} value={p}>
+                  {p}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -80,18 +82,18 @@ export default function SermonsIndex() {
         ) : (
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((s) => {
-              const st = seriesTitle(s.seriesId);
+              const st = seriesTitle(s.series);
               return (
-                <Link key={s.id} to={`/sermons/${s.slug}`} className="group block">
-                  <div className="relative overflow-hidden rounded-2xl aspect-[16/10] bg-muted shadow-card">
+                <Link key={s.id} to={`/sermons/${s.id}`} className="group block">
+                  <div className="relative overflow-hidden rounded-2xl aspect-[16/10] bg-muted shadow-card flex items-center justify-center">
                     <img
-                      src={s.thumbnailUrl}
+                      src={youtubeThumbnail(s.video_link)}
                       alt={s.title}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-primary/10 to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-t from-primary/70 via-primary/10 to-transparent" />
                     <PlayCircle
-                      className="absolute bottom-4 right-4 h-10 w-10 text-primary-foreground/95"
+                      className="relative h-14 w-14 text-primary-foreground/80"
                       strokeWidth={1.3}
                     />
                     {st && (
@@ -105,10 +107,10 @@ export default function SermonsIndex() {
                   </h3>
                   <div className="mt-2 flex items-center gap-3 text-sm text-ink-muted">
                     <span className="inline-flex items-center gap-1.5">
-                      <User className="h-3.5 w-3.5" /> {s.speaker}
+                      <User className="h-3.5 w-3.5" /> {s.preacher}
                     </span>
                     <span>·</span>
-                    <span>{format(new Date(s.sermonDate), "MMM d, yyyy")}</span>
+                    <span>{format(new Date(s.date), "MMM d, yyyy")}</span>
                   </div>
                 </Link>
               );

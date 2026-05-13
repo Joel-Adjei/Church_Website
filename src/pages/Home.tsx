@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { SectionHeading } from "@/components/SectionHeading";
 import { Dialog, DialogContent, DialogTitle, DialogHeader } from "@/components/ui/dialog";
 import { settings } from "@/utils/mockData";
-import { useList } from "@/services/queries";
+import { useList, useSermons } from "@/services/queries";
 import { format } from "date-fns";
 
 const STORY_VIDEO_ID = "ScMzIvxBSi4";
@@ -25,7 +25,7 @@ const testimonials = [
 ];
 
 export default function Home() {
-  const { data: sermons = [] } = useList("sermons");
+  const { data: sermons = [] } = useSermons();
   const { data: events = [] } = useList("events");
   const { data: announcements = [] } = useList("announcements");
   const { data: series = [] } = useList("series");
@@ -74,19 +74,18 @@ export default function Home() {
         <section className="mx-auto max-w-7xl px-6 lg:px-10 py-20 md:py-28">
           <SectionHeading eyebrow="Latest sermon" title="This week from our pulpit" />
           <div className="mt-12 grid gap-10 lg:grid-cols-2 lg:gap-16 items-center">
-            <Link to={`/sermons/${latest.slug}`} className="group relative block overflow-hidden rounded-2xl shadow-card">
-              <img src={latest.thumbnailUrl} alt={latest.title} className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            <Link to={`/sermons/${latest.id}`} className="group relative block overflow-hidden rounded-2xl shadow-card bg-muted aspect-[16/10]">
               <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <PlayCircle className="h-20 w-20 text-primary-foreground/95 transition-transform group-hover:scale-110" strokeWidth={1.2} />
               </div>
             </Link>
             <div>
-              {seriesTitle(latest.seriesId) && <div className="text-sm text-accent font-semibold uppercase tracking-widest mb-3">{seriesTitle(latest.seriesId)}</div>}
+              {seriesTitle(latest.series) && <div className="text-sm text-accent font-semibold uppercase tracking-widest mb-3">{seriesTitle(latest.series)}</div>}
               <h3 className="font-display text-4xl md:text-5xl text-ink leading-[1.05]">{latest.title}</h3>
-              <p className="mt-2 text-ink-muted">{latest.speaker} · {format(new Date(latest.sermonDate), "MMMM d, yyyy")}</p>
+              <p className="mt-2 text-ink-muted">{latest.preacher} · {format(new Date(latest.date), "MMMM d, yyyy")}</p>
               <p className="mt-6 text-lg text-ink-muted leading-relaxed">{latest.description}</p>
-              <Button asChild className="mt-8 gap-2"><Link to={`/sermons/${latest.slug}`}>Watch now <ArrowRight className="h-4 w-4" /></Link></Button>
+              <Button asChild className="mt-8 gap-2"><Link to={`/sermons/${latest.id}`}>Watch now <ArrowRight className="h-4 w-4" /></Link></Button>
             </div>
           </div>
         </section>

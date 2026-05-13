@@ -2,7 +2,14 @@ import { useState } from "react";
 import { useGivings, useDeleteGiving } from "@/services/queries";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { DeleteConfirm } from "@/components/admin/DeleteConfirm";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { format, parseISO } from "date-fns";
@@ -11,7 +18,10 @@ import { Search, TrendingUp, Heart, Globe, Building2, Users, Gift, HandCoins } f
 import type { GivingCategory } from "@/types";
 import { cn } from "@/utils/utils";
 
-const CATEGORY_META: Record<GivingCategory, { label: string; icon: React.ElementType; color: string }> = {
+const CATEGORY_META: Record<
+  GivingCategory,
+  { label: string; icon: React.ElementType; color: string }
+> = {
   tithe: { label: "Tithe", icon: Heart, color: "text-rose-500" },
   offering: { label: "General Offering", icon: HandCoins, color: "text-amber-500" },
   missions: { label: "Missions", icon: Globe, color: "text-blue-500" },
@@ -32,7 +42,9 @@ export default function Givings() {
     return name.includes(q) || g.email.toLowerCase().includes(q) || g.category.includes(q);
   });
 
-  const totalCompleted = givings.filter((g) => g.status === "completed").reduce((sum, g) => sum + g.amount, 0);
+  const totalCompleted = givings
+    .filter((g) => g.status === "completed")
+    .reduce((sum, g) => sum + g.amount, 0);
   const totalCount = givings.filter((g) => g.status === "completed").length;
 
   const categoryTotals = givings
@@ -77,7 +89,9 @@ export default function Givings() {
           </div>
           <div>
             <div className="text-2xl font-display text-ink capitalize">
-              {topCategory ? CATEGORY_META[topCategory[0] as GivingCategory]?.label ?? topCategory[0] : "—"}
+              {topCategory
+                ? (CATEGORY_META[topCategory[0] as GivingCategory]?.label ?? topCategory[0])
+                : "—"}
             </div>
             <div className="text-xs text-ink-muted mt-0.5">Top category</div>
           </div>
@@ -103,7 +117,6 @@ export default function Givings() {
               <TableHead>Donor</TableHead>
               <TableHead>Amount</TableHead>
               <TableHead>Category</TableHead>
-              <TableHead>Frequency</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Date</TableHead>
               <TableHead className="text-right">Actions</TableHead>
@@ -112,7 +125,9 @@ export default function Givings() {
           <TableBody>
             {isLoading && (
               <TableRow>
-                <TableCell colSpan={7} className="text-center py-12 text-ink-muted">Loading…</TableCell>
+                <TableCell colSpan={7} className="text-center py-12 text-ink-muted">
+                  Loading…
+                </TableCell>
               </TableRow>
             )}
             {!isLoading && filtered.length === 0 && (
@@ -132,7 +147,9 @@ export default function Givings() {
                     <div className="font-medium text-ink">{donorName}</div>
                     {!g.anonymous && <div className="text-xs text-ink-muted">{g.email}</div>}
                     {g.message && (
-                      <div className="text-xs text-ink-muted mt-0.5 italic max-w-[200px] truncate">"{g.message}"</div>
+                      <div className="text-xs text-ink-muted mt-0.5 italic max-w-[200px] truncate">
+                        "{g.message}"
+                      </div>
                     )}
                   </TableCell>
                   <TableCell className="font-semibold text-ink">
@@ -144,11 +161,12 @@ export default function Givings() {
                       <span className="text-sm">{meta.label}</span>
                     </div>
                   </TableCell>
-                  <TableCell className="text-ink-muted capitalize text-sm">
-                    {g.frequency.replace("-", " ")}
-                  </TableCell>
+
                   <TableCell>
-                    <Badge variant={g.status === "completed" ? "default" : "secondary"} className="capitalize">
+                    <Badge
+                      variant={g.status === "completed" ? "default" : "secondary"}
+                      className="capitalize"
+                    >
                       {g.status}
                     </Badge>
                   </TableCell>

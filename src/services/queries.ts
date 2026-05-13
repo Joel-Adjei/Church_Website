@@ -1,6 +1,49 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { api } from "./api";
-import type { Announcement, ChurchEvent, Devotion, GalleryProgram, Sermon, SermonSeries } from "@/types";
+import { api, BASE_URL } from "./api";
+import type { Announcement, ChurchEvent, Devotion, GalleryProgram, Resource, Sermon, SermonSeries } from "@/types";
+
+type Paginated<T> = { count: number; next: string | null; previous: string | null; results: T[] };
+
+export function useSermons() {
+  return useQuery({
+    queryKey: ["sermons"],
+    queryFn: () => api<Paginated<Sermon>>(`${BASE_URL}/sermons/`).then((r) => r.results),
+  });
+}
+
+export function useSermonById(id: string | undefined) {
+  return useQuery({
+    queryKey: ["sermons", id],
+    queryFn: () => api<Sermon>(`${BASE_URL}/sermons/${id}/`),
+    enabled: !!id,
+  });
+}
+
+export function useCreateSermon() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (body: Omit<Sermon, "id" | "likes" | "comments" | "next_sermon" | "previous_sermon" | "resource" | "resource_details">) =>
+      api<Sermon>(`${BASE_URL}/sermons/create/`, { method: "POST", body: JSON.stringify(body), auth: true }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["sermons"] }),
+  });
+}
+
+export function useUpdateSermon() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, ...body }: Partial<Omit<Sermon, "likes" | "comments" | "next_sermon" | "previous_sermon" | "resource" | "resource_details">> & { id: string }) =>
+      api<Sermon>(`${BASE_URL}/sermons/${id}/update/`, { method: "PUT", body: JSON.stringify(body), auth: true }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["sermons"] }),
+  });
+}
+
+export function useDeleteSermon() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => api(`${BASE_URL}/sermons/${id}/update/`, { method: "DELETE", auth: true }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["sermons"] }),
+  });
+}
 
 type Resources = {
   sermons: Sermon;
@@ -9,6 +52,7 @@ type Resources = {
   announcements: Announcement;
   gallery: GalleryProgram;
   devotions: Devotion;
+  resources: Resource;
 };
 
 export function useList<K extends keyof Resources>(key: K) {
@@ -52,7 +96,7 @@ export function useRemove<K extends keyof Resources>(key: K) {
   });
 }
 
-import type { Giving, LiveStatus, Settings } from "@/types";
+import type { Giving, LiveStatus, PrayerRequest, Settings } from "@/types";
 
 export function useSettings() {
   return useQuery({ queryKey: ["settings"], queryFn: () => api<Settings>("/api/settings") });
@@ -82,6 +126,33 @@ export function useDeleteGiving() {
   return useMutation({
     mutationFn: (id: string) => api(`/api/givings/${id}`, { method: "DELETE", auth: true }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["givings"] }),
+  });
+}
+
+export function usePrayerRequests() {
+  return useQuery({ queryKey: ["prayer-requests"], queryFn: () => api<PrayerRequest[]>("/api/prayer-requests", { auth: true }) });
+}
+export function useSubmitPrayerRequest() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (body: Omit<PrayerRequest, "id" | "status" | "createdAt">) =>
+      api<PrayerRequest>("/api/prayer-requests", { method: "POST", body: JSON.stringify(body) }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["prayer-requests"] }),
+  });
+}
+export function useUpdatePrayerRequest() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, ...body }: Partial<PrayerRequest> & { id: string }) =>
+      api<PrayerRequest>(`/api/prayer-requests/${id}`, { method: "PUT", body: JSON.stringify(body), auth: true }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["prayer-requests"] }),
+  });
+}
+export function useDeletePrayerRequest() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => api(`/api/prayer-requests/${id}`, { method: "DELETE", auth: true }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["prayer-requests"] }),
   });
 }
 
