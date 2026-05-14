@@ -143,18 +143,18 @@ export default function Home() {
               to={`/sermons/${latest.id}`}
               className="group relative block overflow-hidden rounded-2xl shadow-card bg-muted aspect-[16/10]"
             >
-              <div className="absolute inset-0 bg-linear-to-t from-primary/80 to-transparent" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <img
-                  src={youtubeThumbnail(latest.video_link)}
-                  alt={latest.title}
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
+              <div className="absolute inset-0 bg-linear-to-t from-primary/80 to-transparent z-10" />
+              <div className="absolute inset-0 flex items-center justify-center z-10">
                 <PlayCircle
                   className="h-20 w-20 text-primary-foreground/95 transition-transform group-hover:scale-110"
                   strokeWidth={1.2}
                 />
               </div>
+              <img
+                src={youtubeThumbnail(latest.video_link)}
+                alt={latest.title}
+                className="absolute inset-0 h-full w-full object-cover z-0 transition-transform duration-500 group-hover:scale-105"
+              />
             </Link>
             <div>
               {seriesTitle(latest.series) && (
