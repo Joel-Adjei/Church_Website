@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, ScrollRestoration } from "react-router-dom";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import LiveIndicator from "@/components/LiveIndicator";
@@ -22,6 +22,7 @@ export default function RootLayout() {
           <LiveIndicator />
         </div>
       )}
+      <ScrollRestoration />
     </div>
   );
 }

@@ -255,78 +255,82 @@ export default function Home() {
         </DialogContent>
       </Dialog>
 
-      <section className="bg-surface-elevated border-y border-border">
-        <div className="mx-auto max-w-7xl px-6 lg:px-10 py-20 md:py-28">
+      {upcoming.length > 0 && (
+        <section className="bg-surface-elevated border-y border-border">
+          <div className="mx-auto max-w-7xl px-6 lg:px-10 py-20 md:py-28">
+            <div className="flex items-end justify-between mb-12 gap-6 flex-wrap">
+              <SectionHeading eyebrow="What's next" title="Upcoming events" />
+              <Link
+                to="/events"
+                className="text-sm font-medium text-primary hover:text-accent inline-flex items-center gap-1"
+              >
+                All events <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+            <div className="grid gap-6 md:grid-cols-3">
+              {upcoming.map((e) => (
+                <Link
+                  key={e.id}
+                  to={`/events/${e.id}`}
+                  className="group block overflow-hidden rounded-2xl bg-card border border-border shadow-card hover:shadow-elevated transition-shadow"
+                >
+                  {e.flyer && (
+                    <div className="aspect-4/3 overflow-hidden">
+                      <img
+                        src={e.flyer}
+                        alt={e.name}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    </div>
+                  )}
+                  <div className="p-6">
+                    <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-accent font-semibold">
+                      <Calendar className="h-3.5 w-3.5" />
+                      {format(new Date(e.date), "MMM d")} · {e.start_time.slice(0, 5)}
+                    </div>
+                    <h3 className="mt-3 font-display text-2xl text-ink leading-tight group-hover:text-primary transition-colors">
+                      {e.name}
+                    </h3>
+                    <div className="mt-2 flex items-center gap-1.5 text-sm text-ink-muted">
+                      <MapPin className="h-3.5 w-3.5" /> {e.location}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {news.length > 0 && (
+        <section className="mx-auto max-w-7xl px-6 lg:px-10 py-20 md:py-28">
           <div className="flex items-end justify-between mb-12 gap-6 flex-wrap">
-            <SectionHeading eyebrow="What's next" title="Upcoming events" />
+            <SectionHeading eyebrow="From the church" title="Latest news" />
             <Link
-              to="/events"
+              to="/announcements"
               className="text-sm font-medium text-primary hover:text-accent inline-flex items-center gap-1"
             >
-              All events <ArrowRight className="h-4 w-4" />
+              All news <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {upcoming.map((e) => (
-              <Link
-                key={e.id}
-                to={`/events/${e.id}`}
-                className="group block overflow-hidden rounded-2xl bg-card border border-border shadow-card hover:shadow-elevated transition-shadow"
-              >
-                {e.flyer && (
-                  <div className="aspect-4/3 overflow-hidden">
-                    <img
-                      src={e.flyer}
-                      alt={e.name}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  </div>
-                )}
-                <div className="p-6">
-                  <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-accent font-semibold">
-                    <Calendar className="h-3.5 w-3.5" />
-                    {format(new Date(e.date), "MMM d")} · {e.start_time.slice(0, 5)}
-                  </div>
-                  <h3 className="mt-3 font-display text-2xl text-ink leading-tight group-hover:text-primary transition-colors">
-                    {e.name}
-                  </h3>
-                  <div className="mt-2 flex items-center gap-1.5 text-sm text-ink-muted">
-                    <MapPin className="h-3.5 w-3.5" /> {e.location}
-                  </div>
+          <div className="grid gap-8 md:grid-cols-3">
+            {news.map((n) => (
+              <Link key={n.id} to={`/announcements/${n.id}`} className="group block">
+                <div className="text-xs text-ink-muted mb-3">
+                  {format(new Date(n.date), "MMMM d, yyyy")}
                 </div>
+                <h3 className="font-display text-2xl text-ink leading-snug group-hover:text-primary transition-colors">
+                  {n.title}
+                </h3>
+                <p className="mt-3 text-ink-muted line-clamp-3">{n.content}</p>
+                <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-accent">
+                  Read more <ArrowRight className="h-3.5 w-3.5" />
+                </span>
               </Link>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-6 lg:px-10 py-20 md:py-28">
-        <div className="flex items-end justify-between mb-12 gap-6 flex-wrap">
-          <SectionHeading eyebrow="From the church" title="Latest news" />
-          <Link
-            to="/announcements"
-            className="text-sm font-medium text-primary hover:text-accent inline-flex items-center gap-1"
-          >
-            All news <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-        <div className="grid gap-8 md:grid-cols-3">
-          {news.map((n) => (
-            <Link key={n.id} to={`/announcements/${n.id}`} className="group block">
-              <div className="text-xs text-ink-muted mb-3">
-                {format(new Date(n.date), "MMMM d, yyyy")}
-              </div>
-              <h3 className="font-display text-2xl text-ink leading-snug group-hover:text-primary transition-colors">
-                {n.title}
-              </h3>
-              <p className="mt-3 text-ink-muted line-clamp-3">{n.content}</p>
-              <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-accent">
-                Read more <ArrowRight className="h-3.5 w-3.5" />
-              </span>
-            </Link>
-          ))}
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className="bg-surface-elevated border-y border-border">
         <div className="mx-auto max-w-7xl px-6 lg:px-10 py-20 md:py-28">

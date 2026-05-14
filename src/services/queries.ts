@@ -195,6 +195,49 @@ export function useDeleteAnnouncement() {
   });
 }
 
+export function useDevotions() {
+  return useQuery({
+    queryKey: ["devotions"],
+    queryFn: () => api<Paginated<Devotion>>(`${BASE_URL}/devotions/`).then((r) => r.results),
+  });
+}
+
+export function useDevotionById(id: string | undefined) {
+  return useQuery({
+    queryKey: ["devotions", id],
+    queryFn: () => api<Devotion>(`${BASE_URL}/devotions/${id}/`),
+    enabled: !!id,
+  });
+}
+
+type DevotionPayload = { title: string; Bible_verse: string; content: string; thumbnail: string; prayer?: string; reflection?: string };
+
+export function useCreateDevotion() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (body: DevotionPayload) =>
+      api<Devotion>(`${BASE_URL}/devotions/create/`, { method: "POST", body: JSON.stringify(body), auth: true }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["devotions"] }),
+  });
+}
+
+export function useUpdateDevotion() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, ...body }: DevotionPayload & { id: string }) =>
+      api<Devotion>(`${BASE_URL}/devotions/${id}/update/`, { method: "PUT", body: JSON.stringify(body), auth: true }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["devotions"] }),
+  });
+}
+
+export function useDeleteDevotion() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => api(`${BASE_URL}/devotions/${id}/update/`, { method: "DELETE", auth: true }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["devotions"] }),
+  });
+}
+
 export function useDeleteEvent() {
   const qc = useQueryClient();
   return useMutation({
