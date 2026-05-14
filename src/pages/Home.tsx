@@ -19,6 +19,7 @@ import { Dialog, DialogContent, DialogTitle, DialogHeader } from "@/components/u
 import { settings } from "@/utils/mockData";
 import { useEvents, useSermons, useSeries, useAnnouncements } from "@/services/queries";
 import { format } from "date-fns";
+import { youtubeThumbnail } from "@/lib/utils";
 
 const STORY_VIDEO_ID = "ScMzIvxBSi4";
 const STORY_THUMB = "https://images.unsplash.com/photo-1508963493744-76fce69379c0?w=1600&q=80";
@@ -139,8 +140,13 @@ export default function Home() {
               to={`/sermons/${latest.id}`}
               className="group relative block overflow-hidden rounded-2xl shadow-card bg-muted aspect-[16/10]"
             >
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-primary/80 to-transparent" />
               <div className="absolute inset-0 flex items-center justify-center">
+                <img
+                  src={youtubeThumbnail(latest.video_link)}
+                  alt={latest.title}
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
                 <PlayCircle
                   className="h-20 w-20 text-primary-foreground/95 transition-transform group-hover:scale-110"
                   strokeWidth={1.2}
