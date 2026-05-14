@@ -144,30 +144,14 @@ export type Resource = {
   createdAt: string;
 };
 
-export type PrayerCategory =
-  | "healing"
-  | "family"
-  | "finances"
-  | "guidance"
-  | "salvation"
-  | "relationships"
-  | "thanksgiving"
-  | "other";
-export type PrayerPrivacy = "public" | "private" | "anonymous";
-export type PrayerStatus = "new" | "praying" | "answered";
+export type PrayerPrivacy = "private" | "anonymous";
 
 export type PrayerRequest = {
   id: ID;
-  firstName: string;
-  lastName: string;
-  email: string;
+  name: string;
   phone?: string;
-  category: PrayerCategory;
   subject: string;
   request: string;
-  privacy: PrayerPrivacy;
-  status: PrayerStatus;
-  adminNote?: string;
   createdAt: string;
 };
 
@@ -182,9 +166,8 @@ export type GivingStatus = "completed" | "pending";
 
 export type Giving = {
   id: ID;
-  firstName: string;
-  lastName: string;
-  email: string;
+  name: string;
+  email?: string;
   phone?: string;
   amount: number;
   currency: string;

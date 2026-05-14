@@ -19,7 +19,7 @@ import { Label } from "@/components/ui/label";
 import { SectionHeading } from "@/components/SectionHeading";
 import { useSubmitPrayerRequest } from "@/services/queries";
 import heroImg from "@/assets/bg_12.jpg";
-import type { PrayerCategory, PrayerPrivacy } from "@/types";
+import type { PrayerPrivacy } from "@/types";
 
 const PRIVACY_OPTIONS: {
   value: PrayerPrivacy;
@@ -41,35 +41,13 @@ const PRIVACY_OPTIONS: {
   },
 ];
 
-const CATEGORIES: { value: PrayerCategory; label: string }[] = [
-  { value: "healing", label: "Healing" },
-  { value: "family", label: "Family" },
-  { value: "finances", label: "Finances" },
-  { value: "guidance", label: "Guidance" },
-  { value: "salvation", label: "Salvation" },
-  { value: "relationships", label: "Relationships" },
-  { value: "thanksgiving", label: "Thanksgiving" },
-  { value: "other", label: "Other" },
-];
-
 const schema = z.object({
-  firstName: z.string().min(2, "Please enter your first name"),
-  lastName: z.string().min(1, "Please enter your last name"),
-  email: z.string().email("Please enter a valid email"),
+  name: z.string().min(2, "Please enter your full name"),
   phone: z.string().optional(),
-  category: z.enum([
-    "healing",
-    "family",
-    "finances",
-    "guidance",
-    "salvation",
-    "relationships",
-    "thanksgiving",
-    "other",
-  ]),
+
   subject: z.string().min(3, "Please give your request a title"),
   request: z.string().min(20, "Please share a few more details so we can pray specifically"),
-  privacy: z.enum(["public", "private", "anonymous"]),
+  privacy: z.enum(["private", "anonymous"]),
 });
 type FormData = z.infer<typeof schema>;
 
@@ -85,17 +63,13 @@ export default function PrayerRequest() {
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { privacy: "private", category: "other" },
+    defaultValues: { privacy: "private" },
   });
 
   const selectedPrivacy = watch("privacy");
-  const selectedCategory = watch("category");
 
   const onSubmit = async (data: FormData) => {
-    const payload =
-      data.privacy === "anonymous"
-        ? { ...data, firstName: "Anonymous", lastName: "", email: "anon@gracecathedral.org" }
-        : data;
+    const payload = data.privacy === "anonymous" ? { ...data, name: "Anonymous" } : data;
     await submit.mutateAsync(payload);
     toast.success("Your prayer request has been received. Our team is praying with you.", {
       duration: 5000,
@@ -156,84 +130,19 @@ export default function PrayerRequest() {
             </div>
 
             {/* Name */}
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="">
               <div>
-                <Label htmlFor="firstName">First name *</Label>
+                <Label htmlFor="name">Full name *</Label>
                 <Input
-                  id="firstName"
-                  {...register("firstName")}
+                  id="name"
+                  {...register("name")}
                   className="mt-1.5"
                   disabled={selectedPrivacy === "anonymous"}
                 />
-                {errors.firstName && (
-                  <p className="mt-1 text-xs text-destructive">{errors.firstName.message}</p>
+                {errors.name && (
+                  <p className="mt-1 text-xs text-destructive">{errors.name.message}</p>
                 )}
               </div>
-              <div>
-                <Label htmlFor="lastName">Last name *</Label>
-                <Input
-                  id="lastName"
-                  {...register("lastName")}
-                  className="mt-1.5"
-                  disabled={selectedPrivacy === "anonymous"}
-                />
-                {errors.lastName && (
-                  <p className="mt-1 text-xs text-destructive">{errors.lastName.message}</p>
-                )}
-              </div>
-            </div>
-
-            {/* Contact */}
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <Label htmlFor="email">Email *</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  {...register("email")}
-                  className="mt-1.5"
-                  disabled={selectedPrivacy === "anonymous"}
-                />
-                {errors.email && (
-                  <p className="mt-1 text-xs text-destructive">{errors.email.message}</p>
-                )}
-              </div>
-              <div>
-                <Label htmlFor="phone">
-                  Phone <span className="text-ink-muted">(optional)</span>
-                </Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  {...register("phone")}
-                  className="mt-1.5"
-                  disabled={selectedPrivacy === "anonymous"}
-                />
-              </div>
-            </div>
-
-            {/* Category */}
-            <div>
-              <Label>Category *</Label>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {CATEGORIES.map((cat) => (
-                  <button
-                    key={cat.value}
-                    type="button"
-                    onClick={() => setValue("category", cat.value, { shouldValidate: true })}
-                    className={`px-3 py-1.5 rounded-full text-sm border transition-colors ${
-                      selectedCategory === cat.value
-                        ? "bg-primary text-primary-foreground border-primary"
-                        : "bg-background border-border text-ink-muted hover:border-primary/50 hover:text-ink"
-                    }`}
-                  >
-                    {cat.label}
-                  </button>
-                ))}
-              </div>
-              {errors.category && (
-                <p className="mt-1 text-xs text-destructive">{errors.category.message}</p>
-              )}
             </div>
 
             {/* Subject */}

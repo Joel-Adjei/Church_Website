@@ -38,8 +38,8 @@ export default function Givings() {
   const filtered = givings.filter((g) => {
     if (!search.trim()) return true;
     const q = search.toLowerCase();
-    const name = `${g.firstName} ${g.lastName}`.toLowerCase();
-    return name.includes(q) || g.email.toLowerCase().includes(q) || g.category.includes(q);
+    const name = g.name.toLowerCase();
+    return name.includes(q) || g.category.includes(q);
   });
 
   const totalCompleted = givings
@@ -65,7 +65,7 @@ export default function Givings() {
 
       {/* Summary cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-background border border-border rounded-2xl p-5 flex items-center gap-4">
+        <div className="bg-background border border-border rounded-2xl p`-5 flex items-center gap-4">
           <div className="h-11 w-11 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
             <TrendingUp className="h-5 w-5 text-emerald-600" />
           </div>
@@ -117,7 +117,6 @@ export default function Givings() {
               <TableHead>Donor</TableHead>
               <TableHead>Amount</TableHead>
               <TableHead>Category</TableHead>
-              <TableHead>Status</TableHead>
               <TableHead>Date</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
@@ -140,7 +139,7 @@ export default function Givings() {
             {filtered.map((g) => {
               const meta = CATEGORY_META[g.category];
               const Icon = meta.icon;
-              const donorName = g.anonymous ? "Anonymous" : `${g.firstName} ${g.lastName}`.trim();
+              const donorName = g.anonymous ? "Anonymous" : g.name;
               return (
                 <TableRow key={g.id}>
                   <TableCell>
@@ -162,14 +161,6 @@ export default function Givings() {
                     </div>
                   </TableCell>
 
-                  <TableCell>
-                    <Badge
-                      variant={g.status === "completed" ? "default" : "secondary"}
-                      className="capitalize"
-                    >
-                      {g.status}
-                    </Badge>
-                  </TableCell>
                   <TableCell className="text-ink-muted whitespace-nowrap text-sm">
                     {format(parseISO(g.createdAt), "MMM d, yyyy")}
                   </TableCell>

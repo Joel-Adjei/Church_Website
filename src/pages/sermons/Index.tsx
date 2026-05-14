@@ -12,7 +12,8 @@ import {
 import { useSermons, useSeries } from "@/services/queries";
 import { format } from "date-fns";
 import { SectionHeading } from "@/components/SectionHeading";
-import heroImg from "@/assets/sermon_bg.jpg";
+import heroImg from "@/assets/bg_10.jpg";
+// import heroImg from "@/assets/sermon_bg.jpg";
 import { youtubeThumbnail } from "@/lib/utils";
 
 export default function SermonsIndex() {
@@ -34,13 +35,13 @@ export default function SermonsIndex() {
 
   return (
     <>
-      <section className="relative h-120 flex items-end overflow-hidden">
+      <section className="relative lg:h-120 flex items-end overflow-hidden">
         <img src={heroImg} className="absolute inset-0 h-full w-full object-cover" />
         <div className="h-full w-full bg-linear-to-t from-primary via-primary/80 to-primary/0 z-10 absolute" />
 
         <div className="relative max-w-7xl px-6 lg:px-28 py-16 md:py-24 z-20">
           <SectionHeading
-            eyebrow="Listen & watch"
+            eyebrow=""
             title="Sermons"
             titleColor="white"
             description="Every Sunday message, archived and searchable."

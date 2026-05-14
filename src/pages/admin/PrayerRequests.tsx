@@ -6,19 +6,9 @@ import {
 } from "@/services/queries";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { DeleteConfirm } from "@/components/admin/DeleteConfirm";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { format, parseISO } from "date-fns";
 import { toast } from "sonner";
 import {
@@ -36,57 +26,13 @@ import {
   MessageSquare,
   Phone,
   Mail,
+  User2,
 } from "lucide-react";
-import type { PrayerCategory, PrayerPrivacy, PrayerRequest, PrayerStatus } from "@/types";
+import type { PrayerPrivacy, PrayerRequest } from "@/types";
 import { cn } from "@/utils/utils";
-
-const CATEGORY_META: Record<PrayerCategory, { label: string; color: string }> = {
-  healing: { label: "Healing", color: "text-rose-500" },
-  family: { label: "Family", color: "text-amber-500" },
-  finances: { label: "Finances", color: "text-emerald-500" },
-  guidance: { label: "Guidance", color: "text-blue-500" },
-  salvation: { label: "Salvation", color: "text-purple-500" },
-  relationships: { label: "Relationships", color: "text-pink-500" },
-  thanksgiving: { label: "Thanksgiving", color: "text-orange-500" },
-  other: { label: "Other", color: "text-ink-muted" },
-};
-
-const PRIVACY_META: Record<
-  PrayerPrivacy,
-  { label: string; icon: React.ElementType; color: string }
-> = {
-  public: { label: "Public", icon: Globe, color: "text-blue-500" },
-  private: { label: "Private", icon: ShieldCheck, color: "text-emerald-500" },
-  anonymous: { label: "Anonymous", icon: EyeOff, color: "text-ink-muted" },
-};
-
-const STATUS_META: Record<
-  PrayerStatus,
-  { label: string; icon: React.ElementType; variant: "default" | "secondary" | "outline" }
-> = {
-  new: { label: "New", icon: Sparkles, variant: "secondary" },
-  praying: { label: "Praying", icon: Clock, variant: "default" },
-  answered: { label: "Answered", icon: CheckCircle2, variant: "outline" },
-};
 
 function DetailDialog({ request, onClose }: { request: PrayerRequest; onClose: () => void }) {
   const update = useUpdatePrayerRequest();
-  const [note, setNote] = useState(request.adminNote ?? "");
-
-  const setStatus = async (status: PrayerStatus) => {
-    await update.mutateAsync({ id: request.id, status });
-    toast.success(`Status updated to "${STATUS_META[status].label}"`);
-    onClose();
-  };
-
-  const saveNote = async () => {
-    await update.mutateAsync({ id: request.id, adminNote: note });
-    toast.success("Note saved");
-    onClose();
-  };
-
-  const privacyMeta = PRIVACY_META[request.privacy];
-  const PrivacyIcon = privacyMeta.icon;
 
   return (
     <DialogContent className="max-w-2xl">
@@ -98,20 +44,14 @@ function DetailDialog({ request, onClose }: { request: PrayerRequest; onClose: (
         {/* Requester */}
         <div className="flex items-start gap-3 p-4 rounded-xl bg-surface-elevated border border-border">
           <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0 text-primary font-display text-sm">
-            {request.privacy === "anonymous" ? "?" : (request.firstName[0] ?? "?").toUpperCase()}
+            {request.name === "Anonymous" ? "?" : (request?.name[0] ?? "?").toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
             <div className="font-medium text-ink">
-              {request.privacy === "anonymous"
-                ? "Anonymous"
-                : `${request.firstName} ${request.lastName}`.trim()}
+              {request.name === "Anonymous" ? "Anonymous" : request.name.trim()}
             </div>
-            {request.privacy !== "anonymous" && (
+            {request.name !== "Anonymous" && (
               <div className="flex flex-wrap gap-3 mt-1 text-xs text-ink-muted">
-                <span className="flex items-center gap-1">
-                  <Mail className="h-3 w-3" />
-                  {request.email}
-                </span>
                 {request.phone && (
                   <span className="flex items-center gap-1">
                     <Phone className="h-3 w-3" />
@@ -120,10 +60,6 @@ function DetailDialog({ request, onClose }: { request: PrayerRequest; onClose: (
                 )}
               </div>
             )}
-          </div>
-          <div className="flex items-center gap-1 text-xs">
-            <PrivacyIcon className={cn("h-3.5 w-3.5", privacyMeta.color)} />
-            <span className="text-ink-muted">{privacyMeta.label}</span>
           </div>
         </div>
 
@@ -140,8 +76,6 @@ export default function PrayerRequests() {
   const { data: requests = [], isLoading } = usePrayerRequests();
   const remove = useDeletePrayerRequest();
   const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState<PrayerStatus | "all">("all");
-  const [categoryFilter, setCategoryFilter] = useState<PrayerCategory | "all">("all");
   const [selected, setSelected] = useState<PrayerRequest | null>(null);
 
   const filtered = requests.filter((r) => {
@@ -150,15 +84,11 @@ export default function PrayerRequests() {
       !q ||
       r.subject.toLowerCase().includes(q) ||
       r.request.toLowerCase().includes(q) ||
-      `${r.firstName} ${r.lastName}`.toLowerCase().includes(q);
-    const matchesStatus = statusFilter === "all" || r.status === statusFilter;
-    return matchesSearch && matchesStatus;
+      r.name.toLowerCase().includes(q);
+    return matchesSearch;
   });
 
   const total = requests.length;
-  const newCount = requests.filter((r) => r.status === "new").length;
-  const prayingCount = requests.filter((r) => r.status === "praying").length;
-  const answeredCount = requests.filter((r) => r.status === "answered").length;
 
   return (
     <div className="space-y-8">
@@ -175,19 +105,6 @@ export default function PrayerRequests() {
             value: total,
             icon: Heart,
             color: "bg-rose-100 text-rose-600",
-          },
-          { label: "New", value: newCount, icon: Sparkles, color: "bg-amber-100 text-amber-600" },
-          {
-            label: "Being prayed for",
-            value: prayingCount,
-            icon: Users,
-            color: "bg-blue-100 text-blue-600",
-          },
-          {
-            label: "Answered",
-            value: answeredCount,
-            icon: TrendingUp,
-            color: "bg-emerald-100 text-emerald-600",
           },
         ].map((stat) => {
           const Icon = stat.icon;
@@ -214,46 +131,16 @@ export default function PrayerRequests() {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-3">
-        <div className="relative">
+      <div className="flex w-full gap-3">
+        <div className="w-full relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ink-muted" />
           <Input
             placeholder="Search requests…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 w-56"
+            className="pl-9 w-full"
           />
         </div>
-        <Select
-          value={statusFilter}
-          onValueChange={(v) => setStatusFilter(v as PrayerStatus | "all")}
-        >
-          <SelectTrigger className="w-36">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All statuses</SelectItem>
-            <SelectItem value="new">New</SelectItem>
-            <SelectItem value="praying">Praying</SelectItem>
-            <SelectItem value="answered">Answered</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select
-          value={categoryFilter}
-          onValueChange={(v) => setCategoryFilter(v as PrayerCategory | "all")}
-        >
-          <SelectTrigger className="w-40">
-            <SelectValue placeholder="Category" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All categories</SelectItem>
-            {(Object.keys(CATEGORY_META) as PrayerCategory[]).map((c) => (
-              <SelectItem key={c} value={c}>
-                {CATEGORY_META[c].label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
       </div>
 
       {/* Cards grid */}
@@ -262,18 +149,11 @@ export default function PrayerRequests() {
       )}
       {!isLoading && filtered.length === 0 && (
         <div className="text-center py-20 text-ink-muted">
-          {search || statusFilter !== "all" || categoryFilter !== "all"
-            ? "No requests match your filters."
-            : "No prayer requests yet."}
+          {search ? "No requests match your filters." : "No prayer requests yet."}
         </div>
       )}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {filtered.map((r) => {
-          const statusMeta = STATUS_META[r.status];
-          const StatusIcon = statusMeta.icon;
-          const privacyMeta = PRIVACY_META[r.privacy];
-          const PrivacyIcon = privacyMeta.icon;
-
           return (
             <div
               key={r.id}
@@ -301,17 +181,11 @@ export default function PrayerRequests() {
               <div className="flex items-center justify-between pt-2 border-t border-border">
                 <div className="flex items-center gap-2">
                   <div className="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-medium">
-                    {r.privacy === "anonymous" ? "?" : (r.firstName[0] ?? "?").toUpperCase()}
+                    {r.name === "Anonymous" ? "?" : <User2 />}
                   </div>
                   <span className="text-sm text-ink-muted">
-                    {r.privacy === "anonymous"
-                      ? "Anonymous"
-                      : `${r.firstName} ${r.lastName}`.trim()}
+                    {r.name === "Anonymous" ? "Anonymous" : r.name.trim()}
                   </span>
-                </div>
-                <div className="flex items-center gap-1 text-xs text-ink-muted">
-                  <PrivacyIcon className={cn("h-3.5 w-3.5", privacyMeta.color)} />
-                  {privacyMeta.label}
                 </div>
               </div>
 
