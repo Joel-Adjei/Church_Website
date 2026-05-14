@@ -32,7 +32,6 @@ const CATEGORIES: { value: ResourceCategory | "all"; label: string; icon: React.
   { value: "clothing", label: "Clothing", icon: Shirt },
   { value: "food", label: "Food", icon: ShoppingBasket },
   { value: "equipment", label: "Equipment", icon: Cpu },
-  { value: "digital", label: "Digital", icon: FileText },
   { value: "stationery", label: "Stationery", icon: FileText },
   { value: "other", label: "Other", icon: Package },
 ];
@@ -221,27 +220,6 @@ export default function ResourcesIndex() {
           />
         </div>
       </section>
-
-      {/* Stats strip */}
-      <div className="bg-accent/10 border-y border-accent/20">
-        <div className="mx-auto max-w-7xl px-6 lg:px-10 py-3 flex flex-wrap gap-6 text-sm text-ink-muted">
-          {(["books", "clothing", "food", "equipment", "digital"] as ResourceCategory[]).map(
-            (cat) => {
-              const count = resources.filter(
-                (r) => r.category === cat && r.availability !== "claimed",
-              ).length;
-              if (!count) return null;
-              const Icon = CATEGORY_ICONS[cat];
-              return (
-                <span key={cat} className="flex items-center gap-1.5">
-                  <Icon className="h-4 w-4 text-accent" />
-                  <strong className="text-ink">{count}</strong> {cat}
-                </span>
-              );
-            },
-          )}
-        </div>
-      </div>
 
       <div className="mx-auto max-w-7xl px-6 lg:px-10 py-12 md:py-16 space-y-10">
         {/* Search + Category filters */}

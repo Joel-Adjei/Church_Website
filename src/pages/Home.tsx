@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import { SectionHeading } from "@/components/SectionHeading";
 import { Dialog, DialogContent, DialogTitle, DialogHeader } from "@/components/ui/dialog";
 import { settings } from "@/utils/mockData";
-import { useEvents, useSermons, useSeries, useAnnouncements } from "@/services/queries";
+import { useEvents, useSermons, useSeries, useAnnouncements, useLive } from "@/services/queries";
 import { format } from "date-fns";
 import { youtubeThumbnail } from "@/lib/utils";
 
@@ -71,6 +71,7 @@ export default function Home() {
   const { data: events = [] } = useEvents();
   const { data: announcements = [] } = useAnnouncements();
   const { data: series = [] } = useSeries();
+  const { data: live } = useLive();
 
   const latest = sermons[0];
   const upcoming = events.slice(0, 3);
@@ -80,34 +81,36 @@ export default function Home() {
 
   return (
     <>
-      <section className="relative min-h-140 isolate overflow-hidden">
+      <section className="relative min-h-140 w-full flex flex-col justify-center isolate overflow-hidden">
         <div
           className="absolute inset-0 -z-10 bg-cover bg-center"
           style={{ backgroundImage: `url(${settings.bannerImageUrl})` }}
         />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-primary/30 via-primary/60 to-primary/90" />
-        <div className="mx-auto max-w-7xl px-6 lg:px-10 py-24 md:py-40">
-          <div className="max-w-3xl">
-            <span className="inline-block text-center lg:text-left  text-xs uppercase tracking-[0.25em] text-accent font-semibold mb-5">
+        <div className="absolute inset-0 -z-10 bg-linear-to-b from-primary/60 via-primary/80 to-primary/90" />
+        <div className="mx-auto max-w-6xl px-6 lg:px-10 py-24 md:py-40">
+          <div className="max-w-3xl mx-auto w-full flex flex-col items-center justify-centers">
+            <span className="inline-block text-center text-xs uppercase tracking-[0.25em] text-accent font-semibold mb-5">
               Welcome home
             </span>
-            <h1 className="font-display text-center lg:text-left text-5xl md:text-7xl lg:text-8xl text-primary-foreground leading-[1.02]">
+            <h1 className="font-display text-center text-5xl md:text-7xl lg:text-8xl text-primary-foreground leading-[1.02]">
               {settings.churchName}
             </h1>
-            <p className="mt-6 text-lg text-center lg:text-left  md:text-xl text-primary-foreground/85 max-w-xl leading-relaxed">
+            <p className="mt-6 text-lg text-center md:text-xl text-primary-foreground/85 max-w-xl leading-relaxed">
               {settings.tagline}
             </p>
             <div className="mt-10 flex flex-wrap gap-3">
-              <Button asChild size="lg" className="gap-2">
-                <Link to="/live">
-                  <Radio className="h-4 w-4" /> Watch Live
-                </Link>
-              </Button>
+              {live?.isLive && (
+                <Button asChild size="lg" variant={"secondary"} className="gap-2 py-6">
+                  <Link to="/live">
+                    <Radio className="h-4 w-4" /> Watch Live
+                  </Link>
+                </Button>
+              )}
               <Button
                 asChild
                 size="lg"
                 variant="outline"
-                className="bg-transparent border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground hover:text-primary"
+                className="bg-transparent py-6! border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground hover:text-primary"
               >
                 <Link to="/sermons">Browse sermons</Link>
               </Button>

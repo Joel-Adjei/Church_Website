@@ -5,6 +5,7 @@ import { cn } from "@/utils/utils";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { settings } from "@/utils/mockData";
+import { useLive } from "@/services/queries";
 
 type NavItem =
   | { type: "link"; to: string; label: string }
@@ -144,6 +145,7 @@ function MobileDropdown({
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
+  const { data: live } = useLive();
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md">
@@ -197,12 +199,7 @@ export function Navbar() {
 
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="lg:hidden"
-              aria-label="Open menu"
-            >
+            <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Open menu">
               <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
@@ -211,11 +208,7 @@ export function Navbar() {
               <SheetTitle>Navigation</SheetTitle>
             </SheetHeader>
             <div className="h-16 border-b border-border flex items-center px-6">
-              <Link
-                to="/"
-                className="flex items-center gap-2"
-                onClick={() => setOpen(false)}
-              >
+              <Link to="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-display">
                   G
                 </div>
@@ -258,12 +251,14 @@ export function Navbar() {
                   Give
                 </Link>
               </Button>
-              <Button asChild className="gap-1.5" size="lg">
-                <Link to="/live" onClick={() => setOpen(false)}>
-                  <Radio className="h-4 w-4" />
-                  Watch Live
-                </Link>
-              </Button>
+              {live?.isLive && (
+                <Button asChild className="gap-1.5" size="lg">
+                  <Link to="/live" onClick={() => setOpen(false)}>
+                    <Radio className="h-4 w-4" />
+                    Watch Live
+                  </Link>
+                </Button>
+              )}
             </div>
           </SheetContent>
         </Sheet>

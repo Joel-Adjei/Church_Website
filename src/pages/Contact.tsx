@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { settings } from "@/utils/mockData";
 import { SectionHeading } from "@/components/SectionHeading";
-import heroImg from "@/assets/bg_11.jpg";
+import heroImg from "@/assets/bg_13.jpg";
 
 const schema = z.object({
   name: z.string().min(2, "Please share your name"),

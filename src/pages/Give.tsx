@@ -12,11 +12,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/utils/utils";
 import { useSubmitGiving } from "@/services/queries";
 import type { GivingCategory } from "@/types";
-import heroImg from "@/assets/bg_08.jpg";
+import heroImg from "@/assets/bg_11.jpg";
 
 const schema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
+  name: z.string(),
   email: z.string().email("Enter a valid email"),
   phone: z.string().optional(),
   amount: z
@@ -74,8 +73,7 @@ export default function Give() {
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      name: "",
       email: "",
       phone: "",
       category: "offering",
@@ -160,10 +158,10 @@ export default function Give() {
           }}
         />
         <div className="relative mx-auto max-w-3xl px-6 py-16 text-center z-20">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-white/20">
-            <Heart className="h-7 w-7" />
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/20">
+            <Heart className="h-7 w-7 text-primary" />
           </div>
-          <h1 className="font-display text-primary text-4xl lg:text-7xl sm:text-5xl mb-4">
+          <h1 className="font-display text-white text-4xl lg:text-7xl sm:text-5xl mb-4">
             Give with a Cheerful Heart
           </h1>
           <p className="text-primary-foreground/80 text-lg max-w-xl mx-auto">
@@ -269,18 +267,9 @@ export default function Give() {
             >
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <Label htmlFor="firstName">First name</Label>
-                  <Input id="firstName" placeholder="John" {...register("firstName")} />
-                  {errors.firstName && (
-                    <p className="text-sm text-destructive">{errors.firstName.message}</p>
-                  )}
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="lastName">Last name</Label>
-                  <Input id="lastName" placeholder="Doe" {...register("lastName")} />
-                  {errors.lastName && (
-                    <p className="text-sm text-destructive">{errors.lastName.message}</p>
-                  )}
+                  <Label htmlFor="name">First name</Label>
+                  <Input id="name" placeholder="John" {...register("name")} />
+                  {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
                 </div>
               </div>
               <div className="space-y-1.5">
@@ -313,13 +302,11 @@ export default function Give() {
                 onCheckedChange={(checked) => {
                   setValue("anonymous", !!checked);
                   if (checked) {
-                    setValue("firstName", "Anonymous");
-                    setValue("lastName", "");
+                    setValue("name", "Anonymous");
                     setValue("email", "anon@gracecathedral.org");
                     setValue("phone", "");
                   } else {
-                    setValue("firstName", "");
-                    setValue("lastName", "");
+                    setValue("name", "");
                     setValue("email", "");
                   }
                 }}
