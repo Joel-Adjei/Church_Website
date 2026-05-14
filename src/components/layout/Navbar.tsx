@@ -189,12 +189,14 @@ export function Navbar() {
               Give
             </Link>
           </Button>
-          <Button asChild size="sm" className="ml-1 gap-1.5">
-            <Link to="/live">
-              <Radio className="h-3.5 w-3.5" />
-              Watch Live
-            </Link>
-          </Button>
+          {isLive && (
+            <Button asChild size="sm" className="ml-1 gap-1.5">
+              <Link to="/live">
+                <Radio className="h-3.5 w-3.5" />
+                Watch Live
+              </Link>
+            </Button>
+          )}
         </nav>
 
         <Sheet open={open} onOpenChange={setOpen}>
