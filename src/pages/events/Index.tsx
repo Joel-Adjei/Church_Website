@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Calendar, MapPin, ArrowRight } from "lucide-react";
+import { Calendar, MapPin, ArrowRight, Loader2, CalendarX } from "lucide-react";
 import { useEvents } from "@/services/queries";
 import { format } from "date-fns";
 import { SectionHeading } from "@/components/SectionHeading";
@@ -23,8 +23,25 @@ export default function EventsIndex() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 lg:px-10 py-16 grid gap-10 md:grid-cols-2">
-        {isLoading && <div className="text-ink-muted">Loading…</div>}
+      <section className="mx-auto max-w-7xl px-6 lg:px-10 py-16">
+        {isLoading && (
+          <div className="flex flex-col items-center justify-center py-24 gap-4 text-ink-muted">
+            <Loader2 className="h-10 w-10 animate-spin text-primary" />
+            <p className="text-sm font-medium">Loading events…</p>
+          </div>
+        )}
+        {!isLoading && events.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-24 gap-4">
+            <div className="rounded-full bg-muted p-5">
+              <CalendarX className="h-10 w-10 text-ink-muted" />
+            </div>
+            <p className="text-lg font-semibold text-ink">No upcoming events</p>
+            <p className="text-sm text-ink-muted max-w-xs text-center">
+              There are no events scheduled right now. Check back soon for what's coming up.
+            </p>
+          </div>
+        )}
+        <div className="grid gap-10 md:grid-cols-2">
         {events.map((e) => (
           <Link
             key={e.id}
@@ -58,6 +75,7 @@ export default function EventsIndex() {
             </div>
           </Link>
         ))}
+        </div>
       </section>
     </>
   );

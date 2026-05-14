@@ -47,13 +47,25 @@ export type Announcement = {
   date: string;
 };
 
+export type GalleryImage = {
+  id: ID;
+  gallery: ID;
+  title: string;
+  image: string;
+  description: string;
+  venue: string;
+  likes: number;
+  date: string;
+};
+
 export type GalleryProgram = {
   id: ID;
-  slug: string;
   title: string;
   description: string;
-  coverImageUrl: string;
-  images: { url: string; caption?: string }[];
+  venue: string;
+  likes: number;
+  date: string;
+  images: GalleryImage[];
 };
 
 export type AdminUser = { id: ID; email: string; name: string };

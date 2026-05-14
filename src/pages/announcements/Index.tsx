@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2, BellOff } from "lucide-react";
 import { useAnnouncements } from "@/services/queries";
 import { format } from "date-fns";
 import heroImg from "@/assets/bg_09.jpg";
@@ -19,8 +19,25 @@ export default function AnnouncementsIndex() {
           </div>
         </div>
       </section>
-      <section className="mx-auto max-w-3xl px-6 lg:px-10 py-16 divide-y divide-border">
-        {isLoading && <div className="text-ink-muted py-12 text-center">Loading…</div>}
+      <section className="mx-auto max-w-3xl px-6 lg:px-10 py-16">
+        {isLoading && (
+          <div className="flex flex-col items-center justify-center py-24 gap-4 text-ink-muted">
+            <Loader2 className="h-10 w-10 animate-spin text-primary" />
+            <p className="text-sm font-medium">Loading announcements…</p>
+          </div>
+        )}
+        {!isLoading && announcements.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-24 gap-4">
+            <div className="rounded-full bg-muted p-5">
+              <BellOff className="h-10 w-10 text-ink-muted" />
+            </div>
+            <p className="text-lg font-semibold text-ink">No announcements yet</p>
+            <p className="text-sm text-ink-muted max-w-xs text-center">
+              Nothing to share right now — check back soon for the latest news.
+            </p>
+          </div>
+        )}
+        <div className="divide-y divide-border">
         {announcements.map((a) => (
           <Link key={a.id} to={`/announcements/${a.id}`} className="group block py-10 first:pt-0">
             <div className="text-xs text-accent font-semibold uppercase tracking-widest">
@@ -35,6 +52,7 @@ export default function AnnouncementsIndex() {
             </span>
           </Link>
         ))}
+        </div>
       </section>
     </>
   );

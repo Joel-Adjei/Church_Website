@@ -111,6 +111,49 @@ export function useUpdateEvent() {
   });
 }
 
+export function useGallery() {
+  return useQuery({
+    queryKey: ["gallery"],
+    queryFn: () => api<Paginated<GalleryProgram>>(`${BASE_URL}/gallery/albums/`).then((r) => r.results),
+  });
+}
+
+export function useGalleryById(id: string | undefined) {
+  return useQuery({
+    queryKey: ["gallery", id],
+    queryFn: () => api<GalleryProgram>(`${BASE_URL}/gallery/albums/${id}/`),
+    enabled: !!id,
+  });
+}
+
+type GalleryPayload = { title: string; description: string; venue: string; image_urls: string[] };
+
+export function useCreateGallery() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (body: GalleryPayload) =>
+      api<GalleryProgram>(`${BASE_URL}/gallery/albums/create/`, { method: "POST", body: JSON.stringify(body), auth: true }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["gallery"] }),
+  });
+}
+
+export function useUpdateGallery() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, ...body }: GalleryPayload & { id: string }) =>
+      api<GalleryProgram>(`${BASE_URL}/gallery/albums/${id}/update/`, { method: "PUT", body: JSON.stringify(body), auth: true }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["gallery"] }),
+  });
+}
+
+export function useDeleteGallery() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => api(`${BASE_URL}/gallery/albums/${id}/update/`, { method: "DELETE", auth: true }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["gallery"] }),
+  });
+}
+
 export function useAnnouncements() {
   return useQuery({
     queryKey: ["announcements"],

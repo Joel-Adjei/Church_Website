@@ -66,7 +66,7 @@ export const router = createBrowserRouter([
       { path: "announcements", element: <AnnouncementsIndex /> },
       { path: "announcements/:id", element: <AnnouncementDetail /> },
       { path: "gallery", element: <GalleryIndex /> },
-      { path: "gallery/:slug", element: <GalleryDetail /> },
+      { path: "gallery/:id", element: <GalleryDetail /> },
       { path: "devotions", element: <DevotionsIndex /> },
       { path: "devotions/:slug", element: <DevotionDetail /> },
       { path: "give", element: <Give /> },
