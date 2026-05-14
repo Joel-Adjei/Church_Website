@@ -48,6 +48,8 @@ import AdminResources from "@/pages/admin/Resources";
 import AdminResourceNew from "@/pages/admin/ResourceNew";
 import AdminResourceEdit from "@/pages/admin/ResourceEdit";
 import AdminLive from "@/pages/admin/LiveStream";
+import AdminLiveNew from "@/pages/admin/LiveStreamNew";
+import AdminLiveEdit from "@/pages/admin/LiveStreamEdit";
 import AdminSettings from "@/pages/admin/Settings";
 
 export const router = createBrowserRouter([
@@ -104,6 +106,8 @@ export const router = createBrowserRouter([
       { path: "resources/new", element: <AdminResourceNew /> },
       { path: "resources/:id", element: <AdminResourceEdit /> },
       { path: "live", element: <AdminLive /> },
+      { path: "live/new", element: <AdminLiveNew /> },
+      { path: "live/:id", element: <AdminLiveEdit /> },
       { path: "settings", element: <AdminSettings /> },
     ],
   },

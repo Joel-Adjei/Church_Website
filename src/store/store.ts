@@ -581,9 +581,9 @@ const seedPrayerRequests: PrayerRequest[] = [
 
 const seedLive: LiveStatus = {
   isLive: false,
-  platform: "youtube",
-  streamUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+  streamUrl: "",
   nextService: "Sunday at 9:00 AM",
+  stream: null,
 };
 
 const today = new Date();

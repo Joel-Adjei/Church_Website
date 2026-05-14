@@ -233,7 +233,7 @@ export default function Home() {
               alt="Our story"
               className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-primary/20 to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-primary/70 via-primary/20 to-transparent" />
             <span className="absolute inset-0 flex items-center justify-center">
               <span className="h-20 w-20 rounded-full bg-background/95 inline-flex items-center justify-center shadow-elevated transition-transform group-hover:scale-110">
                 <Play className="h-8 w-8 text-primary ml-1" fill="currentColor" />

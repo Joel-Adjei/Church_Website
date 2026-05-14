@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, BASE_URL } from "./api";
-import type { Announcement, ChurchEvent, Devotion, GalleryProgram, Giving, LiveStatus, PrayerRequest, Resource, Sermon, SermonSeries, Settings } from "@/types";
+import type { Announcement, ChurchEvent, Devotion, GalleryProgram, Giving, LiveStatus, LiveStream, PrayerRequest, Resource, Sermon, SermonSeries, Settings } from "@/types";
 
 type Paginated<T> = { count: number; next: string | null; previous: string | null; results: T[] };
 
@@ -365,14 +365,61 @@ export function useDeletePrayerRequest() {
   });
 }
 
-export function useLive() {
-  return useQuery({ queryKey: ["live"], queryFn: () => api<LiveStatus>("/api/live") });
+export function useLiveStreams() {
+  return useQuery({
+    queryKey: ["live-streams"],
+    queryFn: () => api<Paginated<LiveStream>>(`${BASE_URL}/live-streams/`).then((r) => r.results),
+  });
 }
-export function useUpdateLive() {
+
+export function useLiveStreamById(id: string | undefined) {
+  return useQuery({
+    queryKey: ["live-streams", id],
+    queryFn: () => api<LiveStream>(`${BASE_URL}/live-streams/${id}/`),
+    enabled: !!id,
+  });
+}
+
+type LiveStreamPayload = { title: string; description: string; stream_link: string; status: string; date: string };
+
+export function useCreateLiveStream() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (body: Partial<LiveStatus>) =>
-      api<LiveStatus>("/api/live", { method: "PUT", body: JSON.stringify(body), auth: true }),
-    onSuccess: (data) => { qc.setQueryData(["live"], data); },
+    mutationFn: (body: LiveStreamPayload) =>
+      api<LiveStream>(`${BASE_URL}/live-streams/create/`, { method: "POST", body: JSON.stringify(body), auth: true }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["live-streams"] }),
+  });
+}
+
+export function useUpdateLiveStream() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, ...body }: LiveStreamPayload & { id: string }) =>
+      api<LiveStream>(`${BASE_URL}/live-streams/${id}/update/`, { method: "PUT", body: JSON.stringify(body), auth: true }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["live-streams"] }),
+  });
+}
+
+export function useDeleteLiveStream() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => api(`${BASE_URL}/live-streams/${id}/update/`, { method: "DELETE", auth: true }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["live-streams"] }),
+  });
+}
+
+export function useLive() {
+  return useQuery({
+    queryKey: ["live"],
+    queryFn: async () => {
+      const r = await api<Paginated<LiveStream>>(`${BASE_URL}/live-streams/`);
+      const active = r.results.find((s) => s.status === "live") ?? null;
+      return {
+        isLive: !!active,
+        streamUrl: active?.stream_link ?? "",
+        nextService: active?.title ?? "",
+        stream: active,
+      } satisfies LiveStatus;
+    },
   });
 }

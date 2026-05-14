@@ -7,8 +7,8 @@ type actions = {
 
 export const useLiveStore = create<LiveStatus & actions>((set) => ({
   isLive: false,
-  platform: "youtube",
   streamUrl: "",
   nextService: "",
+  stream: null,
   setLiveStatus: (status) => set(status),
 }));
