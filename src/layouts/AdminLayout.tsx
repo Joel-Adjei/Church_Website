@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Outlet, Link, useLocation, useNavigate, Navigate } from "react-router-dom";
+import { Outlet, Link, useLocation, useNavigate, Navigate, ScrollRestoration } from "react-router-dom";
 import { useAuth } from "@/store/auth";
 import { getToken } from "@/services/api";
 import { Button } from "@/components/ui/button";
@@ -141,6 +141,7 @@ export default function AdminLayout() {
           <Outlet />
         </main>
       </div>
+      <ScrollRestoration />
     </div>
   );
 }

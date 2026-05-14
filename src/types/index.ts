@@ -96,24 +96,26 @@ export type LiveStatus = {
   nextService: string;
 };
 
-export type DevotionStatus = "draft" | "published";
+export type DevotionReflection = {
+  id: ID;
+  name: string;
+  likes: number;
+  comments: string;
+  content: string;
+  devotion: ID;
+  date: string;
+};
 
 export type Devotion = {
   id: ID;
-  slug: string;
   title: string;
-  verseRef: string;
-  verseText: string;
+  Bible_verse: string;
   content: string;
-  prayer: string;
-  reflection: string;
-  author: string;
-  imageUrl: string;
-  devotionDate: string;
-  category: string;
-  status: DevotionStatus;
-  featured: boolean;
-  createdAt: string;
+  thumbnail: string;
+  date: string;
+  reflections: DevotionReflection[];
+  prayer?: string;
+  reflection?: string;
 };
 
 export type ResourceCategory =
