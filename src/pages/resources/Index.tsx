@@ -5,12 +5,26 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
-  BookOpen, Shirt, ShoppingBasket, Cpu, FileText, Package, Search,
-  MapPin, Mail, Phone, Tag, CheckCircle, AlertCircle, XCircle, Star, Loader2,
+  BookOpen,
+  Shirt,
+  ShoppingBasket,
+  Cpu,
+  FileText,
+  Package,
+  Search,
+  MapPin,
+  Mail,
+  Phone,
+  Tag,
+  CheckCircle,
+  AlertCircle,
+  XCircle,
+  Star,
+  Loader2,
 } from "lucide-react";
 import type { Resource, ResourceCategory } from "@/types";
 import { cn } from "@/utils/utils";
-import heroImg from "@/assets/bg_05.jpg";
+import heroImg from "@/assets/bg_14.jpg";
 
 const CATEGORIES: { value: ResourceCategory | "all"; label: string; icon: React.ElementType }[] = [
   { value: "all", label: "All", icon: Package },
@@ -44,9 +58,21 @@ const CATEGORY_ICONS: Record<ResourceCategory, React.ElementType> = {
 };
 
 const AVAILABILITY_META = {
-  available: { label: "Available", icon: CheckCircle, className: "text-emerald-600 bg-emerald-50 border-emerald-200" },
-  limited: { label: "Limited", icon: AlertCircle, className: "text-amber-600 bg-amber-50 border-amber-200" },
-  claimed: { label: "Claimed", icon: XCircle, className: "text-ink-muted bg-secondary border-border" },
+  available: {
+    label: "Available",
+    icon: CheckCircle,
+    className: "text-emerald-600 bg-emerald-50 border-emerald-200",
+  },
+  limited: {
+    label: "Limited",
+    icon: AlertCircle,
+    className: "text-amber-600 bg-amber-50 border-amber-200",
+  },
+  claimed: {
+    label: "Claimed",
+    icon: XCircle,
+    className: "text-ink-muted bg-secondary border-border",
+  },
 };
 
 const CONDITION_LABELS: Record<string, string> = {
@@ -64,11 +90,13 @@ function ResourceCard({ resource }: { resource: Resource }) {
   const isClaimed = resource.availability === "claimed";
 
   return (
-    <div className={cn(
-      "group bg-card border border-border rounded-2xl overflow-hidden shadow-card transition-all duration-300",
-      "hover:shadow-elevated hover:-translate-y-0.5",
-      isClaimed && "opacity-60"
-    )}>
+    <div
+      className={cn(
+        "group bg-card border border-border rounded-2xl overflow-hidden shadow-card transition-all duration-300",
+        "hover:shadow-elevated hover:-translate-y-0.5",
+        isClaimed && "opacity-60",
+      )}
+    >
       {/* Image */}
       <div className="relative aspect-[16/9] overflow-hidden bg-secondary">
         {resource.imageUrl ? (
@@ -89,10 +117,12 @@ function ResourceCard({ resource }: { resource: Resource }) {
           </div>
         )}
         {/* Availability overlay */}
-        <div className={cn(
-          "absolute top-3 right-3 flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full border",
-          avail.className
-        )}>
+        <div
+          className={cn(
+            "absolute top-3 right-3 flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full border",
+            avail.className,
+          )}
+        >
           <AvailIcon className="h-3 w-3" /> {avail.label}
         </div>
       </div>
@@ -100,7 +130,12 @@ function ResourceCard({ resource }: { resource: Resource }) {
       <div className="p-5 flex flex-col gap-3">
         {/* Category + condition */}
         <div className="flex items-center gap-2 flex-wrap">
-          <span className={cn("inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full border", catColor)}>
+          <span
+            className={cn(
+              "inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full border",
+              catColor,
+            )}
+          >
             <CatIcon className="h-3 w-3" />
             {resource.category.charAt(0).toUpperCase() + resource.category.slice(1)}
           </span>
@@ -135,7 +170,12 @@ function ResourceCard({ resource }: { resource: Resource }) {
           {resource.contactEmail && (
             <div className="flex items-center gap-2 text-xs text-ink-muted">
               <Mail className="h-3.5 w-3.5 text-accent shrink-0" />
-              <a href={`mailto:${resource.contactEmail}`} className="hover:underline hover:text-ink">{resource.contactEmail}</a>
+              <a
+                href={`mailto:${resource.contactEmail}`}
+                className="hover:underline hover:text-ink"
+              >
+                {resource.contactEmail}
+              </a>
             </div>
           )}
           {resource.contactPhone && (
@@ -158,7 +198,8 @@ export default function ResourcesIndex() {
   const filtered = resources.filter((r) => {
     const matchesCategory = activeCategory === "all" || r.category === activeCategory;
     const q = search.toLowerCase();
-    const matchesSearch = !q || r.title.toLowerCase().includes(q) || r.description.toLowerCase().includes(q);
+    const matchesSearch =
+      !q || r.title.toLowerCase().includes(q) || r.description.toLowerCase().includes(q);
     return matchesCategory && matchesSearch;
   });
 
@@ -170,7 +211,7 @@ export default function ResourcesIndex() {
       {/* Hero */}
       <section className="relative h-[400px] flex items-end overflow-hidden">
         <img src={heroImg} alt="" className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/55 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-primary via-primary/55 to-transparent" />
         <div className="relative mx-auto max-w-7xl px-6 lg:px-10 py-16 md:py-20 z-20 w-full">
           <SectionHeading
             eyebrow="Church Resources"
@@ -184,17 +225,21 @@ export default function ResourcesIndex() {
       {/* Stats strip */}
       <div className="bg-accent/10 border-y border-accent/20">
         <div className="mx-auto max-w-7xl px-6 lg:px-10 py-3 flex flex-wrap gap-6 text-sm text-ink-muted">
-          {(["books", "clothing", "food", "equipment", "digital"] as ResourceCategory[]).map((cat) => {
-            const count = resources.filter((r) => r.category === cat && r.availability !== "claimed").length;
-            if (!count) return null;
-            const Icon = CATEGORY_ICONS[cat];
-            return (
-              <span key={cat} className="flex items-center gap-1.5">
-                <Icon className="h-4 w-4 text-accent" />
-                <strong className="text-ink">{count}</strong> {cat}
-              </span>
-            );
-          })}
+          {(["books", "clothing", "food", "equipment", "digital"] as ResourceCategory[]).map(
+            (cat) => {
+              const count = resources.filter(
+                (r) => r.category === cat && r.availability !== "claimed",
+              ).length;
+              if (!count) return null;
+              const Icon = CATEGORY_ICONS[cat];
+              return (
+                <span key={cat} className="flex items-center gap-1.5">
+                  <Icon className="h-4 w-4 text-accent" />
+                  <strong className="text-ink">{count}</strong> {cat}
+                </span>
+              );
+            },
+          )}
         </div>
       </div>
 
@@ -247,7 +292,9 @@ export default function ResourcesIndex() {
               <h2 className="font-display text-xl text-ink">Featured Resources</h2>
             </div>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {featured.map((r) => <ResourceCard key={r.id} resource={r} />)}
+              {featured.map((r) => (
+                <ResourceCard key={r.id} resource={r} />
+              ))}
             </div>
           </section>
         )}
@@ -259,17 +306,20 @@ export default function ResourcesIndex() {
               <h2 className="font-display text-xl text-ink mb-5">All Resources</h2>
             )}
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {rest.map((r) => <ResourceCard key={r.id} resource={r} />)}
+              {rest.map((r) => (
+                <ResourceCard key={r.id} resource={r} />
+              ))}
             </div>
           </section>
         )}
 
         {/* CTA */}
-        <div className="rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground p-8 flex flex-col sm:flex-row items-center gap-6">
+        <div className="rounded-2xl bg-linear-to-br from-primary to-primary/80 text-primary-foreground p-8 flex flex-col sm:flex-row items-center gap-6">
           <div className="flex-1">
             <h3 className="font-display text-2xl mb-2">Have something to donate?</h3>
             <p className="text-primary-foreground/80 text-sm">
-              Your unused books, clothing, or equipment could be a blessing to another member of our church family.
+              Your unused books, clothing, or equipment could be a blessing to another member of our
+              church family.
             </p>
           </div>
           <a

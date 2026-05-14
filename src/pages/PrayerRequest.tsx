@@ -18,7 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { SectionHeading } from "@/components/SectionHeading";
 import { useSubmitPrayerRequest } from "@/services/queries";
-import heroImg from "@/assets/bg_07.jpg";
+import heroImg from "@/assets/bg_12.jpg";
 import type { PrayerCategory, PrayerPrivacy } from "@/types";
 
 const PRIVACY_OPTIONS: {
@@ -57,7 +57,16 @@ const schema = z.object({
   lastName: z.string().min(1, "Please enter your last name"),
   email: z.string().email("Please enter a valid email"),
   phone: z.string().optional(),
-  category: z.enum(["healing", "family", "finances", "guidance", "salvation", "relationships", "thanksgiving", "other"]),
+  category: z.enum([
+    "healing",
+    "family",
+    "finances",
+    "guidance",
+    "salvation",
+    "relationships",
+    "thanksgiving",
+    "other",
+  ]),
   subject: z.string().min(3, "Please give your request a title"),
   request: z.string().min(20, "Please share a few more details so we can pray specifically"),
   privacy: z.enum(["public", "private", "anonymous"]),
@@ -99,7 +108,7 @@ export default function PrayerRequest() {
       {/* Hero */}
       <section className="relative h-[420px] flex items-end overflow-hidden">
         <img src={heroImg} className="absolute inset-0 h-full w-full object-cover" alt="" />
-        <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/60 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-primary via-primary/60 to-transparent" />
         <div className="relative mx-auto max-w-7xl px-6 lg:px-10 py-16 md:py-24 z-20 w-full">
           <div className="flex items-center gap-3 mb-4">
             <div className="h-10 w-10 rounded-full bg-accent/20 border border-accent/30 flex items-center justify-center">
@@ -222,7 +231,9 @@ export default function PrayerRequest() {
                   </button>
                 ))}
               </div>
-              {errors.category && <p className="mt-1 text-xs text-destructive">{errors.category.message}</p>}
+              {errors.category && (
+                <p className="mt-1 text-xs text-destructive">{errors.category.message}</p>
+              )}
             </div>
 
             {/* Subject */}
@@ -352,7 +363,7 @@ export default function PrayerRequest() {
           </div>
 
           {/* Scripture */}
-          <div className="rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground p-6">
+          <div className="rounded-2xl bg-linear-to-br from-primary to-primary/80 text-primary-foreground p-6">
             <HandHeart className="h-8 w-8 mb-4 opacity-80" />
             <blockquote className="font-display text-lg leading-relaxed italic mb-3">
               "Do not be anxious about anything, but in every situation, by prayer and petition,
