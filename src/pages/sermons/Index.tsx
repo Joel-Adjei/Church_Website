@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { Search, PlayCircle, User } from "lucide-react";
+import { Search, PlayCircle, User, Loader2, VideoOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useSermons, useList } from "@/services/queries";
+import { useSermons, useSeries } from "@/services/queries";
 import { format } from "date-fns";
 import { SectionHeading } from "@/components/SectionHeading";
 import heroImg from "@/assets/sermon_bg.jpg";
@@ -17,7 +17,7 @@ import { youtubeThumbnail } from "@/lib/utils";
 
 export default function SermonsIndex() {
   const { data: sermons = [], isLoading } = useSermons();
-  const { data: series = [] } = useList("series");
+  const { data: series = [] } = useSeries();
   const [q, setQ] = useState("");
   const [preacher, setPreacher] = useState<string>("all");
 
@@ -76,9 +76,20 @@ export default function SermonsIndex() {
         </div>
 
         {isLoading ? (
-          <div className="py-24 text-center text-ink-muted">Loading sermons…</div>
+          <div className="flex flex-col items-center justify-center py-24 gap-4 text-ink-muted">
+            <Loader2 className="h-10 w-10 animate-spin text-primary" />
+            <p className="text-sm font-medium">Loading sermons…</p>
+          </div>
         ) : filtered.length === 0 ? (
-          <div className="py-24 text-center text-ink-muted">No sermons match your search.</div>
+          <div className="flex flex-col items-center justify-center py-24 gap-4">
+            <div className="rounded-full bg-muted p-5">
+              <VideoOff className="h-10 w-10 text-ink-muted" />
+            </div>
+            <p className="text-lg font-semibold text-ink">No sermons found</p>
+            <p className="text-sm text-ink-muted max-w-xs text-center">
+              Try adjusting your search or filter to find what you're looking for.
+            </p>
+          </div>
         ) : (
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((s) => {

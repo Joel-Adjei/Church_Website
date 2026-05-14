@@ -29,30 +29,10 @@ export type Store = {
 };
 
 const seedSeries: SermonSeries[] = [
-  {
-    id: "series-1",
-    slug: "romans-reborn",
-    title: "Romans: Reborn",
-    description: "A nine-week walk through Paul's letter to the Romans.",
-  },
-  {
-    id: "series-2",
-    slug: "foundations",
-    title: "Foundations",
-    description: "The bedrock practices of a thriving spiritual life.",
-  },
-  {
-    id: "series-3",
-    slug: "parables",
-    title: "Parables",
-    description: "The teaching stories of Jesus, retold for today.",
-  },
-  {
-    id: "series-4",
-    slug: "sermon-on-the-mount",
-    title: "Sermon on the Mount",
-    description: "A summer in Matthew 5–7.",
-  },
+  { id: "series-1", title: "Romans: Reborn", description: "A nine-week walk through Paul's letter to the Romans.", image: "", thoughts: [], available_sermons: "" },
+  { id: "series-2", title: "Foundations", description: "The bedrock practices of a thriving spiritual life.", image: "", thoughts: [], available_sermons: "" },
+  { id: "series-3", title: "Parables", description: "The teaching stories of Jesus, retold for today.", image: "", thoughts: [], available_sermons: "" },
+  { id: "series-4", title: "Sermon on the Mount", description: "A summer in Matthew 5–7.", image: "", thoughts: [], available_sermons: "" },
 ];
 
 const seedSermons: Sermon[] = [
@@ -156,125 +136,57 @@ const seedSermons: Sermon[] = [
 ];
 
 const seedEvents: ChurchEvent[] = [
-  {
-    id: "1",
-    slug: "spring-community-dinner",
-    title: "Spring Community Dinner",
-    description: "An evening of shared food and shared stories.",
-    startAt: "2026-05-15T18:00:00",
-    endAt: "2026-05-15T21:00:00",
-    location: "Fellowship Hall",
-    bannerImageUrl: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80",
-  },
-  {
-    id: "2",
-    slug: "youth-retreat-weekend",
-    title: "Youth Retreat Weekend",
-    description: "Three days at Lake Pinecrest.",
-    startAt: "2026-05-22T16:00:00",
-    endAt: "2026-05-24T14:00:00",
-    location: "Lake Pinecrest Camp",
-    bannerImageUrl: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=80",
-  },
-  {
-    id: "3",
-    slug: "global-missions-sunday",
-    title: "Global Missions Sunday",
-    description: "Highlighting the work of our partners.",
-    startAt: "2026-06-01T09:00:00",
-    endAt: "2026-06-01T12:00:00",
-    location: "Main Sanctuary",
-    bannerImageUrl: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=1200&q=80",
-  },
-  {
-    id: "4",
-    slug: "summer-baptism-service",
-    title: "Summer Baptism Service",
-    description: "Open-air baptism at the river.",
-    startAt: "2026-06-14T10:00:00",
-    endAt: "2026-06-14T12:00:00",
-    location: "Riverside Park",
-    bannerImageUrl: "https://images.unsplash.com/photo-1519834785169-98be25ec3f84?w=1200&q=80",
-  },
+  { id: "1", name: "Spring Community Dinner", description: "An evening of shared food and shared stories.", flyer: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80", location: "Fellowship Hall", date: "2026-05-15", end_date: "2026-05-15", days: 1, start_time: "18:00:00", end_time: "21:00:00", created_at: new Date().toISOString() },
+  { id: "2", name: "Youth Retreat Weekend", description: "Three days at Lake Pinecrest.", flyer: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=80", location: "Lake Pinecrest Camp", date: "2026-05-22", end_date: "2026-05-24", days: 3, start_time: "16:00:00", end_time: "14:00:00", created_at: new Date().toISOString() },
+  { id: "3", name: "Global Missions Sunday", description: "Highlighting the work of our partners.", flyer: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=1200&q=80", location: "Main Sanctuary", date: "2026-06-01", end_date: "2026-06-01", days: 1, start_time: "09:00:00", end_time: "12:00:00", created_at: new Date().toISOString() },
+  { id: "4", name: "Summer Baptism Service", description: "Open-air baptism at the river.", flyer: "https://images.unsplash.com/photo-1519834785169-98be25ec3f84?w=1200&q=80", location: "Riverside Park", date: "2026-06-14", end_date: "2026-06-14", days: 1, start_time: "10:00:00", end_time: "12:00:00", created_at: new Date().toISOString() },
 ];
 
 const seedAnnouncements: Announcement[] = [
-  {
-    id: "1",
-    slug: "easter-services-recap",
-    title: "Easter Services — Thank You",
-    body: "Over 1,800 of you joined across our four services. Photos and the message archive are now available.",
-    imageUrl: "https://images.unsplash.com/photo-1586556830295-50a5d23ff7e3?w=1200&q=80",
-    publishAt: "2026-04-22",
-  },
-  {
-    id: "2",
-    slug: "new-small-groups-spring",
-    title: "Spring Small Groups Now Open",
-    body: "Twelve new groups are forming this season. Sign up by May 1.",
-    publishAt: "2026-04-18",
-  },
-  {
-    id: "3",
-    slug: "building-renovations-update",
-    title: "Sanctuary Renovation Update",
-    body: "Phase one wraps up next month. Thank you for your patience.",
-    imageUrl: "https://images.unsplash.com/photo-1520637836862-4d197d17c55a?w=1200&q=80",
-    publishAt: "2026-04-10",
-  },
-  {
-    id: "4",
-    slug: "volunteer-appreciation",
-    title: "Volunteer Appreciation Brunch",
-    body: "Join us Sunday May 5 at 12:30 for brunch on the lawn.",
-    publishAt: "2026-04-03",
-  },
+  { id: "1", title: "Easter Services — Thank You", content: "Over 1,800 of you joined across our four services. Photos and the message archive are now available.", date: "2026-04-22T08:00:00Z" },
+  { id: "2", title: "Spring Small Groups Now Open", content: "Twelve new groups are forming this season. Sign up by May 1.", date: "2026-04-18T08:00:00Z" },
+  { id: "3", title: "Sanctuary Renovation Update", content: "Phase one wraps up next month. Thank you for your patience.", date: "2026-04-10T08:00:00Z" },
+  { id: "4", title: "Volunteer Appreciation Brunch", content: "Join us Sunday May 5 at 12:30 for brunch on the lawn.", date: "2026-04-03T08:00:00Z" },
 ];
 
 const seedGallery: GalleryProgram[] = [
   {
     id: "1",
-    slug: "easter-2026",
     title: "Easter 2026",
     description: "Sunrise service and the Easter brunch.",
-    coverImageUrl: "https://images.unsplash.com/photo-1521900444019-d3ff2ae65a52?w=800&q=80",
+    venue: "Main Sanctuary",
+    likes: 0,
+    date: "2026-04-05T09:00:00Z",
     images: [
-      {
-        url: "https://images.unsplash.com/photo-1521900444019-d3ff2ae65a52?w=1200&q=80",
-        caption: "Sunrise service",
-      },
-      {
-        url: "https://images.unsplash.com/photo-1490131784822-d7ddb4cfc11d?w=1200&q=80",
-        caption: "Choir rehearsal",
-      },
-      { url: "https://images.unsplash.com/photo-1507692049790-de58290a4334?w=1200&q=80" },
-      {
-        url: "https://images.unsplash.com/photo-1586556830295-50a5d23ff7e3?w=1200&q=80",
-        caption: "Easter brunch",
-      },
+      { id: "img-1", gallery: "1", title: "Sunrise service", image: "https://images.unsplash.com/photo-1521900444019-d3ff2ae65a52?w=1200&q=80", description: "", venue: "", likes: 0, date: "2026-04-05T09:00:00Z" },
+      { id: "img-2", gallery: "1", title: "Choir rehearsal", image: "https://images.unsplash.com/photo-1490131784822-d7ddb4cfc11d?w=1200&q=80", description: "", venue: "", likes: 0, date: "2026-04-05T09:00:00Z" },
+      { id: "img-3", gallery: "1", title: "", image: "https://images.unsplash.com/photo-1507692049790-de58290a4334?w=1200&q=80", description: "", venue: "", likes: 0, date: "2026-04-05T09:00:00Z" },
+      { id: "img-4", gallery: "1", title: "Easter brunch", image: "https://images.unsplash.com/photo-1586556830295-50a5d23ff7e3?w=1200&q=80", description: "", venue: "", likes: 0, date: "2026-04-05T09:00:00Z" },
     ],
   },
   {
     id: "2",
-    slug: "youth-camp-2025",
     title: "Youth Camp 2025",
     description: "Five days at Lake Pinecrest.",
-    coverImageUrl: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&q=80",
+    venue: "Lake Pinecrest",
+    likes: 0,
+    date: "2025-07-10T09:00:00Z",
     images: [
-      { url: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=80" },
-      { url: "https://images.unsplash.com/photo-1504718855392-c0fe7eee0a3e?w=1200&q=80" },
-      { url: "https://images.unsplash.com/photo-1519834785169-98be25ec3f84?w=1200&q=80" },
+      { id: "img-5", gallery: "2", title: "", image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=80", description: "", venue: "", likes: 0, date: "2025-07-10T09:00:00Z" },
+      { id: "img-6", gallery: "2", title: "", image: "https://images.unsplash.com/photo-1504718855392-c0fe7eee0a3e?w=1200&q=80", description: "", venue: "", likes: 0, date: "2025-07-10T09:00:00Z" },
+      { id: "img-7", gallery: "2", title: "", image: "https://images.unsplash.com/photo-1519834785169-98be25ec3f84?w=1200&q=80", description: "", venue: "", likes: 0, date: "2025-07-10T09:00:00Z" },
     ],
   },
   {
     id: "3",
-    slug: "christmas-eve-2025",
     title: "Christmas Eve 2025",
     description: "Candlelight service.",
-    coverImageUrl: "https://images.unsplash.com/photo-1543248939-ff40856f65d4?w=800&q=80",
+    venue: "Main Sanctuary",
+    likes: 0,
+    date: "2025-12-24T18:00:00Z",
     images: [
-      { url: "https://images.unsplash.com/photo-1543248939-ff40856f65d4?w=1200&q=80" },
-      { url: "https://images.unsplash.com/photo-1482330454287-3cf6469df49e?w=1200&q=80" },
+      { id: "img-8", gallery: "3", title: "", image: "https://images.unsplash.com/photo-1543248939-ff40856f65d4?w=1200&q=80", description: "", venue: "", likes: 0, date: "2025-12-24T18:00:00Z" },
+      { id: "img-9", gallery: "3", title: "", image: "https://images.unsplash.com/photo-1482330454287-3cf6469df49e?w=1200&q=80", description: "", venue: "", likes: 0, date: "2025-12-24T18:00:00Z" },
     ],
   },
 ];

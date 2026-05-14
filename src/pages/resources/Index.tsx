@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   BookOpen, Shirt, ShoppingBasket, Cpu, FileText, Package, Search,
-  MapPin, Mail, Phone, Tag, CheckCircle, AlertCircle, XCircle, Star,
+  MapPin, Mail, Phone, Tag, CheckCircle, AlertCircle, XCircle, Star, Loader2,
 } from "lucide-react";
 import type { Resource, ResourceCategory } from "@/types";
 import { cn } from "@/utils/utils";
@@ -226,7 +226,10 @@ export default function ResourcesIndex() {
         </div>
 
         {isLoading && (
-          <div className="text-center py-20 text-ink-muted">Loading resources…</div>
+          <div className="flex flex-col items-center justify-center py-24 gap-4 text-ink-muted">
+            <Loader2 className="h-10 w-10 animate-spin text-primary" />
+            <p className="text-sm font-medium">Loading resources…</p>
+          </div>
         )}
 
         {!isLoading && filtered.length === 0 && (

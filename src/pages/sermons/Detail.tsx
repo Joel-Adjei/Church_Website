@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, Calendar, User } from "lucide-react";
-import { useSermonById, useSermons, useList } from "@/services/queries";
+import { useSermonById, useSermons, useSeries } from "@/services/queries";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { ShareButtons } from "@/components/ShareButtons";
@@ -19,7 +19,7 @@ export default function SermonDetail() {
   const { id } = useParams<{ id: string }>();
   const { data: sermon, isLoading, error } = useSermonById(id);
   const { data: sermons = [] } = useSermons();
-  const { data: series = [] } = useList("series");
+  const { data: series = [] } = useSeries();
 
   if (isLoading) return <div className="py-24 text-center text-ink-muted">Loading…</div>;
   if (error || !sermon)

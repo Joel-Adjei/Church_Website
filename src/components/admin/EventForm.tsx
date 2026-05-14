@@ -6,43 +6,61 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useCreate, useUpdate } from "@/services/queries";
-import { slugify } from "@/store/store";
+import { useCreateEvent, useUpdateEvent } from "@/services/queries";
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
 import type { ChurchEvent } from "@/types";
 
 const schema = z.object({
-  title: z.string().trim().min(2).max(200),
-  slug: z.string().trim().min(2).max(200).regex(/^[a-z0-9-]+$/, "Lowercase, numbers, hyphens only"),
-  description: z.string().trim().min(2).max(4000),
-  startAt: z.string().min(1, "Start required"),
-  endAt: z.string().min(1, "End required"),
-  location: z.string().trim().min(2).max(200),
-  bannerImageUrl: z.string().trim().url(),
-}).refine((v) => new Date(v.endAt) >= new Date(v.startAt), { path: ["endAt"], message: "End must be after start" });
+  name: z.string().trim().min(2, "Name is required").max(200),
+  description: z.string().trim().min(2, "Description is required").max(4000),
+  flyer: z.string().trim().url("Must be a valid URL").or(z.literal("")).optional(),
+  location: z.string().trim().min(2, "Location is required").max(200),
+  date: z.string().min(1, "Start date is required"),
+  end_date: z.string().min(1, "End date is required"),
+  start_time: z.string().min(1, "Start time is required"),
+  end_time: z.string().min(1, "End time is required"),
+  days: z.coerce.number().min(1),
+});
 type Values = z.infer<typeof schema>;
-
-function toLocal(s: string) { return s.length >= 16 ? s.slice(0, 16) : s; }
 
 export function EventForm({ initial, mode }: { initial?: ChurchEvent; mode: "new" | "edit" }) {
   const navigate = useNavigate();
-  const create = useCreate("events");
-  const update = useUpdate("events");
+  const create = useCreateEvent();
+  const update = useUpdateEvent();
+
   const form = useForm<Values>({
     resolver: zodResolver(schema),
     defaultValues: initial
-      ? { ...initial, startAt: toLocal(initial.startAt), endAt: toLocal(initial.endAt) }
-      : { title: "", slug: "", description: "", startAt: "", endAt: "", location: "", bannerImageUrl: "" },
+      ? {
+          name: initial.name,
+          description: initial.description,
+          flyer: initial.flyer ?? "",
+          location: initial.location,
+          date: initial.date,
+          end_date: initial.end_date,
+          start_time: initial.start_time.slice(0, 5),
+          end_time: initial.end_time.slice(0, 5),
+          days: initial.days,
+        }
+      : { name: "", description: "", flyer: "", location: "", date: "", end_date: "", start_time: "", end_time: "", days: 1 },
   });
 
   async function onSubmit(values: Values) {
+    const payload = {
+      ...values,
+      flyer: values.flyer ?? "",
+      start_time: `${values.start_time}:00`,
+      end_time: `${values.end_time}:00`,
+    };
     try {
-      if (mode === "new") await create.mutateAsync(values);
-      else if (initial) await update.mutateAsync({ id: initial.id, ...values });
+      if (mode === "new") await create.mutateAsync(payload);
+      else if (initial) await update.mutateAsync({ id: initial.id, ...payload });
       toast.success(mode === "new" ? "Event created" : "Event updated");
       navigate("/admin/events");
-    } catch (e) { toast.error(e instanceof Error ? e.message : "Save failed"); }
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Save failed");
+    }
   }
 
   return (
@@ -53,25 +71,37 @@ export function EventForm({ initial, mode }: { initial?: ChurchEvent; mode: "new
       <h1 className="font-display text-3xl text-ink mb-8">{mode === "new" ? "New event" : "Edit event"}</h1>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 max-w-2xl bg-background border border-border rounded-2xl p-6" noValidate>
         <div className="space-y-2">
-          <Label htmlFor="title">Title</Label>
-          <Input id="title" {...form.register("title", { onChange: (e) => { if (mode === "new" && !form.getValues("slug")) form.setValue("slug", slugify(e.target.value)); } })} />
-          {form.formState.errors.title && <p className="text-xs text-destructive">{form.formState.errors.title.message}</p>}
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="slug">Slug</Label>
-          <Input id="slug" {...form.register("slug")} />
-          {form.formState.errors.slug && <p className="text-xs text-destructive">{form.formState.errors.slug.message}</p>}
+          <Label htmlFor="name">Name</Label>
+          <Input id="name" {...form.register("name")} />
+          {form.formState.errors.name && <p className="text-xs text-destructive">{form.formState.errors.name.message}</p>}
         </div>
         <div className="grid sm:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="startAt">Start</Label>
-            <Input id="startAt" type="datetime-local" {...form.register("startAt")} />
-            {form.formState.errors.startAt && <p className="text-xs text-destructive">{form.formState.errors.startAt.message}</p>}
+            <Label htmlFor="date">Start Date</Label>
+            <Input id="date" type="date" {...form.register("date")} />
+            {form.formState.errors.date && <p className="text-xs text-destructive">{form.formState.errors.date.message}</p>}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="endAt">End</Label>
-            <Input id="endAt" type="datetime-local" {...form.register("endAt")} />
-            {form.formState.errors.endAt && <p className="text-xs text-destructive">{form.formState.errors.endAt.message}</p>}
+            <Label htmlFor="end_date">End Date</Label>
+            <Input id="end_date" type="date" {...form.register("end_date")} />
+            {form.formState.errors.end_date && <p className="text-xs text-destructive">{form.formState.errors.end_date.message}</p>}
+          </div>
+        </div>
+        <div className="grid sm:grid-cols-3 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="start_time">Start Time</Label>
+            <Input id="start_time" type="time" {...form.register("start_time")} />
+            {form.formState.errors.start_time && <p className="text-xs text-destructive">{form.formState.errors.start_time.message}</p>}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="end_time">End Time</Label>
+            <Input id="end_time" type="time" {...form.register("end_time")} />
+            {form.formState.errors.end_time && <p className="text-xs text-destructive">{form.formState.errors.end_time.message}</p>}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="days">Days</Label>
+            <Input id="days" type="number" min={1} {...form.register("days")} />
+            {form.formState.errors.days && <p className="text-xs text-destructive">{form.formState.errors.days.message}</p>}
           </div>
         </div>
         <div className="space-y-2">
@@ -80,9 +110,9 @@ export function EventForm({ initial, mode }: { initial?: ChurchEvent; mode: "new
           {form.formState.errors.location && <p className="text-xs text-destructive">{form.formState.errors.location.message}</p>}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="bannerImageUrl">Banner image URL</Label>
-          <Input id="bannerImageUrl" type="url" {...form.register("bannerImageUrl")} />
-          {form.formState.errors.bannerImageUrl && <p className="text-xs text-destructive">{form.formState.errors.bannerImageUrl.message}</p>}
+          <Label htmlFor="flyer">Flyer / Banner Image URL <span className="text-ink-muted font-normal">(optional)</span></Label>
+          <Input id="flyer" type="url" placeholder="https://…" {...form.register("flyer")} />
+          {form.formState.errors.flyer && <p className="text-xs text-destructive">{form.formState.errors.flyer.message}</p>}
         </div>
         <div className="space-y-2">
           <Label htmlFor="description">Description</Label>

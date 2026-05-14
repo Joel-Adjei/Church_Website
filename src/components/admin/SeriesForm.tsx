@@ -6,32 +6,34 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useCreate, useUpdate } from "@/services/queries";
-import { slugify } from "@/store/store";
+import { useCreateSeries, useUpdateSeries } from "@/services/queries";
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
 import type { SermonSeries } from "@/types";
 
 const schema = z.object({
-  title: z.string().trim().min(2).max(200),
-  slug: z.string().trim().min(2).max(200).regex(/^[a-z0-9-]+$/, "Lowercase, numbers, hyphens only"),
-  description: z.string().trim().min(2).max(2000),
+  title: z.string().trim().min(2, "Title is required").max(200),
+  description: z.string().trim().min(2, "Description is required").max(2000),
+  image: z.string().trim().url("Must be a valid URL").or(z.literal("")).optional(),
 });
 type Values = z.infer<typeof schema>;
 
 export function SeriesForm({ initial, mode }: { initial?: SermonSeries; mode: "new" | "edit" }) {
   const navigate = useNavigate();
-  const create = useCreate("series");
-  const update = useUpdate("series");
+  const create = useCreateSeries();
+  const update = useUpdateSeries();
   const form = useForm<Values>({
     resolver: zodResolver(schema),
-    defaultValues: initial ?? { title: "", slug: "", description: "" },
+    defaultValues: initial
+      ? { title: initial.title, description: initial.description, image: initial.image ?? "" }
+      : { title: "", description: "", image: "" },
   });
 
   async function onSubmit(values: Values) {
+    const payload = { title: values.title, description: values.description, image: values.image ?? "" };
     try {
-      if (mode === "new") await create.mutateAsync(values);
-      else if (initial) await update.mutateAsync({ id: initial.id, ...values });
+      if (mode === "new") await create.mutateAsync(payload);
+      else if (initial) await update.mutateAsync({ id: initial.id, ...payload });
       toast.success(mode === "new" ? "Series created" : "Series updated");
       navigate("/admin/series");
     } catch (e) {
@@ -48,15 +50,13 @@ export function SeriesForm({ initial, mode }: { initial?: SermonSeries; mode: "n
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 max-w-2xl bg-background border border-border rounded-2xl p-6" noValidate>
         <div className="space-y-2">
           <Label htmlFor="title">Title</Label>
-          <Input id="title" {...form.register("title", {
-            onChange: (e) => { if (mode === "new" && !form.getValues("slug")) form.setValue("slug", slugify(e.target.value)); },
-          })} />
+          <Input id="title" {...form.register("title")} />
           {form.formState.errors.title && <p className="text-xs text-destructive">{form.formState.errors.title.message}</p>}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="slug">Slug</Label>
-          <Input id="slug" {...form.register("slug")} />
-          {form.formState.errors.slug && <p className="text-xs text-destructive">{form.formState.errors.slug.message}</p>}
+          <Label htmlFor="image">Cover Image URL <span className="text-ink-muted font-normal">(optional)</span></Label>
+          <Input id="image" type="url" placeholder="https://…" {...form.register("image")} />
+          {form.formState.errors.image && <p className="text-xs text-destructive">{form.formState.errors.image.message}</p>}
         </div>
         <div className="space-y-2">
           <Label htmlFor="description">Description</Label>
