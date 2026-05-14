@@ -70,7 +70,7 @@ export default function PrayerRequests() {
     const matchesSearch =
       !q ||
       r.subject.toLowerCase().includes(q) ||
-      r.request.toLowerCase().includes(q) ||
+      r.request?.toLowerCase().includes(q) ||
       r.name.toLowerCase().includes(q);
     return matchesSearch;
   });
@@ -153,7 +153,7 @@ export default function PrayerRequests() {
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-ink-muted text-xs">·</span>
                     <span className="text-xs text-ink-muted">
-                      {format(parseISO(r.date), "MMM d, yyyy")}
+                      {format(parseISO(r.createdAt), "MMM d, yyyy")}
                     </span>
                   </div>
                 </div>

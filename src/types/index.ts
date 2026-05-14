@@ -154,7 +154,8 @@ export type PrayerRequest = {
   phone?: string;
   subject: string;
   request?: string;
-  date: string;
+  date?: string;
+  createdAt: string;
 };
 
 export type GivingCategory =
