@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { LogIn } from "lucide-react";
 
 const schema = z.object({
-  email: z.string().trim().email("Enter a valid email"),
+  email: z.string().trim().min(1, "name is required"),
   password: z.string().min(1, "Password is required"),
 });
 type FormValues = z.infer<typeof schema>;
@@ -39,7 +39,9 @@ export default function Login() {
     <div className="min-h-screen grid place-items-center bg-surface-elevated px-4">
       <div className="w-full max-w-md bg-background border border-border rounded-2xl shadow-card p-8">
         <Link to="/" className="flex items-center gap-2 mb-8">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground font-display">G</div>
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground font-display">
+            G
+          </div>
           <span className="font-display text-xl">Grace Cathedral</span>
         </Link>
         <h1 className="font-display text-3xl text-ink">Admin sign in</h1>
@@ -47,17 +49,29 @@ export default function Login() {
 
         <form onSubmit={form.handleSubmit(onSubmit)} className="mt-8 space-y-4" noValidate>
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" autoComplete="username" {...form.register("email")} />
-            {form.formState.errors.email && <p className="text-xs text-destructive">{form.formState.errors.email.message}</p>}
+            <Label htmlFor="email">Name</Label>
+            <Input id="email" autoComplete="username" {...form.register("email")} />
+            {form.formState.errors.email && (
+              <p className="text-xs text-destructive">{form.formState.errors.email.message}</p>
+            )}
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" autoComplete="current-password" {...form.register("password")} />
-            {form.formState.errors.password && <p className="text-xs text-destructive">{form.formState.errors.password.message}</p>}
+            <Input
+              id="password"
+              type="password"
+              autoComplete="current-password"
+              {...form.register("password")}
+            />
+            {form.formState.errors.password && (
+              <p className="text-xs text-destructive">{form.formState.errors.password.message}</p>
+            )}
           </div>
           {error && (
-            <div role="alert" className="text-sm text-destructive bg-destructive/5 border border-destructive/20 rounded-md p-3">
+            <div
+              role="alert"
+              className="text-sm text-destructive bg-destructive/5 border border-destructive/20 rounded-md p-3"
+            >
               {error}
             </div>
           )}

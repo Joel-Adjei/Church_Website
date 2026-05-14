@@ -13,7 +13,7 @@ export default function EventDetail() {
   if (error || !event) return <div className="py-24 text-center text-ink-muted">Event not found.</div>;
 
   const startDateTime = new Date(`${event.date}T${event.start_time}`);
-  const endDateTime = new Date(`${event.end_date}T${event.end_time}`);
+  const endDateTime = event.end_time ? new Date(`${event.end_date}T${event.end_time}`) : null;
 
   return (
     <article>
@@ -65,7 +65,7 @@ export default function EventDetail() {
             <div>
               <div className="text-xs uppercase tracking-wider text-ink-muted">Time</div>
               <div className="text-ink font-medium">
-                {format(startDateTime, "h:mm a")} – {format(endDateTime, "h:mm a")}
+                {format(startDateTime, "h:mm a")}{endDateTime ? ` – ${format(endDateTime, "h:mm a")}` : ""}
               </div>
             </div>
           </div>

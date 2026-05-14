@@ -87,13 +87,22 @@ export type Settings = {
   };
 };
 
-export type LivePlatform = "youtube" | "vimeo" | "facebook" | "custom";
+export type LiveStream = {
+  id: ID;
+  title: string;
+  description: string;
+  stream_link: string;
+  status: string;
+  reactions: number;
+  comments: string;
+  date: string;
+};
 
 export type LiveStatus = {
   isLive: boolean;
-  platform: LivePlatform;
   streamUrl: string;
   nextService: string;
+  stream: LiveStream | null;
 };
 
 export type DevotionReflection = {

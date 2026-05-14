@@ -8,7 +8,6 @@ export default function Live() {
   const { data: settings } = useSettings();
   const isLive = live?.isLive ?? false;
   const streamUrl = live?.streamUrl ?? "";
-  const nextService = live?.nextService ?? "Sunday";
   const serviceTimes = settings?.serviceTimes ?? [];
 
   return (
@@ -26,8 +25,16 @@ export default function Live() {
       </div>
 
       {isLive && streamUrl ? (
-        <div className="aspect-video overflow-hidden rounded-2xl bg-primary shadow-elevated">
-          <iframe src={streamUrl} className="h-full w-full" allow="autoplay; encrypted-media" allowFullScreen title="Live stream" />
+        <div>
+          {live?.stream?.title && (
+            <div className="mb-4 text-center">
+              <h2 className="font-display text-2xl text-ink">{live.stream.title}</h2>
+              {live.stream.description && <p className="mt-1 text-ink-muted">{live.stream.description}</p>}
+            </div>
+          )}
+          <div className="aspect-video overflow-hidden rounded-2xl bg-primary shadow-elevated">
+            <iframe src={streamUrl} className="h-full w-full" allow="autoplay; encrypted-media" allowFullScreen title="Live stream" />
+          </div>
         </div>
       ) : (
         <div className="rounded-2xl border-2 border-dashed border-border bg-surface-elevated p-12 md:p-20 text-center">
@@ -35,7 +42,7 @@ export default function Live() {
             <Calendar className="h-7 w-7 text-primary" />
           </div>
           <h2 className="font-display text-3xl text-ink">We're not live right now</h2>
-          <p className="mt-3 text-ink-muted">Our next service is <strong className="text-ink">{nextService}</strong>.</p>
+          <p className="mt-3 text-ink-muted">Join us on Sunday for our next service.</p>
           {serviceTimes.length > 0 && (
             <div className="mt-8 grid gap-3 max-w-md mx-auto text-left">
               {serviceTimes.map((s, i) => (
