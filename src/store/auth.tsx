@@ -1,12 +1,12 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { api, getToken, setToken } from "@/services/api";
+import { api, BASE_URL, getToken, setToken, getRefreshToken, setRefreshToken } from "@/services/api";
 import type { AdminUser } from "@/types";
 
 type AuthCtx = {
   user: AdminUser | null;
   isAuthenticated: boolean;
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (username: string, password: string) => Promise<void>;
   logout: () => void;
 };
 
@@ -19,23 +19,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const t = getToken();
     if (!t) { setLoading(false); return; }
-    api<{ user: AdminUser }>("/api/auth/me", { auth: true })
-      .then((d) => setUser(d.user))
-      .catch(() => setToken(null))
+    api<AdminUser>(`${BASE_URL}/auth/users/me/`, { auth: true })
+      .then((u) => setUser(u))
+      .catch(() => { setToken(null); setRefreshToken(null); })
       .finally(() => setLoading(false));
   }, []);
 
-  async function login(email: string, password: string) {
-    const res = await api<{ token: string; user: AdminUser }>("/api/auth/login", {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-    });
-    setToken(res.token);
-    setUser(res.user);
+  async function login(username: string, password: string) {
+    const { access, refresh } = await api<{ access: string; refresh: string }>(
+      `${BASE_URL}/auth/jwt/create/`,
+      { method: "POST", body: JSON.stringify({ username, password }) },
+    );
+    setToken(access);
+    setRefreshToken(refresh);
+    const u = await api<AdminUser>(`${BASE_URL}/auth/users/me/`, { auth: true });
+    setUser(u);
   }
 
   function logout() {
     setToken(null);
+    setRefreshToken(null);
     setUser(null);
   }
 

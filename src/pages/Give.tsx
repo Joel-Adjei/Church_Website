@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Heart, HandCoins, Globe, Building2, Users, Gift, CheckCircle2 } from "lucide-react";
+import { Seo } from "@/components/Seo";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -146,6 +147,10 @@ export default function Give() {
 
   return (
     <div className="min-h-screen  bg-surface-elevated">
+      <Seo
+        title="Give & Support"
+        description="Support the mission of Grace Cathedral through your generous giving. Every gift helps our community serve the city and beyond."
+      />
       {/* Hero */}
       <div className="relative h-120 overflow-hidden bg-primary text-primary-foreground">
         <img src={heroImg} className="absolute inset-0 h-full w-full object-cover" />

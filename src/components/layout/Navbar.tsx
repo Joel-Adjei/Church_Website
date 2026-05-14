@@ -5,7 +5,7 @@ import { cn } from "@/utils/utils";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { settings } from "@/utils/mockData";
-import { useLive } from "@/services/queries";
+import { useLiveStore } from "@/store/live";
 
 type NavItem =
   | { type: "link"; to: string; label: string }
@@ -145,7 +145,7 @@ function MobileDropdown({
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
-  const { data: live } = useLive();
+  const isLive = useLiveStore((state) => state.isLive);
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md">
@@ -251,7 +251,7 @@ export function Navbar() {
                   Give
                 </Link>
               </Button>
-              {live?.isLive && (
+              {isLive && (
                 <Button asChild className="gap-1.5" size="lg">
                   <Link to="/live" onClick={() => setOpen(false)}>
                     <Radio className="h-4 w-4" />

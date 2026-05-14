@@ -337,28 +337,30 @@ export function useDeleteGiving() {
 }
 
 export function usePrayerRequests() {
-  return useQuery({ queryKey: ["prayer-requests"], queryFn: () => api<PrayerRequest[]>("/api/prayer-requests", { auth: true }) });
+  return useQuery({
+    queryKey: ["prayer-requests"],
+    queryFn: () =>
+      api<Paginated<PrayerRequest>>(`${BASE_URL}/prayer-requests/`, { auth: true }).then(
+        (r) => r.results,
+      ),
+  });
 }
 export function useSubmitPrayerRequest() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (body: Omit<PrayerRequest, "id" | "status" | "createdAt">) =>
-      api<PrayerRequest>("/api/prayer-requests", { method: "POST", body: JSON.stringify(body) }),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["prayer-requests"] }),
-  });
-}
-export function useUpdatePrayerRequest() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: ({ id, ...body }: Partial<PrayerRequest> & { id: string }) =>
-      api<PrayerRequest>(`/api/prayer-requests/${id}`, { method: "PUT", body: JSON.stringify(body), auth: true }),
+    mutationFn: (body: { name: string; subject: string; phone?: string; request?: string }) =>
+      api<PrayerRequest>(`${BASE_URL}/prayer-requests/create/`, {
+        method: "POST",
+        body: JSON.stringify(body),
+      }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["prayer-requests"] }),
   });
 }
 export function useDeletePrayerRequest() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => api(`/api/prayer-requests/${id}`, { method: "DELETE", auth: true }),
+    mutationFn: (id: string) =>
+      api(`${BASE_URL}/prayer-requests/${id}/delete/`, { method: "DELETE", auth: true }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["prayer-requests"] }),
   });
 }

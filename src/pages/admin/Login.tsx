@@ -21,16 +21,17 @@ export default function Login() {
   const [error, setError] = useState<string | null>(null);
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { email: "admin@gracecathedral.org", password: "password123" },
+    defaultValues: { email: "", password: "" },
   });
 
   async function onSubmit(values: FormValues) {
     setError(null);
     try {
       await login(values.email, values.password);
-      navigate("/admin");
+      const params = new URLSearchParams(window.location.search);
+      navigate(params.get("redirect") ?? "/admin");
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Sign in failed");
+      setError(e instanceof Error ? e.message : "Invalid credentials. Please try again.");
     }
   }
 
@@ -42,7 +43,7 @@ export default function Login() {
           <span className="font-display text-xl">Grace Cathedral</span>
         </Link>
         <h1 className="font-display text-3xl text-ink">Admin sign in</h1>
-        <p className="mt-2 text-sm text-ink-muted">Use the demo credentials to enter the admin area.</p>
+        <p className="mt-2 text-sm text-ink-muted">Sign in to manage your church content.</p>
 
         <form onSubmit={form.handleSubmit(onSubmit)} className="mt-8 space-y-4" noValidate>
           <div className="space-y-2">
@@ -63,9 +64,6 @@ export default function Login() {
           <Button type="submit" className="w-full gap-2" disabled={form.formState.isSubmitting}>
             <LogIn className="h-4 w-4" /> {form.formState.isSubmitting ? "Signing in…" : "Sign in"}
           </Button>
-          <p className="text-xs text-ink-muted text-center">
-            Demo: <code>admin@gracecathedral.org</code> / <code>password123</code>
-          </p>
         </form>
       </div>
     </div>

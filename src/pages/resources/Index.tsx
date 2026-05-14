@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useList } from "@/services/queries";
+import { Seo } from "@/components/Seo";
 import { SectionHeading } from "@/components/SectionHeading";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -207,6 +208,10 @@ export default function ResourcesIndex() {
 
   return (
     <>
+      <Seo
+        title="Resources"
+        description="Browse books, equipment, and other resources shared by the Grace Cathedral community."
+      />
       {/* Hero */}
       <section className="relative h-[400px] flex items-end overflow-hidden">
         <img src={heroImg} alt="" className="absolute inset-0 h-full w-full object-cover" />

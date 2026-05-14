@@ -153,7 +153,8 @@ export type PrayerRequest = {
   name: string;
   phone?: string;
   subject: string;
-  request: string;
+  request?: string;
+  date?: string;
   createdAt: string;
 };
 

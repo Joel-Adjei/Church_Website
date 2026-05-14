@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { Seo } from "@/components/Seo";
 import {
   ArrowRight,
   Calendar,
@@ -17,9 +18,10 @@ import { Button } from "@/components/ui/button";
 import { SectionHeading } from "@/components/SectionHeading";
 import { Dialog, DialogContent, DialogTitle, DialogHeader } from "@/components/ui/dialog";
 import { settings } from "@/utils/mockData";
-import { useEvents, useSermons, useSeries, useAnnouncements, useLive } from "@/services/queries";
+import { useEvents, useSermons, useSeries, useAnnouncements } from "@/services/queries";
 import { format } from "date-fns";
 import { youtubeThumbnail } from "@/lib/utils";
+import { useLiveStore } from "@/store/live";
 
 const STORY_VIDEO_ID = "ScMzIvxBSi4";
 const STORY_THUMB = "https://images.unsplash.com/photo-1508963493744-76fce69379c0?w=1600&q=80";
@@ -71,7 +73,7 @@ export default function Home() {
   const { data: events = [] } = useEvents();
   const { data: announcements = [] } = useAnnouncements();
   const { data: series = [] } = useSeries();
-  const { data: live } = useLive();
+  const isLive = useLiveStore((state) => state.isLive);
 
   const latest = sermons[0];
   const upcoming = events.slice(0, 3);
@@ -81,6 +83,11 @@ export default function Home() {
 
   return (
     <>
+      <Seo
+        title="Grace Cathedral — A community of faith, hope, and love"
+        description="Grace Cathedral is a welcoming community in the heart of the city. Join us for worship, sermons, events, and life together."
+        noSuffix
+      />
       <section className="relative min-h-140 w-full flex flex-col justify-center isolate overflow-hidden">
         <div
           className="absolute inset-0 -z-10 bg-cover bg-center"
@@ -99,7 +106,7 @@ export default function Home() {
               {settings.tagline}
             </p>
             <div className="mt-10 flex flex-wrap gap-3">
-              {live?.isLive && (
+              {isLive && (
                 <Button asChild size="lg" variant={"secondary"} className="gap-2 py-6">
                   <Link to="/live">
                     <Radio className="h-4 w-4" /> Watch Live

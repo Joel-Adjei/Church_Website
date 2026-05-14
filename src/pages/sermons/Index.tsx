@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { Seo } from "@/components/Seo";
 import { Search, PlayCircle, User, Loader2, VideoOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -35,6 +36,10 @@ export default function SermonsIndex() {
 
   return (
     <>
+      <Seo
+        title="Sermons & Series"
+        description="Browse sermons, message series, and teachings from Grace Cathedral. Stream or listen to recent and past messages."
+      />
       <section className="relative lg:h-120 flex items-end overflow-hidden">
         <img src={heroImg} className="absolute inset-0 h-full w-full object-cover" />
         <div className="h-full w-full bg-linear-to-t from-primary via-primary/80 to-primary/0 z-10 absolute" />

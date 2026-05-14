@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Calendar, MapPin, ArrowRight, Loader2, CalendarX } from "lucide-react";
+import { Seo } from "@/components/Seo";
 import { useEvents } from "@/services/queries";
 import { format } from "date-fns";
 import { SectionHeading } from "@/components/SectionHeading";
@@ -9,6 +10,10 @@ export default function EventsIndex() {
   const { data: events = [], isLoading } = useEvents();
   return (
     <>
+      <Seo
+        title="Events"
+        description="Discover upcoming events at Grace Cathedral — from worship nights and conferences to community gatherings."
+      />
       <section className="relative h-120 lg:h-130 flex items-end overflow-hidden">
         <img src={heroImg} className="absolute inset-0 h-full w-full object-cover" />
         <div className="h-full w-full bg-linear-to-t from-primary via-primary/80 to-primary/0 z-10 absolute" />

@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { Seo } from "@/components/Seo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -36,6 +37,10 @@ export default function Contact() {
 
   return (
     <>
+      <Seo
+        title="Contact & Connect"
+        description="Get in touch with Grace Cathedral. We'd love to hear from you — whether you're new, have questions, or want to get involved."
+      />
       <section className="relative h-90 flex items-end overflow-hidden">
         <img src={heroImg} className="absolute inset-0 h-full w-full object-cover" />
         <div className="h-full w-full bg-linear-to-t from-primary to-primary/0 z-10 absolute" />

@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { Seo } from "@/components/Seo";
 import { format, parseISO } from "date-fns";
 import { Search, Calendar, BookOpen, ArrowRight, Sparkles } from "lucide-react";
 import devotionsHero from "@/assets/devotions-hero.jpg";
@@ -38,6 +39,10 @@ export default function DevotionsIndex() {
 
   return (
     <div>
+      <Seo
+        title="Daily Devotions"
+        description="Read daily devotions from Grace Cathedral — scripture, reflection, and prayer to grow your faith each day."
+      />
       <section className="relative overflow-hidden">
         <img src={devotionsHero} alt="" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-black/60" />

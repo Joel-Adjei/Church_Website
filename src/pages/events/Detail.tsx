@@ -4,6 +4,7 @@ import { useEventById } from "@/services/queries";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { ShareButtons } from "@/components/ShareButtons";
+import { Seo } from "@/components/Seo";
 
 export default function EventDetail() {
   const { id } = useParams<{ id: string }>();
@@ -16,6 +17,12 @@ export default function EventDetail() {
 
   return (
     <article>
+      <Seo
+        title={event.name}
+        description={event.description.slice(0, 160)}
+        image={event.flyer || undefined}
+        type="article"
+      />
       {event.flyer ? (
         <div className="relative h-[55vh] min-h-100 overflow-hidden">
           <img src={event.flyer} alt={event.name} className="absolute inset-0 h-full w-full object-cover" />
