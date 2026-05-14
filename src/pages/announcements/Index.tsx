@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Loader2, BellOff } from "lucide-react";
+import { Seo } from "@/components/Seo";
 import { useAnnouncements } from "@/services/queries";
 import { format } from "date-fns";
 import heroImg from "@/assets/bg_09.jpg";
@@ -8,6 +9,10 @@ export default function AnnouncementsIndex() {
   const { data: announcements = [], isLoading } = useAnnouncements();
   return (
     <>
+      <Seo
+        title="News & Announcements"
+        description="Stay up to date with the latest news and announcements from Grace Cathedral."
+      />
       <section className="relative lg:h-90 flex items-end overflow-hidden">
         <img src={heroImg} className="absolute bottom-0 inset-0 h-full w-full object-cover" />
         <div className="h-full w-full bg-linear-to-t from-primary/20 to-primary/0 z-10 absolute" />

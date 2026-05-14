@@ -1,6 +1,7 @@
 import { Radio, Calendar } from "lucide-react";
 import { useLive, useSettings } from "@/services/queries";
 import { Button } from "@/components/ui/button";
+import { Seo } from "@/components/Seo";
 
 export default function Live() {
   const { data: live } = useLive();
@@ -12,6 +13,10 @@ export default function Live() {
 
   return (
     <section className="mx-auto max-w-5xl px-6 lg:px-10 py-12 md:py-20">
+      <Seo
+        title="Watch Live"
+        description="Join Grace Cathedral for live worship online. Watch our live stream or catch the next scheduled service."
+      />
       <div className="text-center mb-10">
         <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-accent font-semibold mb-4">
           <Radio className="h-3.5 w-3.5" /> Live service

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Images, ImageOff, Loader2 } from "lucide-react";
+import { Seo } from "@/components/Seo";
 import { useGallery } from "@/services/queries";
 import { SectionHeading } from "@/components/SectionHeading";
 import heroImg from "@/assets/bg_02.jpg";
@@ -8,6 +9,10 @@ export default function GalleryIndex() {
   const { data: programs = [], isLoading } = useGallery();
   return (
     <>
+      <Seo
+        title="Gallery"
+        description="A collection of moments from Grace Cathedral — services, events, and community life in photos."
+      />
       <section className="relative h-120 flex items-end overflow-hidden">
         <img src={heroImg} className="absolute inset-0 h-full w-full object-cover" />
         <div className="h-full w-full bg-linear-to-t from-primary to-primary/0 z-10 absolute" />

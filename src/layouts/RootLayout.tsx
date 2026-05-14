@@ -3,12 +3,20 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import LiveIndicator from "@/components/LiveIndicator";
 import { useLive } from "@/services/queries";
-import { useEffect } from "react";
+import { use, useEffect } from "react";
+import { useLiveStore } from "@/store/live";
 
 export default function RootLayout() {
   const { pathname } = useLocation();
   const isAdmin = pathname.startsWith("/admin");
   const { data: live } = useLive();
+  const setLiveStatus = useLiveStore((state) => state.setLiveStatus);
+
+  useEffect(() => {
+    if (live) {
+      setLiveStatus(live);
+    }
+  }, [live, setLiveStatus]);
 
   return (
     <div className="min-h-screen relative  flex flex-col bg-background">

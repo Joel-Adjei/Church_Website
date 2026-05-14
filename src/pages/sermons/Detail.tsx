@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { ShareButtons } from "@/components/ShareButtons";
 import { youtubeThumbnail } from "@/lib/utils";
+import { Seo } from "@/components/Seo";
 
 function youtubeEmbedId(url: string): string {
   try {
@@ -33,6 +34,12 @@ export default function SermonDetail() {
 
   return (
     <article className="mx-auto max-w-4xl px-6 lg:px-10 py-12 md:py-20">
+      <Seo
+        title={sermon.title}
+        description={sermon.description.slice(0, 160)}
+        image={sermon.video_link ? youtubeThumbnail(sermon.video_link) : undefined}
+        type="article"
+      />
       <div className="flex items-center justify-between gap-2 mb-6 flex-wrap">
         <Button asChild variant="ghost" size="sm" className="-ml-3 gap-1.5">
           <Link to="/sermons">

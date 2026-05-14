@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import Autoplay from "embla-carousel-autoplay";
+import { Seo } from "@/components/Seo";
 import { SectionHeading } from "@/components/SectionHeading";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { Heart, Users, HandHeart, Globe } from "lucide-react";
@@ -40,6 +41,10 @@ export default function About() {
 
   return (
     <>
+      <Seo
+        title="About Us"
+        description="Meet the people, values, and story behind Grace Cathedral — a family of faith rooted in the city and the gospel."
+      />
       <section className="relative isolate overflow-hidden border-b border-border">
         <div className="absolute inset-0 -z-10 bg-cover bg-center opacity-20" style={{ backgroundImage: "url(https://images.unsplash.com/photo-1438032005730-c779502df39b?w=1920&q=80)" }} />
         <div className="mx-auto max-w-4xl px-6 lg:px-10 py-24 md:py-32 text-center">

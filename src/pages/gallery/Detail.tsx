@@ -4,6 +4,7 @@ import { ArrowLeft, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useGalleryById } from "@/services/queries";
 import { Button } from "@/components/ui/button";
 import { ShareButtons } from "@/components/ShareButtons";
+import { Seo } from "@/components/Seo";
 
 export default function GalleryDetail() {
   const { id } = useParams<{ id: string }>();
@@ -19,6 +20,12 @@ export default function GalleryDetail() {
 
   return (
     <article className="mx-auto max-w-7xl px-6 lg:px-10 py-12 md:py-20">
+      <Seo
+        title={program.title}
+        description={program.description.slice(0, 160)}
+        image={program.images[0]?.image}
+        type="article"
+      />
       <div className="flex items-center justify-between gap-2 mb-6 flex-wrap">
         <Button asChild variant="ghost" size="sm" className="-ml-3 gap-1.5">
           <Link to="/gallery"><ArrowLeft className="h-4 w-4" /> All galleries</Link>

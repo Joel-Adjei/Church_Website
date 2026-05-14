@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
   usePrayerRequests,
-  useUpdatePrayerRequest,
   useDeletePrayerRequest,
 } from "@/services/queries";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
@@ -14,26 +13,14 @@ import { toast } from "sonner";
 import {
   Search,
   Heart,
-  ShieldCheck,
-  EyeOff,
-  Globe,
-  CheckCircle2,
-  Clock,
-  Sparkles,
-  Users,
   BookMarked,
-  TrendingUp,
-  MessageSquare,
   Phone,
-  Mail,
   User2,
 } from "lucide-react";
-import type { PrayerPrivacy, PrayerRequest } from "@/types";
+import type { PrayerRequest } from "@/types";
 import { cn } from "@/utils/utils";
 
 function DetailDialog({ request, onClose }: { request: PrayerRequest; onClose: () => void }) {
-  const update = useUpdatePrayerRequest();
-
   return (
     <DialogContent className="max-w-2xl">
       <DialogHeader>
@@ -166,7 +153,7 @@ export default function PrayerRequests() {
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-ink-muted text-xs">·</span>
                     <span className="text-xs text-ink-muted">
-                      {format(parseISO(r.createdAt), "MMM d, yyyy")}
+                      {format(parseISO(r.date), "MMM d, yyyy")}
                     </span>
                   </div>
                 </div>

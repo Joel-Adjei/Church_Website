@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { Seo } from "@/components/Seo";
 import { format, parseISO } from "date-fns";
 import { ArrowLeft, Calendar, BookOpen, HandHeart, Lightbulb } from "lucide-react";
 import { useDevotionById, useDevotions } from "@/services/queries";
@@ -33,6 +34,12 @@ export default function DevotionDetail() {
 
   return (
     <article>
+      <Seo
+        title={d.title}
+        description={d.Bible_verse.slice(0, 160)}
+        image={d.thumbnail || undefined}
+        type="article"
+      />
       <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-transparent">
         <div className="h-full bg-accent transition-[width] duration-150" style={{ width: `${progress}%` }} />
       </div>

@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
+import { Seo } from "@/components/Seo";
 import {
   Heart,
   ShieldCheck,
@@ -79,6 +80,10 @@ export default function PrayerRequest() {
 
   return (
     <>
+      <Seo
+        title="Prayer Requests"
+        description="Share your prayer needs with Grace Cathedral. Our team is committed to praying for you and standing with you."
+      />
       {/* Hero */}
       <section className="relative h-[420px] flex items-end overflow-hidden">
         <img src={heroImg} className="absolute inset-0 h-full w-full object-cover" alt="" />
@@ -129,8 +134,8 @@ export default function PrayerRequest() {
               <p className="text-sm text-ink-muted mt-1">Fields marked * are required.</p>
             </div>
 
-            {/* Name */}
-            <div className="">
+            {/* Name + Phone */}
+            <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <Label htmlFor="name">Full name *</Label>
                 <Input
@@ -142,6 +147,17 @@ export default function PrayerRequest() {
                 {errors.name && (
                   <p className="mt-1 text-xs text-destructive">{errors.name.message}</p>
                 )}
+              </div>
+              <div>
+                <Label htmlFor="phone">Phone number</Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  placeholder="+233 24 000 0000"
+                  {...register("phone")}
+                  className="mt-1.5"
+                  disabled={selectedPrivacy === "anonymous"}
+                />
               </div>
             </div>
 
