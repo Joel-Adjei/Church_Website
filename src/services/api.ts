@@ -1,4 +1,5 @@
-export const BASE_URL = "https://elevation-church-1.onrender.com/api";
+export const BASE_URL =
+  import.meta.env.VITE_BASE_URL || "https://elevation-church-1.onrender.com/api";
 
 const TOKEN_KEY = "church-admin-token";
 
@@ -24,9 +25,13 @@ export async function api<T = unknown>(
   }
   const res = await fetch(path, { ...init, headers });
   if (res.status === 204) return undefined as T;
-  const data = res.headers.get("content-type")?.includes("application/json") ? await res.json() : await res.text();
+  const data = res.headers.get("content-type")?.includes("application/json")
+    ? await res.json()
+    : await res.text();
   if (!res.ok) {
-    const msg = (data && typeof data === "object" && "error" in data && (data as { error: string }).error) || `Request failed (${res.status})`;
+    const msg =
+      (data && typeof data === "object" && "error" in data && (data as { error: string }).error) ||
+      `Request failed (${res.status})`;
     throw new Error(msg);
   }
   return data as T;
