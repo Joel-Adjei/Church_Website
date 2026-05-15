@@ -1,6 +1,19 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, BASE_URL } from "./api";
-import type { Announcement, ChurchEvent, Devotion, GalleryProgram, Giving, LiveStatus, LiveStream, PrayerRequest, Resource, Sermon, SermonSeries, Settings } from "@/types";
+import type {
+  Announcement,
+  ChurchEvent,
+  Devotion,
+  GalleryProgram,
+  Giving,
+  LiveStatus,
+  LiveStream,
+  PrayerRequest,
+  Resource,
+  Sermon,
+  SermonSeries,
+  Settings,
+} from "@/types";
 
 type Paginated<T> = { count: number; next: string | null; previous: string | null; results: T[] };
 
@@ -22,8 +35,23 @@ export function useSermonById(id: string | undefined) {
 export function useCreateSermon() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (body: Omit<Sermon, "id" | "likes" | "comments" | "next_sermon" | "previous_sermon" | "resource" | "resource_details">) =>
-      api<Sermon>(`${BASE_URL}/sermons/create/`, { method: "POST", body: JSON.stringify(body), auth: true }),
+    mutationFn: (
+      body: Omit<
+        Sermon,
+        | "id"
+        | "likes"
+        | "comments"
+        | "next_sermon"
+        | "previous_sermon"
+        | "resource"
+        | "resource_details"
+      >,
+    ) =>
+      api<Sermon>(`${BASE_URL}/sermons/create/`, {
+        method: "POST",
+        body: JSON.stringify(body),
+        auth: true,
+      }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["sermons"] }),
   });
 }
@@ -31,8 +59,20 @@ export function useCreateSermon() {
 export function useUpdateSermon() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, ...body }: Partial<Omit<Sermon, "likes" | "comments" | "next_sermon" | "previous_sermon" | "resource" | "resource_details">> & { id: string }) =>
-      api<Sermon>(`${BASE_URL}/sermons/${id}/update/`, { method: "PUT", body: JSON.stringify(body), auth: true }),
+    mutationFn: ({
+      id,
+      ...body
+    }: Partial<
+      Omit<
+        Sermon,
+        "likes" | "comments" | "next_sermon" | "previous_sermon" | "resource" | "resource_details"
+      >
+    > & { id: string }) =>
+      api<Sermon>(`${BASE_URL}/sermons/${id}/update/`, {
+        method: "PUT",
+        body: JSON.stringify(body),
+        auth: true,
+      }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["sermons"] }),
   });
 }
@@ -40,7 +80,8 @@ export function useUpdateSermon() {
 export function useDeleteSermon() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => api(`${BASE_URL}/sermons/${id}/update/`, { method: "DELETE", auth: true }),
+    mutationFn: (id: string) =>
+      api(`${BASE_URL}/sermons/${id}/update/`, { method: "DELETE", auth: true }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["sermons"] }),
   });
 }
@@ -64,7 +105,11 @@ export function useCreateSeries() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (body: Pick<SermonSeries, "title" | "description" | "image">) =>
-      api<SermonSeries>(`${BASE_URL}/series/create/`, { method: "POST", body: JSON.stringify(body), auth: true }),
+      api<SermonSeries>(`${BASE_URL}/series/create/`, {
+        method: "POST",
+        body: JSON.stringify(body),
+        auth: true,
+      }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["series"] }),
   });
 }
@@ -72,8 +117,15 @@ export function useCreateSeries() {
 export function useUpdateSeries() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, ...body }: Pick<SermonSeries, "title" | "description" | "image"> & { id: string }) =>
-      api<SermonSeries>(`${BASE_URL}/series/${id}/update/`, { method: "PUT", body: JSON.stringify(body), auth: true }),
+    mutationFn: ({
+      id,
+      ...body
+    }: Pick<SermonSeries, "title" | "description" | "image"> & { id: string }) =>
+      api<SermonSeries>(`${BASE_URL}/series/${id}/update/`, {
+        method: "PUT",
+        body: JSON.stringify(body),
+        auth: true,
+      }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["series"] }),
   });
 }
@@ -97,7 +149,11 @@ export function useCreateEvent() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (body: Omit<ChurchEvent, "id" | "created_at">) =>
-      api<ChurchEvent>(`${BASE_URL}/events/create/`, { method: "POST", body: JSON.stringify(body), auth: true }),
+      api<ChurchEvent>(`${BASE_URL}/events/create/`, {
+        method: "POST",
+        body: JSON.stringify(body),
+        auth: true,
+      }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["events"] }),
   });
 }
@@ -106,7 +162,11 @@ export function useUpdateEvent() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: ({ id, ...body }: Partial<Omit<ChurchEvent, "created_at">> & { id: string }) =>
-      api<ChurchEvent>(`${BASE_URL}/events/${id}/update/`, { method: "PUT", body: JSON.stringify(body), auth: true }),
+      api<ChurchEvent>(`${BASE_URL}/events/${id}/update/`, {
+        method: "PUT",
+        body: JSON.stringify(body),
+        auth: true,
+      }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["events"] }),
   });
 }
@@ -114,7 +174,8 @@ export function useUpdateEvent() {
 export function useGallery() {
   return useQuery({
     queryKey: ["gallery"],
-    queryFn: () => api<Paginated<GalleryProgram>>(`${BASE_URL}/gallery/albums/`).then((r) => r.results),
+    queryFn: () =>
+      api<Paginated<GalleryProgram>>(`${BASE_URL}/gallery/albums/`).then((r) => r.results),
   });
 }
 
@@ -132,7 +193,11 @@ export function useCreateGallery() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (body: GalleryPayload) =>
-      api<GalleryProgram>(`${BASE_URL}/gallery/albums/create/`, { method: "POST", body: JSON.stringify(body), auth: true }),
+      api<GalleryProgram>(`${BASE_URL}/gallery/albums/create/`, {
+        method: "POST",
+        body: JSON.stringify(body),
+        auth: true,
+      }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["gallery"] }),
   });
 }
@@ -141,7 +206,11 @@ export function useUpdateGallery() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: ({ id, ...body }: GalleryPayload & { id: string }) =>
-      api<GalleryProgram>(`${BASE_URL}/gallery/albums/${id}/update/`, { method: "PUT", body: JSON.stringify(body), auth: true }),
+      api<GalleryProgram>(`${BASE_URL}/gallery/albums/${id}/update/`, {
+        method: "PUT",
+        body: JSON.stringify(body),
+        auth: true,
+      }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["gallery"] }),
   });
 }
@@ -149,7 +218,8 @@ export function useUpdateGallery() {
 export function useDeleteGallery() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => api(`${BASE_URL}/gallery/albums/${id}/update/`, { method: "DELETE", auth: true }),
+    mutationFn: (id: string) =>
+      api(`${BASE_URL}/gallery/albums/${id}/update/`, { method: "DELETE", auth: true }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["gallery"] }),
   });
 }
@@ -157,7 +227,8 @@ export function useDeleteGallery() {
 export function useAnnouncements() {
   return useQuery({
     queryKey: ["announcements"],
-    queryFn: () => api<Paginated<Announcement>>(`${BASE_URL}/announcements/`).then((r) => r.results),
+    queryFn: () =>
+      api<Paginated<Announcement>>(`${BASE_URL}/announcements/`).then((r) => r.results),
   });
 }
 
@@ -173,7 +244,11 @@ export function useCreateAnnouncement() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (body: Pick<Announcement, "title" | "content">) =>
-      api<Announcement>(`${BASE_URL}/announcements/create/`, { method: "POST", body: JSON.stringify(body), auth: true }),
+      api<Announcement>(`${BASE_URL}/announcements/create/`, {
+        method: "POST",
+        body: JSON.stringify(body),
+        auth: true,
+      }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["announcements"] }),
   });
 }
@@ -182,7 +257,11 @@ export function useUpdateAnnouncement() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: ({ id, ...body }: Pick<Announcement, "title" | "content"> & { id: string }) =>
-      api<Announcement>(`${BASE_URL}/announcements/${id}/update/`, { method: "PUT", body: JSON.stringify(body), auth: true }),
+      api<Announcement>(`${BASE_URL}/announcements/${id}/update/`, {
+        method: "PUT",
+        body: JSON.stringify(body),
+        auth: true,
+      }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["announcements"] }),
   });
 }
@@ -190,7 +269,8 @@ export function useUpdateAnnouncement() {
 export function useDeleteAnnouncement() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => api(`${BASE_URL}/announcements/${id}/update/`, { method: "DELETE", auth: true }),
+    mutationFn: (id: string) =>
+      api(`${BASE_URL}/announcements/${id}/update/`, { method: "DELETE", auth: true }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["announcements"] }),
   });
 }
@@ -210,13 +290,24 @@ export function useDevotionById(id: string | undefined) {
   });
 }
 
-type DevotionPayload = { title: string; Bible_verse: string; content: string; thumbnail: string; prayer?: string; reflection?: string };
+type DevotionPayload = {
+  title: string;
+  Bible_verse: { reference: string; verse_content: string };
+  content: string;
+  thumbnail: string;
+  prayer?: string;
+  reflection?: string;
+};
 
 export function useCreateDevotion() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (body: DevotionPayload) =>
-      api<Devotion>(`${BASE_URL}/devotions/create/`, { method: "POST", body: JSON.stringify(body), auth: true }),
+      api<Devotion>(`${BASE_URL}/devotions/create/`, {
+        method: "POST",
+        body: JSON.stringify(body),
+        auth: true,
+      }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["devotions"] }),
   });
 }
@@ -225,7 +316,11 @@ export function useUpdateDevotion() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: ({ id, ...body }: DevotionPayload & { id: string }) =>
-      api<Devotion>(`${BASE_URL}/devotions/${id}/update/`, { method: "PUT", body: JSON.stringify(body), auth: true }),
+      api<Devotion>(`${BASE_URL}/devotions/${id}/update/`, {
+        method: "PUT",
+        body: JSON.stringify(body),
+        auth: true,
+      }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["devotions"] }),
   });
 }
@@ -233,7 +328,8 @@ export function useUpdateDevotion() {
 export function useDeleteDevotion() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => api(`${BASE_URL}/devotions/${id}/update/`, { method: "DELETE", auth: true }),
+    mutationFn: (id: string) =>
+      api(`${BASE_URL}/devotions/${id}/update/`, { method: "DELETE", auth: true }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["devotions"] }),
   });
 }
@@ -241,7 +337,8 @@ export function useDeleteDevotion() {
 export function useDeleteEvent() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => api(`${BASE_URL}/events/${id}/update/`, { method: "DELETE", auth: true }),
+    mutationFn: (id: string) =>
+      api(`${BASE_URL}/events/${id}/update/`, { method: "DELETE", auth: true }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["events"] }),
   });
 }
@@ -249,7 +346,8 @@ export function useDeleteEvent() {
 export function useDeleteSeries() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => api(`${BASE_URL}/series/${id}/update/`, { method: "DELETE", auth: true }),
+    mutationFn: (id: string) =>
+      api(`${BASE_URL}/series/${id}/update/`, { method: "DELETE", auth: true }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["series"] }),
   });
 }
@@ -292,7 +390,11 @@ export function useUpdate<K extends keyof Resources>(key: K) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: ({ id, ...body }: Partial<Resources[K]> & { id: string }) =>
-      api<Resources[K]>(`/api/${key}/${id}`, { method: "PUT", body: JSON.stringify(body), auth: true }),
+      api<Resources[K]>(`/api/${key}/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(body),
+        auth: true,
+      }),
     onSuccess: () => qc.invalidateQueries({ queryKey: [key] }),
   });
 }
@@ -313,12 +415,17 @@ export function useUpdateSettings() {
   return useMutation({
     mutationFn: (body: Partial<Settings>) =>
       api<Settings>("/api/settings", { method: "PUT", body: JSON.stringify(body), auth: true }),
-    onSuccess: (data) => { qc.setQueryData(["settings"], data); },
+    onSuccess: (data) => {
+      qc.setQueryData(["settings"], data);
+    },
   });
 }
 
 export function useGivings() {
-  return useQuery({ queryKey: ["givings"], queryFn: () => api<Giving[]>("/api/givings", { auth: true }) });
+  return useQuery({
+    queryKey: ["givings"],
+    queryFn: () => api<Giving[]>("/api/givings", { auth: true }),
+  });
 }
 export function useSubmitGiving() {
   const qc = useQueryClient();
@@ -380,13 +487,23 @@ export function useLiveStreamById(id: string | undefined) {
   });
 }
 
-type LiveStreamPayload = { title: string; description: string; stream_link: string; status: string; date: string };
+type LiveStreamPayload = {
+  title: string;
+  description: string;
+  stream_link: string;
+  status: string;
+  date: string;
+};
 
 export function useCreateLiveStream() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (body: LiveStreamPayload) =>
-      api<LiveStream>(`${BASE_URL}/live-streams/create/`, { method: "POST", body: JSON.stringify(body), auth: true }),
+      api<LiveStream>(`${BASE_URL}/live-streams/create/`, {
+        method: "POST",
+        body: JSON.stringify(body),
+        auth: true,
+      }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["live-streams"] }),
   });
 }
@@ -395,7 +512,11 @@ export function useUpdateLiveStream() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: ({ id, ...body }: LiveStreamPayload & { id: string }) =>
-      api<LiveStream>(`${BASE_URL}/live-streams/${id}/update/`, { method: "PUT", body: JSON.stringify(body), auth: true }),
+      api<LiveStream>(`${BASE_URL}/live-streams/${id}/update/`, {
+        method: "PUT",
+        body: JSON.stringify(body),
+        auth: true,
+      }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["live-streams"] }),
   });
 }
@@ -403,7 +524,8 @@ export function useUpdateLiveStream() {
 export function useDeleteLiveStream() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => api(`${BASE_URL}/live-streams/${id}/update/`, { method: "DELETE", auth: true }),
+    mutationFn: (id: string) =>
+      api(`${BASE_URL}/live-streams/${id}/update/`, { method: "DELETE", auth: true }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["live-streams"] }),
   });
 }

@@ -40,10 +40,20 @@ export function EventForm({ initial, mode }: { initial?: ChurchEvent; mode: "new
           date: initial.date,
           end_date: initial.end_date,
           start_time: initial.start_time.slice(0, 5),
-          end_time: initial.end_time.slice(0, 5),
+          end_time: initial.end_time ? initial.end_time.slice(0, 5) : "",
           days: initial.days,
         }
-      : { name: "", description: "", flyer: "", location: "", date: "", end_date: "", start_time: "", end_time: "", days: 1 },
+      : {
+          name: "",
+          description: "",
+          flyer: "",
+          location: "",
+          date: "",
+          end_date: "",
+          start_time: "",
+          end_time: "",
+          days: 1,
+        },
   });
 
   async function onSubmit(values: Values) {
@@ -66,62 +76,94 @@ export function EventForm({ initial, mode }: { initial?: ChurchEvent; mode: "new
   return (
     <div>
       <Button asChild variant="ghost" size="sm" className="-ml-3 gap-1.5 mb-4">
-        <Link to="/admin/events"><ArrowLeft className="h-4 w-4" /> Events</Link>
+        <Link to="/admin/events">
+          <ArrowLeft className="h-4 w-4" /> Events
+        </Link>
       </Button>
-      <h1 className="font-display text-3xl text-ink mb-8">{mode === "new" ? "New event" : "Edit event"}</h1>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 max-w-2xl bg-background border border-border rounded-2xl p-6" noValidate>
+      <h1 className="font-display text-3xl text-ink mb-8">
+        {mode === "new" ? "New event" : "Edit event"}
+      </h1>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-5 max-w-2xl bg-background border border-border rounded-2xl p-6"
+        noValidate
+      >
         <div className="space-y-2">
           <Label htmlFor="name">Name</Label>
           <Input id="name" {...form.register("name")} />
-          {form.formState.errors.name && <p className="text-xs text-destructive">{form.formState.errors.name.message}</p>}
+          {form.formState.errors.name && (
+            <p className="text-xs text-destructive">{form.formState.errors.name.message}</p>
+          )}
         </div>
         <div className="grid sm:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="date">Start Date</Label>
             <Input id="date" type="date" {...form.register("date")} />
-            {form.formState.errors.date && <p className="text-xs text-destructive">{form.formState.errors.date.message}</p>}
+            {form.formState.errors.date && (
+              <p className="text-xs text-destructive">{form.formState.errors.date.message}</p>
+            )}
           </div>
           <div className="space-y-2">
             <Label htmlFor="end_date">End Date</Label>
             <Input id="end_date" type="date" {...form.register("end_date")} />
-            {form.formState.errors.end_date && <p className="text-xs text-destructive">{form.formState.errors.end_date.message}</p>}
+            {form.formState.errors.end_date && (
+              <p className="text-xs text-destructive">{form.formState.errors.end_date.message}</p>
+            )}
           </div>
         </div>
         <div className="grid sm:grid-cols-3 gap-4">
           <div className="space-y-2">
             <Label htmlFor="start_time">Start Time</Label>
             <Input id="start_time" type="time" {...form.register("start_time")} />
-            {form.formState.errors.start_time && <p className="text-xs text-destructive">{form.formState.errors.start_time.message}</p>}
+            {form.formState.errors.start_time && (
+              <p className="text-xs text-destructive">{form.formState.errors.start_time.message}</p>
+            )}
           </div>
           <div className="space-y-2">
             <Label htmlFor="end_time">End Time</Label>
             <Input id="end_time" type="time" {...form.register("end_time")} />
-            {form.formState.errors.end_time && <p className="text-xs text-destructive">{form.formState.errors.end_time.message}</p>}
+            {form.formState.errors.end_time && (
+              <p className="text-xs text-destructive">{form.formState.errors.end_time.message}</p>
+            )}
           </div>
           <div className="space-y-2">
             <Label htmlFor="days">Days</Label>
             <Input id="days" type="number" min={1} {...form.register("days")} />
-            {form.formState.errors.days && <p className="text-xs text-destructive">{form.formState.errors.days.message}</p>}
+            {form.formState.errors.days && (
+              <p className="text-xs text-destructive">{form.formState.errors.days.message}</p>
+            )}
           </div>
         </div>
         <div className="space-y-2">
           <Label htmlFor="location">Location</Label>
           <Input id="location" {...form.register("location")} />
-          {form.formState.errors.location && <p className="text-xs text-destructive">{form.formState.errors.location.message}</p>}
+          {form.formState.errors.location && (
+            <p className="text-xs text-destructive">{form.formState.errors.location.message}</p>
+          )}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="flyer">Flyer / Banner Image URL <span className="text-ink-muted font-normal">(optional)</span></Label>
+          <Label htmlFor="flyer">
+            Flyer / Banner Image URL <span className="text-ink-muted font-normal">(optional)</span>
+          </Label>
           <Input id="flyer" type="url" placeholder="https://…" {...form.register("flyer")} />
-          {form.formState.errors.flyer && <p className="text-xs text-destructive">{form.formState.errors.flyer.message}</p>}
+          {form.formState.errors.flyer && (
+            <p className="text-xs text-destructive">{form.formState.errors.flyer.message}</p>
+          )}
         </div>
         <div className="space-y-2">
           <Label htmlFor="description">Description</Label>
           <Textarea id="description" rows={6} {...form.register("description")} />
-          {form.formState.errors.description && <p className="text-xs text-destructive">{form.formState.errors.description.message}</p>}
+          {form.formState.errors.description && (
+            <p className="text-xs text-destructive">{form.formState.errors.description.message}</p>
+          )}
         </div>
         <div className="flex gap-2 justify-end pt-2 border-t border-border">
-          <Button type="button" variant="outline" asChild><Link to="/admin/events">Cancel</Link></Button>
-          <Button type="submit" disabled={form.formState.isSubmitting}>{form.formState.isSubmitting ? "Saving…" : "Save"}</Button>
+          <Button type="button" variant="outline" asChild>
+            <Link to="/admin/events">Cancel</Link>
+          </Button>
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? "Saving…" : "Save"}
+          </Button>
         </div>
       </form>
     </div>

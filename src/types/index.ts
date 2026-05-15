@@ -68,7 +68,7 @@ export type GalleryProgram = {
   images: GalleryImage[];
 };
 
-export type AdminUser = { id: ID; email: string; name: string };
+export type AdminUser = { id: ID; name: string };
 
 export type Settings = {
   churchName: string;
@@ -118,7 +118,10 @@ export type DevotionReflection = {
 export type Devotion = {
   id: ID;
   title: string;
-  Bible_verse: string;
+  Bible_verse: {
+    reference: string;
+    verse_content: string;
+  };
   content: string;
   thumbnail: string;
   date: string;

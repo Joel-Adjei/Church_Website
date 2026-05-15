@@ -2,7 +2,14 @@ import { Link } from "react-router-dom";
 import { useDevotions, useDeleteDevotion } from "@/services/queries";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { DeleteConfirm } from "@/components/admin/DeleteConfirm";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
 import { format, parseISO } from "date-fns";
@@ -33,19 +40,35 @@ export default function Devotions() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading && <TableRow><TableCell colSpan={4} className="text-center py-12 text-ink-muted">Loading…</TableCell></TableRow>}
+            {isLoading && (
+              <TableRow>
+                <TableCell colSpan={4} className="text-center py-12 text-ink-muted">
+                  Loading…
+                </TableCell>
+              </TableRow>
+            )}
             {!isLoading && sorted.length === 0 && (
-              <TableRow><TableCell colSpan={4} className="text-center py-12 text-ink-muted">No devotions yet.</TableCell></TableRow>
+              <TableRow>
+                <TableCell colSpan={4} className="text-center py-12 text-ink-muted">
+                  No devotions yet.
+                </TableCell>
+              </TableRow>
             )}
             {sorted.map((d) => (
               <TableRow key={d.id}>
                 <TableCell className="font-medium">{d.title}</TableCell>
-                <TableCell className="text-ink-muted max-w-xs truncate">{d.Bible_verse}</TableCell>
-                <TableCell className="text-ink-muted whitespace-nowrap">{format(parseISO(d.date), "MMM d, yyyy")}</TableCell>
+                <TableCell className="text-ink-muted max-w-xs truncate">
+                  {d.Bible_verse.reference}
+                </TableCell>
+                <TableCell className="text-ink-muted whitespace-nowrap">
+                  {format(parseISO(d.date), "MMM d, yyyy")}
+                </TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-1">
                     <Button asChild variant="ghost" size="sm" className="gap-1.5">
-                      <Link to={`/admin/devotions/${d.id}`}><Pencil className="h-3.5 w-3.5" /> Edit</Link>
+                      <Link to={`/admin/devotions/${d.id}`}>
+                        <Pencil className="h-3.5 w-3.5" /> Edit
+                      </Link>
                     </Button>
                     <DeleteConfirm
                       title={`Delete "${d.title}"?`}

@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react";
-import { Outlet, Link, useLocation, useNavigate, Navigate, ScrollRestoration } from "react-router-dom";
+import {
+  Outlet,
+  Link,
+  useLocation,
+  useNavigate,
+  Navigate,
+  ScrollRestoration,
+} from "react-router-dom";
 import { useAuth } from "@/store/auth";
 import { getToken } from "@/services/api";
 import { Button } from "@/components/ui/button";
@@ -92,7 +99,6 @@ export default function AdminLayout() {
       </div>
       <NavList pathname={pathname} onNavigate={onNav} />
       <div className="border-t border-border p-3">
-        <div className="px-3 py-2 text-xs text-ink-muted truncate">{user?.email}</div>
         <Button
           variant="ghost"
           size="sm"

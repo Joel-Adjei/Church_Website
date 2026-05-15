@@ -13,7 +13,8 @@ import type { Devotion } from "@/types";
 
 const schema = z.object({
   title: z.string().trim().min(2, "Title is required").max(200),
-  Bible_verse: z.string().trim().min(2, "Bible verse is required").max(300),
+  reference: z.string().trim().min(2, "Bible verse is required").max(20),
+  verse_content: z.string().trim().min(2, "Verse content is required").max(100),
   content: z.string().trim().min(20, "Content is too short").max(20000),
   thumbnail: z.string().trim().max(200000).optional().or(z.literal("")),
   prayer: z.string().trim().max(4000).optional().or(z.literal("")),
@@ -31,19 +32,31 @@ export function DevotionForm({ initial, mode }: { initial?: Devotion; mode: "new
     defaultValues: initial
       ? {
           title: initial.title,
-          Bible_verse: initial.Bible_verse,
+          reference: initial.Bible_verse.reference,
+          verse_content: initial.Bible_verse.verse_content,
           content: initial.content,
           thumbnail: initial.thumbnail ?? "",
           prayer: initial.prayer ?? "",
           reflection: initial.reflection ?? "",
         }
-      : { title: "", Bible_verse: "", content: "", thumbnail: "", prayer: "", reflection: "" },
+      : {
+          title: "",
+          reference: "",
+          verse_content: "",
+          content: "",
+          thumbnail: "",
+          prayer: "",
+          reflection: "",
+        },
   });
 
   async function onSubmit(values: Values) {
     const payload = {
       title: values.title,
-      Bible_verse: values.Bible_verse,
+      Bible_verse: {
+        reference: values.reference,
+        verse_content: values.verse_content,
+      },
       content: values.content,
       thumbnail: values.thumbnail || "",
       prayer: values.prayer || "",
@@ -66,32 +79,69 @@ export function DevotionForm({ initial, mode }: { initial?: Devotion; mode: "new
   return (
     <div>
       <Button asChild variant="ghost" size="sm" className="-ml-3 gap-1.5 mb-4">
-        <Link to="/admin/devotions"><ArrowLeft className="h-4 w-4" /> Devotions</Link>
+        <Link to="/admin/devotions">
+          <ArrowLeft className="h-4 w-4" /> Devotions
+        </Link>
       </Button>
-      <h1 className="font-display text-3xl text-ink mb-8">{mode === "new" ? "New devotion" : "Edit devotion"}</h1>
+      <h1 className="font-display text-3xl text-ink mb-8">
+        {mode === "new" ? "New devotion" : "Edit devotion"}
+      </h1>
 
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 max-w-3xl bg-background border border-border rounded-2xl p-6" noValidate>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-5 max-w-3xl bg-background border border-border rounded-2xl p-6"
+        noValidate
+      >
         <div className="space-y-2">
           <Label htmlFor="title">Title</Label>
           <Input id="title" {...form.register("title")} />
-          {form.formState.errors.title && <p className="text-xs text-destructive">{form.formState.errors.title.message}</p>}
+          {form.formState.errors.title && (
+            <p className="text-xs text-destructive">{form.formState.errors.title.message}</p>
+          )}
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="Bible_verse">Bible verse</Label>
-          <Input id="Bible_verse" placeholder="e.g. John 3:16 — For God so loved the world…" {...form.register("Bible_verse")} />
-          {form.formState.errors.Bible_verse && <p className="text-xs text-destructive">{form.formState.errors.Bible_verse.message}</p>}
+          <Label htmlFor="reference">Bible verse reference</Label>
+          <Input id="reference" placeholder="e.g. John 3:16" {...form.register("reference")} />
+          {form.formState.errors.reference && (
+            <p className="text-xs text-destructive">{form.formState.errors.reference.message}</p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="verse_content">Bible verse content</Label>
+          <Textarea
+            id="verse_content"
+            rows={3}
+            placeholder="Enter the full Bible verse."
+            {...form.register("verse_content")}
+          />
+          {form.formState.errors.verse_content && (
+            <p className="text-xs text-destructive">
+              {form.formState.errors.verse_content.message}
+            </p>
+          )}
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="content">Devotion content</Label>
-          <Textarea id="content" rows={10} placeholder="Write the full devotion message." {...form.register("content")} />
-          {form.formState.errors.content && <p className="text-xs text-destructive">{form.formState.errors.content.message}</p>}
+          <Textarea
+            id="content"
+            rows={10}
+            placeholder="Write the full devotion message."
+            {...form.register("content")}
+          />
+          {form.formState.errors.content && (
+            <p className="text-xs text-destructive">{form.formState.errors.content.message}</p>
+          )}
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="reflection">Reflection / Key Takeaway</Label>
           <Textarea id="reflection" rows={3} {...form.register("reflection")} />
+          {form.formState.errors.reflection && (
+            <p className="text-xs text-destructive">{form.formState.errors.reflection.message}</p>
+          )}
         </div>
 
         <div className="space-y-2">
@@ -105,8 +155,12 @@ export function DevotionForm({ initial, mode }: { initial?: Devotion; mode: "new
         </div>
 
         <div className="flex gap-2 justify-end pt-4 border-t border-border">
-          <Button type="button" variant="outline" asChild><Link to="/admin/devotions">Cancel</Link></Button>
-          <Button type="submit" disabled={form.formState.isSubmitting}>{form.formState.isSubmitting ? "Saving…" : "Save devotion"}</Button>
+          <Button type="button" variant="outline" asChild>
+            <Link to="/admin/devotions">Cancel</Link>
+          </Button>
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? "Saving…" : "Save devotion"}
+          </Button>
         </div>
       </form>
     </div>
