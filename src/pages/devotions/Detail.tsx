@@ -25,7 +25,8 @@ export default function DevotionDetail() {
   }, [id]);
 
   if (isLoading) return <div className="py-24 text-center text-ink-muted">Loading…</div>;
-  if (error || !d) return <div className="py-24 text-center text-ink-muted">Devotion not found.</div>;
+  if (error || !d)
+    return <div className="py-24 text-center text-ink-muted">Devotion not found.</div>;
 
   const related = all
     .filter((x) => x.id !== d.id)
@@ -36,24 +37,42 @@ export default function DevotionDetail() {
     <article>
       <Seo
         title={d.title}
-        description={d.Bible_verse.slice(0, 160)}
+        description={d.Bible_verse.reference.slice(0, 160)}
         image={d.thumbnail || undefined}
         type="article"
       />
       <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-transparent">
-        <div className="h-full bg-accent transition-[width] duration-150" style={{ width: `${progress}%` }} />
+        <div
+          className="h-full bg-accent transition-[width] duration-150"
+          style={{ width: `${progress}%` }}
+        />
       </div>
 
       <header className="relative overflow-hidden">
         <div className="absolute inset-0 bg-primary" />
-        {d.thumbnail && <img src={d.thumbnail} alt="" className="absolute inset-0 h-full w-full object-cover opacity-30" />}
+        {d.thumbnail && (
+          <img
+            src={d.thumbnail}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover opacity-30"
+          />
+        )}
         <div className="relative mx-auto max-w-3xl px-6 lg:px-10 py-20 md:py-28 text-primary-foreground">
-          <Button asChild variant="ghost" size="sm" className="-ml-3 gap-1.5 text-primary-foreground/80 hover:text-primary-foreground hover:bg-white/10">
-            <Link to="/devotions"><ArrowLeft className="h-4 w-4" /> All devotions</Link>
+          <Button
+            asChild
+            variant="ghost"
+            size="sm"
+            className="-ml-3 gap-1.5 text-primary-foreground/80 hover:text-primary-foreground hover:bg-white/10"
+          >
+            <Link to="/devotions">
+              <ArrowLeft className="h-4 w-4" /> All devotions
+            </Link>
           </Button>
           <h1 className="mt-6 font-display text-4xl md:text-6xl leading-[1.05]">{d.title}</h1>
           <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-primary-foreground/80">
-            <span className="inline-flex items-center gap-1.5"><Calendar className="h-4 w-4" /> {format(parseISO(d.date), "EEEE, MMMM d, yyyy")}</span>
+            <span className="inline-flex items-center gap-1.5">
+              <Calendar className="h-4 w-4" /> {format(parseISO(d.date), "EEEE, MMMM d, yyyy")}
+            </span>
           </div>
         </div>
       </header>
@@ -62,10 +81,15 @@ export default function DevotionDetail() {
         <section className="relative bg-gradient-to-br from-accent/15 via-surface-elevated to-surface-elevated border border-accent/30 rounded-3xl p-8 md:p-12 mb-12 shadow-card">
           <BookOpen className="h-8 w-8 text-accent mb-4" />
           <p className="text-xs uppercase tracking-[0.25em] text-accent font-semibold">Scripture</p>
-          <blockquote className="mt-3 font-display text-2xl md:text-3xl italic text-ink leading-snug">"{d.Bible_verse}"</blockquote>
+          <blockquote className="mt-3 font-display text-2xl md:text-3xl italic text-ink leading-snug">
+            "{d.Bible_verse.verse_content}"
+          </blockquote>
         </section>
 
-        <div className="text-lg text-ink leading-[1.8] whitespace-pre-line" style={{ fontFamily: "var(--font-display)" }}>
+        <div
+          className="text-lg text-ink leading-[1.8] whitespace-pre-line"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
           {d.content}
         </div>
 
@@ -94,7 +118,9 @@ export default function DevotionDetail() {
               {d.reflections.map((r) => (
                 <div key={r.id} className="border-b border-border pb-4 last:border-0 last:pb-0">
                   <p className="text-ink leading-relaxed">{r.content}</p>
-                  <p className="mt-2 text-sm text-ink-muted">{r.name} · {format(parseISO(r.date), "MMM d, yyyy")}</p>
+                  <p className="mt-2 text-sm text-ink-muted">
+                    {r.name} · {format(parseISO(r.date), "MMM d, yyyy")}
+                  </p>
                 </div>
               ))}
             </div>
@@ -103,10 +129,12 @@ export default function DevotionDetail() {
 
         <div className="mt-12 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-8">
           <div>
-            <div className="text-xs uppercase tracking-[0.2em] text-ink-muted font-semibold">Encourage someone today</div>
+            <div className="text-xs uppercase tracking-[0.2em] text-ink-muted font-semibold">
+              Encourage someone today
+            </div>
             <div className="text-ink font-medium">Share this devotion</div>
           </div>
-          <ShareButtons title={d.title} excerpt={d.Bible_verse} />
+          <ShareButtons title={d.title} excerpt={d.Bible_verse.verse_content} />
         </div>
 
         {related.length > 0 && (
@@ -116,12 +144,22 @@ export default function DevotionDetail() {
               {related.map((r) => (
                 <Link key={r.id} to={`/devotions/${r.id}`} className="group block">
                   <div className="aspect-video overflow-hidden rounded-xl bg-muted">
-                    {r.thumbnail
-                      ? <img src={r.thumbnail} alt="" className="h-full w-full object-cover transition-transform group-hover:scale-105" />
-                      : <div className="h-full w-full bg-gradient-to-br from-primary/20 to-accent/20" />}
+                    {r.thumbnail ? (
+                      <img
+                        src={r.thumbnail}
+                        alt=""
+                        className="h-full w-full object-cover transition-transform group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="h-full w-full bg-gradient-to-br from-primary/20 to-accent/20" />
+                    )}
                   </div>
-                  <h3 className="mt-3 font-display text-lg text-ink leading-snug group-hover:text-primary">{r.title}</h3>
-                  <p className="mt-1 text-xs text-ink-muted">{format(parseISO(r.date), "MMM d, yyyy")}</p>
+                  <h3 className="mt-3 font-display text-lg text-ink leading-snug group-hover:text-primary">
+                    {r.title}
+                  </h3>
+                  <p className="mt-1 text-xs text-ink-muted">
+                    {format(parseISO(r.date), "MMM d, yyyy")}
+                  </p>
                 </Link>
               ))}
             </div>

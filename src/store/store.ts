@@ -20,7 +20,7 @@ export type Store = {
   events: ChurchEvent[];
   announcements: Announcement[];
   gallery: GalleryProgram[];
-  devotions: Devotion[];
+  // devotions: Devotion[];
   givings: Giving[];
   prayerRequests: PrayerRequest[];
   resources: Resource[];
@@ -593,88 +593,88 @@ const dayOffset = (n: number) => {
   return d.toISOString().slice(0, 10);
 };
 
-const seedDevotions: Devotion[] = [
-  {
-    id: "dev-1",
-    title: "Anchored in Hope",
-    Bible_verse: "Hebrews 6:19 — We have this hope as an anchor for the soul, firm and secure.",
-    content:
-      "Hope is not a vague optimism. It is the steady weight that keeps the soul from drifting when storms rise. The writer of Hebrews chose his metaphor with care — an anchor does not stop the waves, it keeps the ship from being swept away.\n\nToday, whatever swirls around you, remember: the anchor is not in your circumstances. It is in the One who holds them.",
-    prayer:
-      "Father, when the waters around me are restless, anchor me in You. Let my soul find its rest in Your unchanging love. Amen.",
-    reflection:
-      "What 'storm' am I facing today, and where am I tempted to drop anchor instead of trusting God?",
-    thumbnail: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1600&q=80",
-    date: dayOffset(0),
-    reflections: [],
-  },
-  {
-    id: "dev-2",
-    title: "The Quiet Place",
-    Bible_verse:
-      "Mark 1:35 — Very early in the morning, while it was still dark, Jesus got up, left the house and went off to a solitary place, where he prayed.",
-    content:
-      "Even Jesus needed quiet. If the Son of God carved out time alone with the Father, what does that say about our need for stillness?\n\nThe noise of the world will gladly fill every hour. But the soul is shaped in silence.",
-    prayer:
-      "Lord, teach me to seek You in the quiet. Help me to value stillness more than productivity. Amen.",
-    reflection: "Where in my day could I create even ten minutes of silence with God?",
-    thumbnail: "https://images.unsplash.com/photo-1473773508845-188df298d2d1?w=1600&q=80",
-    date: dayOffset(1),
-    reflections: [],
-  },
-  {
-    id: "dev-3",
-    title: "Small Acts, Great Love",
-    Bible_verse:
-      "Colossians 3:23 — Whatever you do, work at it with all your heart, as working for the Lord, not for human masters.",
-    content:
-      "We often wait for the 'big moment' to serve God. But faith is mostly built in the small, unseen choices — the kind word, the patient reply, the quiet prayer for a stranger.\n\nLove is not measured by spectacle. It is measured by faithfulness.",
-    prayer:
-      "Jesus, give me eyes to see the small holy moments today. Let me serve You in them with joy. Amen.",
-    reflection: "What 'small' thing can I do today as an act of love for God?",
-    thumbnail: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1600&q=80",
-    date: dayOffset(2),
-    reflections: [],
-  },
-  {
-    id: "dev-4",
-    title: "Grace That Runs",
-    Bible_verse:
-      "Luke 15:20 — But while he was still a long way off, his father saw him and was filled with compassion for him; he ran to his son.",
-    content:
-      "We picture God as patient — and He is. But the parable of the prodigal shows us a God who runs. Grace is not stoic. It is eager. It searches the horizon.\n\nWhatever you've done, however far you've wandered, the Father is already running.",
-    prayer: "Father, thank You for a love that runs to meet me. Help me to come home today. Amen.",
-    reflection: "Is there an area of my life where I've been afraid to come back to God?",
-    thumbnail: "https://images.unsplash.com/photo-1490127252417-7c393f993ee4?w=1600&q=80",
-    date: dayOffset(3),
-    reflections: [],
-  },
-  {
-    id: "dev-5",
-    title: "A Lamp to My Feet",
-    Bible_verse: "Psalm 119:105 — Your word is a lamp for my feet, a light on my path.",
-    content:
-      "Notice the scope of the light: a lamp for the feet, not a spotlight for the horizon. God rarely shows the whole journey. He shows the next step.\n\nFaithfulness is taking that step in the light He gives.",
-    prayer:
-      "Lord, give me the courage to walk in the light I have today, trusting You for tomorrow's. Amen.",
-    reflection: "What is the next faithful step in front of me right now?",
-    thumbnail: "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=1600&q=80",
-    date: dayOffset(4),
-    reflections: [],
-  },
-  {
-    id: "dev-6",
-    title: "Be Still",
-    Bible_verse: "Psalm 46:10 — Be still, and know that I am God.",
-    content:
-      "Stillness is not passivity. It is active trust. To be still is to stop trying to be God of your own life and to let Him be God.\n\nThis verse is an invitation, not a command to perform.",
-    prayer: "God, slow my racing heart. Help me to know You — not just about You — today. Amen.",
-    reflection: "What am I trying to control that I need to release into God's hands?",
-    thumbnail: "https://images.unsplash.com/photo-1476234251651-f353703a034d?w=1600&q=80",
-    date: dayOffset(5),
-    reflections: [],
-  },
-];
+// const seedDevotions: Devotion[] = [
+//   {
+//     id: "dev-1",
+//     title: "Anchored in Hope",
+//     Bible_verse: "Hebrews 6:19 — We have this hope as an anchor for the soul, firm and secure.",
+//     content:
+//       "Hope is not a vague optimism. It is the steady weight that keeps the soul from drifting when storms rise. The writer of Hebrews chose his metaphor with care — an anchor does not stop the waves, it keeps the ship from being swept away.\n\nToday, whatever swirls around you, remember: the anchor is not in your circumstances. It is in the One who holds them.",
+//     prayer:
+//       "Father, when the waters around me are restless, anchor me in You. Let my soul find its rest in Your unchanging love. Amen.",
+//     reflection:
+//       "What 'storm' am I facing today, and where am I tempted to drop anchor instead of trusting God?",
+//     thumbnail: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1600&q=80",
+//     date: dayOffset(0),
+//     reflections: [],
+//   },
+//   {
+//     id: "dev-2",
+//     title: "The Quiet Place",
+//     Bible_verse:
+//       "Mark 1:35 — Very early in the morning, while it was still dark, Jesus got up, left the house and went off to a solitary place, where he prayed.",
+//     content:
+//       "Even Jesus needed quiet. If the Son of God carved out time alone with the Father, what does that say about our need for stillness?\n\nThe noise of the world will gladly fill every hour. But the soul is shaped in silence.",
+//     prayer:
+//       "Lord, teach me to seek You in the quiet. Help me to value stillness more than productivity. Amen.",
+//     reflection: "Where in my day could I create even ten minutes of silence with God?",
+//     thumbnail: "https://images.unsplash.com/photo-1473773508845-188df298d2d1?w=1600&q=80",
+//     date: dayOffset(1),
+//     reflections: [],
+//   },
+//   {
+//     id: "dev-3",
+//     title: "Small Acts, Great Love",
+//     Bible_verse:
+//       "Colossians 3:23 — Whatever you do, work at it with all your heart, as working for the Lord, not for human masters.",
+//     content:
+//       "We often wait for the 'big moment' to serve God. But faith is mostly built in the small, unseen choices — the kind word, the patient reply, the quiet prayer for a stranger.\n\nLove is not measured by spectacle. It is measured by faithfulness.",
+//     prayer:
+//       "Jesus, give me eyes to see the small holy moments today. Let me serve You in them with joy. Amen.",
+//     reflection: "What 'small' thing can I do today as an act of love for God?",
+//     thumbnail: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1600&q=80",
+//     date: dayOffset(2),
+//     reflections: [],
+//   },
+//   {
+//     id: "dev-4",
+//     title: "Grace That Runs",
+//     Bible_verse:
+//       "Luke 15:20 — But while he was still a long way off, his father saw him and was filled with compassion for him; he ran to his son.",
+//     content:
+//       "We picture God as patient — and He is. But the parable of the prodigal shows us a God who runs. Grace is not stoic. It is eager. It searches the horizon.\n\nWhatever you've done, however far you've wandered, the Father is already running.",
+//     prayer: "Father, thank You for a love that runs to meet me. Help me to come home today. Amen.",
+//     reflection: "Is there an area of my life where I've been afraid to come back to God?",
+//     thumbnail: "https://images.unsplash.com/photo-1490127252417-7c393f993ee4?w=1600&q=80",
+//     date: dayOffset(3),
+//     reflections: [],
+//   },
+//   {
+//     id: "dev-5",
+//     title: "A Lamp to My Feet",
+//     Bible_verse: "Psalm 119:105 — Your word is a lamp for my feet, a light on my path.",
+//     content:
+//       "Notice the scope of the light: a lamp for the feet, not a spotlight for the horizon. God rarely shows the whole journey. He shows the next step.\n\nFaithfulness is taking that step in the light He gives.",
+//     prayer:
+//       "Lord, give me the courage to walk in the light I have today, trusting You for tomorrow's. Amen.",
+//     reflection: "What is the next faithful step in front of me right now?",
+//     thumbnail: "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=1600&q=80",
+//     date: dayOffset(4),
+//     reflections: [],
+//   },
+//   {
+//     id: "dev-6",
+//     title: "Be Still",
+//     Bible_verse: "Psalm 46:10 — Be still, and know that I am God.",
+//     content:
+//       "Stillness is not passivity. It is active trust. To be still is to stop trying to be God of your own life and to let Him be God.\n\nThis verse is an invitation, not a command to perform.",
+//     prayer: "God, slow my racing heart. Help me to know You — not just about You — today. Amen.",
+//     reflection: "What am I trying to control that I need to release into God's hands?",
+//     thumbnail: "https://images.unsplash.com/photo-1476234251651-f353703a034d?w=1600&q=80",
+//     date: dayOffset(5),
+//     reflections: [],
+//   },
+// ];
 
 export const seed = (): Store => ({
   sermons: structuredClone(seedSermons),
@@ -682,7 +682,7 @@ export const seed = (): Store => ({
   events: structuredClone(seedEvents),
   announcements: structuredClone(seedAnnouncements),
   gallery: structuredClone(seedGallery),
-  devotions: structuredClone(seedDevotions),
+  // devotions: structuredClone(seedDevotions),
   givings: structuredClone(seedGivings),
   prayerRequests: structuredClone(seedPrayerRequests),
   resources: structuredClone(seedResources),
@@ -708,7 +708,7 @@ export function loadStore(): Store {
       events: arr(parsed.events, base.events),
       announcements: arr(parsed.announcements, base.announcements),
       gallery: arr(parsed.gallery, base.gallery),
-      devotions: arr(parsed.devotions, base.devotions),
+      // devotions: arr(parsed.devotions, base.devotions),
       givings: arr(parsed.givings, base.givings),
       prayerRequests: arr(parsed.prayerRequests, base.prayerRequests),
       resources: arr(parsed.resources, base.resources),

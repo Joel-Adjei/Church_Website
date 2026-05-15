@@ -1,8 +1,5 @@
 import { useState } from "react";
-import {
-  usePrayerRequests,
-  useDeletePrayerRequest,
-} from "@/services/queries";
+import { usePrayerRequests, useDeletePrayerRequest } from "@/services/queries";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { DeleteConfirm } from "@/components/admin/DeleteConfirm";
 import { Button } from "@/components/ui/button";
@@ -10,13 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { format, parseISO } from "date-fns";
 import { toast } from "sonner";
-import {
-  Search,
-  Heart,
-  BookMarked,
-  Phone,
-  User2,
-} from "lucide-react";
+import { Search, Heart, BookMarked, Phone, User2 } from "lucide-react";
 import type { PrayerRequest } from "@/types";
 import { cn } from "@/utils/utils";
 
@@ -153,7 +144,7 @@ export default function PrayerRequests() {
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-ink-muted text-xs">·</span>
                     <span className="text-xs text-ink-muted">
-                      {format(parseISO(r.createdAt), "MMM d, yyyy")}
+                      {format(parseISO(r.date || ""), "MMM d, yyyy")}
                     </span>
                   </div>
                 </div>

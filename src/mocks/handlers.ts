@@ -13,7 +13,17 @@ function unauth() {
   return HttpResponse.json({ error: "Unauthorized" }, { status: 401 });
 }
 
-type Key = keyof Pick<Store, "sermons" | "series" | "events" | "announcements" | "gallery" | "devotions" | "givings" | "prayerRequests" | "resources">;
+type Key = keyof Pick<
+  Store,
+  | "sermons"
+  | "series"
+  | "events"
+  | "announcements"
+  | "gallery"
+  | "givings"
+  | "prayerRequests"
+  | "resources"
+>;
 
 function listHandler(key: Key) {
   return http.get(`/api/${key}`, () => {
@@ -75,14 +85,23 @@ function deleteHandler(key: Key) {
 }
 
 function crud(key: Key) {
-  return [listHandler(key), getBySlug(key), createHandler(key), updateHandler(key), deleteHandler(key)];
+  return [
+    listHandler(key),
+    getBySlug(key),
+    createHandler(key),
+    updateHandler(key),
+    deleteHandler(key),
+  ];
 }
 
 export const handlers = [
   http.post("/api/auth/login", async ({ request }) => {
     const { email, password } = (await request.json()) as { email: string; password: string };
     if (email === ADMIN.email && password === ADMIN.password) {
-      return HttpResponse.json({ token: TOKEN, user: { id: "u1", email: ADMIN.email, name: "Admin" } });
+      return HttpResponse.json({
+        token: TOKEN,
+        user: { id: "u1", email: ADMIN.email, name: "Admin" },
+      });
     }
     return HttpResponse.json({ error: "Invalid email or password" }, { status: 401 });
   }),
@@ -97,7 +116,11 @@ export const handlers = [
     if (!auth(request)) return unauth();
     const body = (await request.json()) as Record<string, unknown>;
     const s = loadStore();
-    s.settings = { ...s.settings, ...body, socials: { ...s.settings.socials, ...((body.socials as object) ?? {}) } } as typeof s.settings;
+    s.settings = {
+      ...s.settings,
+      ...body,
+      socials: { ...s.settings.socials, ...((body.socials as object) ?? {}) },
+    } as typeof s.settings;
     saveStore(s);
     return HttpResponse.json(s.settings);
   }),
@@ -117,7 +140,7 @@ export const handlers = [
   ...crud("events"),
   ...crud("announcements"),
   ...crud("gallery"),
-  ...crud("devotions"),
+  // ...crud("devotions"),
   ...crud("resources"),
 
   // Prayer Requests — public POST (no auth), admin GET (auth), admin PUT for status, admin DELETE
@@ -141,7 +164,11 @@ export const handlers = [
     const s = loadStore();
     const idx = s.prayerRequests.findIndex((p) => p.id === params.id);
     if (idx === -1) return HttpResponse.json({ error: "Not found" }, { status: 404 });
-    s.prayerRequests[idx] = { ...s.prayerRequests[idx], ...body, id: s.prayerRequests[idx].id } as never;
+    s.prayerRequests[idx] = {
+      ...s.prayerRequests[idx],
+      ...body,
+      id: s.prayerRequests[idx].id,
+    } as never;
     saveStore(s);
     return HttpResponse.json(s.prayerRequests[idx]);
   }),
@@ -165,7 +192,13 @@ export const handlers = [
   http.post("/api/givings", async ({ request }) => {
     const body = (await request.json()) as Record<string, unknown>;
     const s = loadStore();
-    const item = { id: newId(), status: "completed", createdAt: new Date().toISOString(), currency: "GHS", ...body };
+    const item = {
+      id: newId(),
+      status: "completed",
+      createdAt: new Date().toISOString(),
+      currency: "GHS",
+      ...body,
+    };
     s.givings.unshift(item as never);
     saveStore(s);
     return HttpResponse.json(item, { status: 201 });

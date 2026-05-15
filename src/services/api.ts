@@ -1,6 +1,7 @@
 export const BASE_URL =
   import.meta.env.VITE_BASE_URL || "https://elevation-church-1.onrender.com/api";
 
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 const ACCESS_KEY = "church-admin-token";
 const REFRESH_KEY = "church-admin-refresh";
 
@@ -27,13 +28,17 @@ async function tryRefresh(): Promise<string | null> {
   const refresh = getRefreshToken();
   if (!refresh) return null;
   try {
-    const res = await fetch(`${BASE_URL}/auth/jwt/refresh/`, {
+    const res = await fetch(`${SERVER_URL}/auth/jwt/refresh/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ refresh }),
     });
-    if (!res.ok) { setRefreshToken(null); setToken(null); return null; }
-    const { access } = await res.json() as { access: string };
+    if (!res.ok) {
+      setRefreshToken(null);
+      setToken(null);
+      return null;
+    }
+    const { access } = (await res.json()) as { access: string };
     setToken(access);
     return access;
   } catch {
@@ -67,7 +72,10 @@ export async function api<T = unknown>(
     : await res.text();
   if (!res.ok) {
     const msg =
-      (data && typeof data === "object" && "detail" in data && typeof (data as Record<string, unknown>).detail === "string"
+      (data &&
+      typeof data === "object" &&
+      "detail" in data &&
+      typeof (data as Record<string, unknown>).detail === "string"
         ? (data as { detail: string }).detail
         : null) ||
       (data && typeof data === "object" && "error" in data && (data as { error: string }).error) ||

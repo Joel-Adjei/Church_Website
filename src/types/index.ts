@@ -118,7 +118,10 @@ export type DevotionReflection = {
 export type Devotion = {
   id: ID;
   title: string;
-  Bible_verse: string;
+  Bible_verse: {
+    reference: string;
+    verse_content: string;
+  };
   content: string;
   thumbnail: string;
   date: string;
