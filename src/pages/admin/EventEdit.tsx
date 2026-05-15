@@ -7,5 +7,9 @@ export default function EventEdit() {
   const { data: item, isLoading } = useEventById(id);
   if (isLoading) return <div className="text-ink-muted">Loading…</div>;
   if (!item) return <div className="text-ink-muted">Event not found.</div>;
-  return <EventForm mode="edit" initial={item} />;
+  return (
+    <div className="w-full mx-auto">
+      <EventForm mode="edit" initial={item} />
+    </div>
+  );
 }

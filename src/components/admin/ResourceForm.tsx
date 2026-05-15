@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ import { useCreate, useUpdate } from "@/services/queries";
 import { slugify } from "@/store/store";
 import { toast } from "sonner";
 import { ArrowLeft, Star } from "lucide-react";
+import { ImageUploadField } from "@/components/admin/ImageUploadField";
 import type { Resource } from "@/types";
 
 const schema = z.object({
@@ -20,7 +21,7 @@ const schema = z.object({
   category: z.enum(["books", "clothing", "food", "equipment", "digital", "stationery", "other"]),
   condition: z.enum(["new", "like-new", "good", "fair"]),
   availability: z.enum(["available", "limited", "claimed"]),
-  imageUrl: z.string().trim().url("Enter a valid URL").or(z.literal("")).optional(),
+  imageUrl: z.string().optional(),
   contactEmail: z.string().trim().email("Enter a valid email").or(z.literal("")).optional(),
   contactPhone: z.string().trim().optional(),
   pickupLocation: z.string().trim().optional(),
@@ -163,12 +164,18 @@ export function ResourceForm({ initial, mode }: { initial?: Resource; mode: "new
           {errors.description && <p className="text-xs text-destructive">{errors.description.message}</p>}
         </div>
 
-        {/* Image URL */}
-        <div className="space-y-2">
-          <Label htmlFor="imageUrl">Image URL <span className="text-ink-muted">(optional)</span></Label>
-          <Input id="imageUrl" type="url" placeholder="https://…" {...register("imageUrl")} />
-          {errors.imageUrl && <p className="text-xs text-destructive">{errors.imageUrl.message}</p>}
-        </div>
+        {/* Image */}
+        <Controller
+          control={form.control}
+          name="imageUrl"
+          render={({ field }) => (
+            <ImageUploadField
+              label="Image"
+              value={field.value ?? ""}
+              onChange={field.onChange}
+            />
+          )}
+        />
 
         {/* Pickup location + quantity */}
         <div className="grid sm:grid-cols-2 gap-4">

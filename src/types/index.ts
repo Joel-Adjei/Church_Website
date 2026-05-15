@@ -33,10 +33,10 @@ export type ChurchEvent = {
   flyer: string;
   location: string;
   date: string;
-  end_date: string;
+  end_date?: string;
   days: number;
   start_time: string;
-  end_time: string;
+  end_time?: string;
   created_at: string;
 };
 

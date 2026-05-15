@@ -90,7 +90,7 @@ export default function AdminLayout() {
   const sidebarInner = (onNav?: () => void) => (
     <>
       <div className="h-16 border-b border-border flex items-center px-6">
-        <Link to="/" className="flex items-center gap-2" onClick={onNav}>
+        <Link to="/admin" className="flex items-center gap-2" onClick={onNav}>
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-display">
             G
           </div>

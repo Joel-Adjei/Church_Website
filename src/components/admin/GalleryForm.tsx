@@ -1,4 +1,4 @@
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
@@ -8,16 +8,15 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateGallery, useUpdateGallery } from "@/services/queries";
 import { toast } from "sonner";
-import { ArrowLeft, Plus, X } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import type { GalleryProgram } from "@/types";
+import { MultiImageUpload } from "@/components/admin/ImageUploadField";
 
 const schema = z.object({
   title: z.string().trim().min(2, "Title is required").max(200),
   description: z.string().trim().min(2, "Description is required").max(2000),
   venue: z.string().trim().min(2, "Venue is required").max(200),
-  image_urls: z.array(z.object({
-    url: z.string().trim().url("Must be a valid URL"),
-  })).min(1, "Add at least one image"),
+  image_urls: z.array(z.string()).min(1, "Add at least one image"),
 });
 type Values = z.infer<typeof schema>;
 
@@ -34,19 +33,18 @@ export function GalleryForm({ initial, mode }: { initial?: GalleryProgram; mode:
           description: initial.description,
           venue: initial.venue,
           image_urls: initial.images.length > 0
-            ? initial.images.map((img) => ({ url: img.image }))
-            : [{ url: "" }],
+            ? initial.images.map((img) => img.image)
+            : [],
         }
-      : { title: "", description: "", venue: "", image_urls: [{ url: "" }] },
+      : { title: "", description: "", venue: "", image_urls: [] },
   });
-  const { fields, append, remove } = useFieldArray({ control: form.control, name: "image_urls" });
 
   async function onSubmit(values: Values) {
     const payload = {
       title: values.title,
       description: values.description,
       venue: values.venue,
-      image_urls: values.image_urls.map((i) => i.url),
+      image_urls: values.image_urls,
     };
     try {
       if (mode === "new") await create.mutateAsync(payload);
@@ -81,32 +79,15 @@ export function GalleryForm({ initial, mode }: { initial?: GalleryProgram; mode:
           {form.formState.errors.description && <p className="text-xs text-destructive">{form.formState.errors.description.message}</p>}
         </div>
 
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <Label>Image URLs</Label>
-            <Button type="button" variant="outline" size="sm" className="gap-1.5" onClick={() => append({ url: "" })}>
-              <Plus className="h-3.5 w-3.5" /> Add image
-            </Button>
-          </div>
-          <div className="space-y-2">
-            {fields.map((f, i) => (
-              <div key={f.id} className="flex gap-2 items-start">
-                <div className="flex-1">
-                  <Input placeholder="https://…" {...form.register(`image_urls.${i}.url`)} />
-                  {form.formState.errors.image_urls?.[i]?.url && (
-                    <p className="text-xs text-destructive mt-1">{form.formState.errors.image_urls[i]?.url?.message}</p>
-                  )}
-                </div>
-                <Button type="button" variant="ghost" size="icon" onClick={() => remove(i)} aria-label="Remove">
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-            ))}
-          </div>
-          {form.formState.errors.image_urls && typeof form.formState.errors.image_urls.message === "string" && (
-            <p className="text-xs text-destructive">{form.formState.errors.image_urls.message}</p>
-          )}
-        </div>
+        <MultiImageUpload
+          label="Gallery Images"
+          values={form.watch("image_urls")}
+          onChange={(urls) => form.setValue("image_urls", urls, { shouldValidate: true })}
+          hint="Upload as many images as you like. Drag & drop or click to select multiple at once."
+        />
+        {form.formState.errors.image_urls && (
+          <p className="text-xs text-destructive">{form.formState.errors.image_urls.message as string}</p>
+        )}
 
         <div className="flex gap-2 justify-end pt-2 border-t border-border">
           <Button type="button" variant="outline" asChild><Link to="/admin/gallery">Cancel</Link></Button>

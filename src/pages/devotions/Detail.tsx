@@ -6,6 +6,7 @@ import { ArrowLeft, Calendar, BookOpen, HandHeart, Lightbulb } from "lucide-reac
 import { useDevotionById, useDevotions } from "@/services/queries";
 import { Button } from "@/components/ui/button";
 import { ShareButtons } from "@/components/ShareButtons";
+import imgSub from "@/assets/bg_07.jpg";
 
 export default function DevotionDetail() {
   const { id } = useParams<{ id: string }>();
@@ -50,10 +51,16 @@ export default function DevotionDetail() {
 
       <header className="relative overflow-hidden">
         <div className="absolute inset-0 bg-primary" />
-        {d.thumbnail && (
+        {d.thumbnail ? (
           <img
             src={d.thumbnail}
-            alt=""
+            alt={d.title}
+            className="absolute inset-0 h-full w-full object-cover opacity-30"
+          />
+        ) : (
+          <img
+            src={imgSub}
+            alt={d.title}
             className="absolute inset-0 h-full w-full object-cover opacity-30"
           />
         )}

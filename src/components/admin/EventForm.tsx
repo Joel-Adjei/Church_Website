@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,16 +10,17 @@ import { useCreateEvent, useUpdateEvent } from "@/services/queries";
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
 import type { ChurchEvent } from "@/types";
+import { ImageUploadField } from "@/components/admin/ImageUploadField";
 
 const schema = z.object({
   name: z.string().trim().min(2, "Name is required").max(200),
   description: z.string().trim().min(2, "Description is required").max(4000),
-  flyer: z.string().trim().url("Must be a valid URL").or(z.literal("")).optional(),
+  flyer: z.string().optional(),
   location: z.string().trim().min(2, "Location is required").max(200),
   date: z.string().min(1, "Start date is required"),
-  end_date: z.string().min(1, "End date is required"),
+  end_date: z.string().optional(),
   start_time: z.string().min(1, "Start time is required"),
-  end_time: z.string().min(1, "End time is required"),
+  end_time: z.string().optional(),
   days: z.coerce.number().min(1),
 });
 type Values = z.infer<typeof schema>;
@@ -61,7 +62,7 @@ export function EventForm({ initial, mode }: { initial?: ChurchEvent; mode: "new
       ...values,
       flyer: values.flyer ?? "",
       start_time: `${values.start_time}:00`,
-      end_time: `${values.end_time}:00`,
+      end_time: values.end_time ? `${values.end_time}:00` : undefined,
     };
     try {
       if (mode === "new") await create.mutateAsync(payload);
@@ -141,15 +142,17 @@ export function EventForm({ initial, mode }: { initial?: ChurchEvent; mode: "new
             <p className="text-xs text-destructive">{form.formState.errors.location.message}</p>
           )}
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="flyer">
-            Flyer / Banner Image URL <span className="text-ink-muted font-normal">(optional)</span>
-          </Label>
-          <Input id="flyer" type="url" placeholder="https://…" {...form.register("flyer")} />
-          {form.formState.errors.flyer && (
-            <p className="text-xs text-destructive">{form.formState.errors.flyer.message}</p>
+        <Controller
+          control={form.control}
+          name="flyer"
+          render={({ field }) => (
+            <ImageUploadField
+              label="Flyer / Banner Image"
+              value={field.value ?? ""}
+              onChange={field.onChange}
+            />
           )}
-        </div>
+        />
         <div className="space-y-2">
           <Label htmlFor="description">Description</Label>
           <Textarea id="description" rows={6} {...form.register("description")} />
