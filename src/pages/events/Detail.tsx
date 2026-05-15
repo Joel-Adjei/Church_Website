@@ -69,7 +69,7 @@ export default function EventDetail() {
               <div className="text-xs uppercase tracking-wider text-ink-muted">Date</div>
               <div className="text-ink font-medium">
                 {format(new Date(event.date), "MMM d, yyyy")}
-                {event.days > 1 && ` – ${format(new Date(event.end_date), "MMM d, yyyy")}`}
+                {event.days > 1 && event.end_date && ` – ${format(new Date(event.end_date), "MMM d, yyyy")}`}
               </div>
             </div>
           </div>

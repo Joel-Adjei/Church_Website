@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,11 +10,12 @@ import { useCreateSeries, useUpdateSeries } from "@/services/queries";
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
 import type { SermonSeries } from "@/types";
+import { ImageUploadField } from "@/components/admin/ImageUploadField";
 
 const schema = z.object({
   title: z.string().trim().min(2, "Title is required").max(200),
   description: z.string().trim().min(2, "Description is required").max(2000),
-  image: z.string().trim().url("Must be a valid URL").or(z.literal("")).optional(),
+  image: z.string().optional(),
 });
 type Values = z.infer<typeof schema>;
 
@@ -53,11 +54,17 @@ export function SeriesForm({ initial, mode }: { initial?: SermonSeries; mode: "n
           <Input id="title" {...form.register("title")} />
           {form.formState.errors.title && <p className="text-xs text-destructive">{form.formState.errors.title.message}</p>}
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="image">Cover Image URL <span className="text-ink-muted font-normal">(optional)</span></Label>
-          <Input id="image" type="url" placeholder="https://…" {...form.register("image")} />
-          {form.formState.errors.image && <p className="text-xs text-destructive">{form.formState.errors.image.message}</p>}
-        </div>
+        <Controller
+          control={form.control}
+          name="image"
+          render={({ field }) => (
+            <ImageUploadField
+              label="Cover Image"
+              value={field.value ?? ""}
+              onChange={field.onChange}
+            />
+          )}
+        />
         <div className="space-y-2">
           <Label htmlFor="description">Description</Label>
           <Textarea id="description" rows={4} {...form.register("description")} />

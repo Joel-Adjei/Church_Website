@@ -128,6 +128,18 @@ export default function Settings() {
                 />
               )}
             />
+            <Controller
+              control={form.control}
+              name="bannerImageUrl"
+              render={({ field }) => (
+                <ImageUploadField
+                  label="Banner Image"
+                  value={field.value}
+                  onChange={field.onChange}
+                  hint="Wide landscape image shown on the homepage hero."
+                />
+              )}
+            />
           </TabsContent>
 
           <TabsContent value="contact" className="space-y-5">

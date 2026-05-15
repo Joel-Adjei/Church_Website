@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,13 +10,14 @@ import { useCreateDevotion, useUpdateDevotion } from "@/services/queries";
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
 import type { Devotion } from "@/types";
+import { ImageUploadField } from "@/components/admin/ImageUploadField";
 
 const schema = z.object({
   title: z.string().trim().min(2, "Title is required").max(200),
   reference: z.string().trim().min(2, "Bible verse is required").max(20),
   verse_content: z.string().trim().min(2, "Verse content is required").max(100),
   content: z.string().trim().min(20, "Content is too short").max(20000),
-  thumbnail: z.string().trim().max(200000).optional().or(z.literal("")),
+  thumbnail: z.string().optional(),
   prayer: z.string().trim().max(4000).optional().or(z.literal("")),
   reflection: z.string().trim().max(2000).optional().or(z.literal("")),
 });
@@ -149,10 +150,17 @@ export function DevotionForm({ initial, mode }: { initial?: Devotion; mode: "new
           <Textarea id="prayer" rows={4} {...form.register("prayer")} />
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="thumbnail">Thumbnail URL</Label>
-          <Input id="thumbnail" placeholder="https://…" {...form.register("thumbnail")} />
-        </div>
+        <Controller
+          control={form.control}
+          name="thumbnail"
+          render={({ field }) => (
+            <ImageUploadField
+              label="Thumbnail"
+              value={field.value ?? ""}
+              onChange={field.onChange}
+            />
+          )}
+        />
 
         <div className="flex gap-2 justify-end pt-4 border-t border-border">
           <Button type="button" variant="outline" asChild>
