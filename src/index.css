@@ -42,6 +42,18 @@
   --shadow-elevated: 0 12px 40px -12px oklch(0.2 0.04 265 / 0.18);
 
   --gradient-hero: linear-gradient(180deg, oklch(0.18 0.04 265 / 0.15) 0%, oklch(0.18 0.04 265 / 0.75) 100%);
+
+  @keyframes float-pulse {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-2px) scale(1.02); }
+  }
+  --animate-float-pulse: float-pulse 3s ease-in-out infinite;
+
+  @keyframes ken-burns {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
+  }
+  --animate-ken-burns: ken-burns 20s linear infinite alternate;
 }
 
 :root {

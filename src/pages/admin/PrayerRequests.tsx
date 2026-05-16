@@ -76,36 +76,11 @@ export default function PrayerRequests() {
       />
 
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        {[
-          {
-            label: "Total requests",
-            value: total,
-            icon: Heart,
-            color: "bg-rose-100 text-rose-600",
-          },
-        ].map((stat) => {
-          const Icon = stat.icon;
-          return (
-            <div
-              key={stat.label}
-              className="bg-background border border-border rounded-2xl p-5 flex items-center gap-4"
-            >
-              <div
-                className={cn(
-                  "h-11 w-11 rounded-full flex items-center justify-center shrink-0",
-                  stat.color,
-                )}
-              >
-                <Icon className="h-5 w-5" />
-              </div>
-              <div>
-                <div className="text-2xl font-display text-ink">{stat.value}</div>
-                <div className="text-xs text-ink-muted mt-0.5">{stat.label}</div>
-              </div>
-            </div>
-          );
-        })}
+      <div className="bg-muted/50 border-l-4 border-border">
+        <div className=" p-5 flex items-center gap-2">
+          <div className="text-lg  text-ink-muted mt-0.5">Total requests:</div>
+          <div className="text-2xl text-ink">{total}</div>
+        </div>
       </div>
 
       {/* Filters */}

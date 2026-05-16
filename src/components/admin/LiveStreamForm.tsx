@@ -29,7 +29,7 @@ type Values = z.infer<typeof schema>;
 
 const STATUSES = [
   { value: "live", label: "Live" },
-  { value: "past", label: "Offline" },
+  { value: "past", label: "Ended" },
 ];
 
 export function LiveStreamForm({ initial, mode }: { initial?: LiveStream; mode: "new" | "edit" }) {
