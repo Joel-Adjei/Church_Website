@@ -43,6 +43,8 @@ import AdminDevotions from "@/pages/admin/Devotions";
 import AdminDevotionNew from "@/pages/admin/DevotionNew";
 import AdminDevotionEdit from "@/pages/admin/DevotionEdit";
 import AdminGivings from "@/pages/admin/Givings";
+import AdminGivingsEdit from "@/pages/admin/GivingsEdit";
+import AdminGivingsNew from "@/pages/admin/GivingsNew";
 import AdminPrayerRequests from "@/pages/admin/PrayerRequests";
 import AdminResources from "@/pages/admin/Resources";
 import AdminResourceNew from "@/pages/admin/ResourceNew";
@@ -101,6 +103,9 @@ export const router = createBrowserRouter([
       { path: "devotions/new", element: <AdminDevotionNew /> },
       { path: "devotions/:id", element: <AdminDevotionEdit /> },
       { path: "givings", element: <AdminGivings /> },
+      { path: "givings/new", element: <AdminGivingsNew /> },
+      { path: "givings/:id", element: <AdminGivingsEdit /> },
+
       { path: "prayer-requests", element: <AdminPrayerRequests /> },
       { path: "resources", element: <AdminResources /> },
       { path: "resources/new", element: <AdminResourceNew /> },

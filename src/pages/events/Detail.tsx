@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button";
 import { ShareButtons } from "@/components/ShareButtons";
 import { Seo } from "@/components/Seo";
 
-export default function EventDetail() {
+export default function EventDetail({ viewID, toView }: { viewID?: string; toView?: boolean }) {
   const { id } = useParams<{ id: string }>();
-  const { data: event, isLoading, error } = useEventById(id);
+  const { data: event, isLoading, error } = useEventById(toView ? viewID : id);
   if (isLoading) return <div className="py-24 text-center text-ink-muted">Loading…</div>;
   if (error || !event)
     return <div className="py-24 text-center text-ink-muted">Event not found.</div>;
@@ -69,7 +69,9 @@ export default function EventDetail() {
               <div className="text-xs uppercase tracking-wider text-ink-muted">Date</div>
               <div className="text-ink font-medium">
                 {format(new Date(event.date), "MMM d, yyyy")}
-                {event.days > 1 && event.end_date && ` – ${format(new Date(event.end_date), "MMM d, yyyy")}`}
+                {event.days > 1 &&
+                  event.end_date &&
+                  ` – ${format(new Date(event.end_date), "MMM d, yyyy")}`}
               </div>
             </div>
           </div>
@@ -90,6 +92,14 @@ export default function EventDetail() {
               <div className="text-ink font-medium">{event.location}</div>
             </div>
           </div>
+        </div>
+
+        <div className="h-120 w-full rounded-lg overflow-hidden mb-8">
+          <img
+            src={event.flyer}
+            alt={`${event.name} flyer`}
+            className="w-fit mx-auto rounded-lg mb-8 object-contain h-full max-w-120"
+          />
         </div>
 
         <div className="text-lg text-ink-muted leading-relaxed whitespace-pre-line">

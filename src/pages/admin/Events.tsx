@@ -2,15 +2,32 @@ import { Link } from "react-router-dom";
 import { useEvents, useDeleteEvent } from "@/services/queries";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { DeleteConfirm } from "@/components/admin/DeleteConfirm";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import EventDetail from "../events/Detail";
+import { useState } from "react";
 
 export default function Events() {
   const { data = [], isLoading } = useEvents();
   const remove = useDeleteEvent();
+  const [selectedEventId, setSelectedEventId] = useState<string>("");
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleViewEvent = (id: string) => {
+    setSelectedEventId(id);
+    setOpenDialog(true);
+  };
   return (
     <div>
       <AdminPageHeader title="Events" newHref="/admin/events/new" newLabel="New event" />
@@ -25,11 +42,25 @@ export default function Events() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading && <TableRow><TableCell colSpan={4} className="py-12 text-center text-ink-muted">Loading…</TableCell></TableRow>}
-            {!isLoading && data.length === 0 && <TableRow><TableCell colSpan={4} className="py-12 text-center text-ink-muted">No events yet.</TableCell></TableRow>}
+            {isLoading && (
+              <TableRow>
+                <TableCell colSpan={4} className="py-12 text-center text-ink-muted">
+                  Loading…
+                </TableCell>
+              </TableRow>
+            )}
+            {!isLoading && data.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={4} className="py-12 text-center text-ink-muted">
+                  No events yet.
+                </TableCell>
+              </TableRow>
+            )}
             {data.map((e) => (
               <TableRow key={e.id}>
-                <TableCell className="font-medium">{e.name}</TableCell>
+                <TableCell className="font-medium" onClick={() => handleViewEvent(e.id)}>
+                  {e.name}
+                </TableCell>
                 <TableCell className="text-ink-muted">
                   {format(new Date(e.date), "MMM d, yyyy")} · {e.start_time.slice(0, 5)}
                 </TableCell>
@@ -37,11 +68,16 @@ export default function Events() {
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-1">
                     <Button asChild variant="ghost" size="sm" className="gap-1.5">
-                      <Link to={`/admin/events/${e.id}`}><Pencil className="h-3.5 w-3.5" /> Edit</Link>
+                      <Link to={`/admin/events/${e.id}`}>
+                        <Pencil className="h-3.5 w-3.5" /> Edit
+                      </Link>
                     </Button>
                     <DeleteConfirm
                       title={`Delete "${e.name}"?`}
-                      onConfirm={async () => { await remove.mutateAsync(e.id); toast.success("Event deleted"); }}
+                      onConfirm={async () => {
+                        await remove.mutateAsync(e.id);
+                        toast.success("Event deleted");
+                      }}
                     />
                   </div>
                 </TableCell>
@@ -50,6 +86,12 @@ export default function Events() {
           </TableBody>
         </Table>
       </div>
+
+      <Dialog open={openDialog} onOpenChange={(open) => setOpenDialog(open)}>
+        <DialogContent className="h-[90dvh] max-w-5xl overflow-auto p-0">
+          <EventDetail viewID={selectedEventId} toView={true} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

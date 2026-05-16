@@ -1,156 +1,169 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Heart, HandCoins, Globe, Building2, Users, Gift, CheckCircle2 } from "lucide-react";
+import {
+  Heart,
+  Building2,
+  ArrowLeftCircleIcon,
+  ArrowRightCircleIcon,
+  Copy,
+  CheckCheck,
+  Smartphone,
+} from "lucide-react";
 import { Seo } from "@/components/Seo";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import { cn } from "@/utils/utils";
-import { useSubmitGiving } from "@/services/queries";
-import type { GivingCategory } from "@/types";
 import heroImg from "@/assets/bg_11.jpg";
+import mtnLogo from "@/assets/mtn_logo.jpg";
+import telecel_Logo from "@/assets/tetecel_logo.jpg";
+import artelTigoLgo from "@/assets/AirtelTigo_logo.jpg";
+import { useAccounts } from "@/services/queries";
+import type { Account } from "@/types";
 
-const schema = z.object({
-  name: z.string(),
-  email: z.string().email("Enter a valid email"),
-  phone: z.string().optional(),
-  amount: z
-    .number({ invalid_type_error: "Enter an amount" })
-    .positive("Amount must be greater than 0"),
-  category: z.enum(["tithe", "offering", "missions", "building-fund", "benevolence", "other"]),
-  message: z.string().optional(),
-  anonymous: z.boolean(),
-});
+const networkLogoMap: Record<string, string> = {
+  mtn: mtnLogo,
+  telecel: telecel_Logo,
+  vodafone: telecel_Logo,
+  airteltigo: artelTigoLgo,
+  airtel: artelTigoLgo,
+  tigo: artelTigoLgo,
+};
 
-type FormValues = z.infer<typeof schema>;
+function getNetworkLogo(network: string): string | undefined {
+  return networkLogoMap[network.toLowerCase().replace(/\s/g, "")];
+}
 
-const PRESET_AMOUNTS = [50, 100, 200, 500, 1000];
+function CopyButton({ value }: { value: string }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(value);
+    setCopied(true);
+    toast.success("Copied to clipboard");
+    setTimeout(() => setCopied(false), 2000);
+  };
+  return (
+    <button
+      onClick={handleCopy}
+      className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors"
+    >
+      {copied ? (
+        <CheckCheck className="h-3.5 w-3.5 text-green-500" />
+      ) : (
+        <Copy className="h-3.5 w-3.5" />
+      )}
+      {copied ? "Copied" : "Copy"}
+    </button>
+  );
+}
 
-const CATEGORIES: {
-  value: GivingCategory;
-  label: string;
-  description: string;
-  icon: React.ElementType;
-}[] = [
-  { value: "tithe", label: "Tithe", description: "Return 10% as an act of worship", icon: Heart },
-  {
-    value: "offering",
-    label: "General Offering",
-    description: "Support the general ministry fund",
-    icon: HandCoins,
-  },
-  {
-    value: "missions",
-    label: "Missions",
-    description: "Fund global outreach & evangelism",
-    icon: Globe,
-  },
-  {
-    value: "building-fund",
-    label: "Building Fund",
-    description: "Contribute to our sanctuary project",
-    icon: Building2,
-  },
-  {
-    value: "benevolence",
-    label: "Benevolence",
-    description: "Help members & families in need",
-    icon: Users,
-  },
-  { value: "other", label: "Other", description: "Designate your gift as needed", icon: Gift },
-];
-
-export default function Give() {
-  const [customAmount, setCustomAmount] = useState("");
-  const [selectedPreset, setSelectedPreset] = useState<number | null>(null);
-  const [submitted, setSubmitted] = useState(false);
-  const submit = useSubmitGiving();
-
-  const form = useForm<FormValues>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
-      category: "offering",
-      message: "",
-      anonymous: false,
-      amount: undefined,
-    },
-  });
-
-  function pickPreset(val: number) {
-    setSelectedPreset(val);
-    setCustomAmount("");
-    form.setValue("amount", val, { shouldValidate: true });
-  }
-
-  function handleCustomAmountChange(raw: string) {
-    setCustomAmount(raw);
-    setSelectedPreset(null);
-    const parsed = parseFloat(raw);
-    form.setValue("amount", isNaN(parsed) ? (undefined as unknown as number) : parsed, {
-      shouldValidate: true,
-    });
-  }
-
-  async function onSubmit(data: FormValues) {
-    try {
-      await submit.mutateAsync(data);
-      setSubmitted(true);
-    } catch {
-      toast.error("Something went wrong. Please try again.");
-    }
-  }
-
-  if (submitted) {
-    return (
-      <div className="min-h-[80vh] flex items-center justify-center px-6">
-        <div className="text-center max-w-md">
-          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100">
-            <CheckCircle2 className="h-10 w-10 text-emerald-600" />
-          </div>
-          <h1 className="font-display text-3xl text-ink mb-3">Thank You!</h1>
-          <p className="text-ink-muted text-lg mb-2">Your gift has been received.</p>
-          <p className="text-ink-muted text-sm mb-8">
-            A confirmation will be sent to your email. May God bless your generosity.
+function BankAccountCard({ account }: { account: Account }) {
+  return (
+    <div className="rounded-2xl border bg-white shadow-sm p-5 flex flex-col gap-4">
+      <div className="flex items-center gap-3">
+        <div className="h-10 w-10 rounded-full bg-blue-50 flex items-center justify-center shrink-0 ring-2 ring-white shadow">
+          <Building2 className="h-5 w-5 text-blue-600" />
+        </div>
+        <div>
+          <p className="font-semibold text-sm leading-tight">{account.bank_name || "Bank"}</p>
+          <p className="text-xs text-muted-foreground">
+            {[account.branch, account.currency].filter(Boolean).join(" · ")}
           </p>
-          <Button
-            onClick={() => {
-              setSubmitted(false);
-              form.reset();
-              setSelectedPreset(null);
-              setCustomAmount("");
-            }}
-          >
-            Give Again
-          </Button>
         </div>
       </div>
-    );
-  }
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    formState: { errors },
-  } = form;
-  const selectedCategory = watch("category");
-  const isAnonymous = watch("anonymous");
+      <div className="space-y-2 rounded-xl bg-gray-50 p-4">
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-xs text-muted-foreground shrink-0">Account Name</span>
+          <span className="text-sm font-medium text-right">{account.account_name}</span>
+        </div>
+        <div className="h-px bg-gray-100" />
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-xs text-muted-foreground shrink-0">Account No.</span>
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-sm font-semibold tracking-wider">
+              {account.account_number}
+            </span>
+            <CopyButton value={account.account_number} />
+          </div>
+        </div>
+        {account.branch && (
+          <>
+            <div className="h-px bg-gray-100" />
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-xs text-muted-foreground">Branch</span>
+              <span className="text-sm">{account.branch}</span>
+            </div>
+          </>
+        )}
+      </div>
+
+      {account.instructions && (
+        <p className="text-xs text-muted-foreground leading-relaxed border-t pt-3">
+          {account.instructions}
+        </p>
+      )}
+    </div>
+  );
+}
+
+function MomoAccountCard({ account }: { account: Account }) {
+  const logo = getNetworkLogo(account.network ?? "");
+  return (
+    <div className="rounded-2xl border bg-white shadow-sm p-5 flex flex-col gap-4">
+      <div className="flex items-center gap-3">
+        {logo ? (
+          <img
+            src={logo}
+            alt={account.network}
+            className="h-10 w-10 rounded-full object-cover ring-2 ring-white shadow"
+          />
+        ) : (
+          <div className="h-10 w-10 rounded-full bg-yellow-100 flex items-center justify-center">
+            <Smartphone className="h-5 w-5 text-yellow-600" />
+          </div>
+        )}
+        <div>
+          <p className="font-semibold text-sm leading-tight">{account.network || "Mobile Money"}</p>
+          <p className="text-xs text-muted-foreground">{account.currency || "GHS"}</p>
+        </div>
+      </div>
+
+      <div className="space-y-2 rounded-xl bg-gray-50 p-4">
+        <div className="flex items-center justify-between">
+          <span className="text-xs text-muted-foreground">Account Name</span>
+          <span className="text-sm font-medium">{account.account_name}</span>
+        </div>
+        <div className="h-px bg-gray-100" />
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-xs text-muted-foreground">Number</span>
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-sm font-semibold tracking-wider">
+              {account.account_number}
+            </span>
+            <CopyButton value={account.account_number} />
+          </div>
+        </div>
+      </div>
+
+      {account.instructions && (
+        <p className="text-xs text-muted-foreground leading-relaxed border-t pt-3">
+          {account.instructions}
+        </p>
+      )}
+    </div>
+  );
+}
+
+export default function Give() {
+  const [selectedChannel, setSeletedeChannel] = useState<"momo" | "bank" | null>(null);
+  const { data: accounts, isLoading: fetchingAccounts } = useAccounts();
+  const momoAccounts = accounts?.filter((a) => a.channel_type === "momo") ?? [];
+  const bankAccounts = accounts?.filter((a) => a.channel_type === "bank") ?? [];
 
   return (
-    <div className="min-h-screen  bg-surface-elevated">
+    <div className="min-h-screen bg-surface-elevated">
       <Seo
         title="Give & Support"
         description="Support the mission of Grace Cathedral through your generous giving. Every gift helps our community serve the city and beyond."
       />
+
       {/* Hero */}
       <div className="relative h-120 overflow-hidden bg-primary text-primary-foreground">
         <img src={heroImg} className="absolute inset-0 h-full w-full object-cover" />
@@ -176,187 +189,159 @@ export default function Give() {
         </div>
       </div>
 
-      <div className="mx-auto max-w-3xl px-6 py-12">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
-          {/* Amount */}
-          <section className="bg-background rounded-2xl border border-border p-6 sm:p-8">
-            <h2 className="font-display text-xl text-ink mb-1">Choose an Amount</h2>
-            <p className="text-sm text-ink-muted mb-6">All amounts are in Ghana Cedis (GHS ₵)</p>
-            <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mb-4">
-              {PRESET_AMOUNTS.map((val) => (
-                <button
-                  key={val}
-                  type="button"
-                  onClick={() => pickPreset(val)}
-                  className={cn(
-                    "rounded-xl border-2 py-3 text-sm font-semibold transition-all",
-                    selectedPreset === val
-                      ? "border-primary bg-primary text-primary-foreground"
-                      : "border-border bg-surface-elevated text-ink hover:border-primary/50",
-                  )}
-                >
-                  ₵{val}
-                </button>
-              ))}
-            </div>
-            <div className="relative">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-muted font-medium">
-                ₵
-              </span>
-              <Input
-                type="number"
-                min="1"
-                step="0.01"
-                placeholder="Enter custom amount"
-                value={customAmount}
-                onChange={(e) => handleCustomAmountChange(e.target.value)}
-                className="pl-8"
-              />
-            </div>
-            {errors.amount && (
-              <p className="mt-1.5 text-sm text-destructive">{errors.amount.message}</p>
-            )}
-          </section>
-
-          {/* Category */}
-          <section className="bg-background rounded-2xl border border-border p-6 sm:p-8">
-            <h2 className="font-display text-xl text-ink mb-1">Giving Category</h2>
-            <p className="text-sm text-ink-muted mb-6">Where would you like your gift to go?</p>
-            <div className="grid sm:grid-cols-2 gap-3">
-              {CATEGORIES.map((cat) => {
-                const Icon = cat.icon;
-                const active = selectedCategory === cat.value;
-                return (
-                  <button
-                    key={cat.value}
-                    type="button"
-                    onClick={() => setValue("category", cat.value)}
-                    className={cn(
-                      "flex items-start gap-3 rounded-xl border-2 p-4 text-left transition-all",
-                      active
-                        ? "border-primary bg-primary/5"
-                        : "border-border bg-surface-elevated hover:border-primary/40",
-                    )}
-                  >
-                    <div className="mt-0.5 shrink-0 text-primary">
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <div
-                        className={cn(
-                          "text-sm font-semibold",
-                          active ? "text-primary" : "text-ink",
-                        )}
-                      >
-                        {cat.label}
-                      </div>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </section>
-
-          {/* Personal Info */}
-          <section className="bg-background rounded-2xl border border-border p-6 sm:p-8">
-            <h2 className="font-display text-xl text-ink mb-1">Your Information</h2>
-            <p className="text-sm text-ink-muted mb-6">
-              We'll send a giving receipt to your email.
-            </p>
-
-            <div
-              className={cn(
-                "space-y-4",
-                isAnonymous && "opacity-50 pointer-events-none select-none",
-              )}
-            >
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <Label htmlFor="name">First name</Label>
-                  <Input id="name" placeholder="John" {...register("name")} />
-                  {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
+      {/* Channel picker */}
+      {!selectedChannel && (
+        <div>
+          {/* Mobile Money */}
+          <div
+            onClick={() => setSeletedeChannel("momo")}
+            className="group relative w-full bg-secondary cursor-pointer overflow-hidden transition-colors duration-300 hover:bg-secondary/80"
+          >
+            <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="flex flex-col my-6 md:gap-8 gap-4 md:flex-row p-6 h-full max-w-3xl mx-auto items-center">
+              <div className="size-45 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300">
+                <img src={heroImg} alt="MoMo" className="rounded-xl object-cover" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl md:text-3xl font-semibold text-primary mb-2 group-hover:translate-x-1 transition-transform duration-300">
+                  Give Through Mobile Money
+                </h3>
+                <div className="flex justify-center md:justify-start gap-2">
+                  {[mtnLogo, telecel_Logo, artelTigoLgo].map((logo, i) => (
+                    <img
+                      key={i}
+                      src={logo}
+                      className="size-9 rounded-full object-cover ring-2 ring-white shadow-sm group-hover:scale-110 transition-transform duration-300"
+                      style={{ transitionDelay: `${i * 40}ms` }}
+                    />
+                  ))}
                 </div>
               </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="email">Email address</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="john@example.com"
-                  {...register("email")}
-                />
-                {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="phone">
-                  Phone number <span className="text-ink-muted">(optional)</span>
-                </Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  placeholder="+233 00 000 0000"
-                  {...register("phone")}
-                />
+              <div className="bg-primary/10 rounded-full p-2 group-hover:bg-primary/20 group-hover:translate-x-1 transition-transform duration-300">
+                <ArrowRightCircleIcon size={44} className="text-primary duration-300" />
               </div>
             </div>
+          </div>
 
-            <div className="mt-5 flex items-start gap-3 rounded-xl border border-border bg-surface-elevated p-4">
-              <Checkbox
-                id="anonymous"
-                checked={isAnonymous}
-                onCheckedChange={(checked) => {
-                  setValue("anonymous", !!checked);
-                  if (checked) {
-                    setValue("name", "Anonymous");
-                    setValue("email", "anon@gracecathedral.org");
-                    setValue("phone", "");
-                  } else {
-                    setValue("name", "");
-                    setValue("email", "");
-                  }
-                }}
-              />
-              <div>
-                <Label htmlFor="anonymous" className="font-medium cursor-pointer">
-                  Give anonymously
-                </Label>
-                <p className="text-xs text-ink-muted mt-0.5">
-                  Your name will not appear in any public records.
-                </p>
+          {/* Bank Transfer */}
+          <div
+            onClick={() => setSeletedeChannel("bank")}
+            className="group relative  w-full bg-primary cursor-pointer overflow-hidden transition-colors duration-300 hover:bg-primary/90"
+          >
+            <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="flex flex-col md:gap-8 gap-4 md:flex-row my-5 p-6 h-full max-w-3xl mx-auto items-center">
+              <div className="size-45 rounded-2xl bg-white/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300">
+                <img src={heroImg} alt="MoMo" className="rounded-xl object-cover" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl md:text-3xl font-semibold text-white mb-1 group-hover:translate-x-1 transition-transform duration-300">
+                  Give Through Bank Transfer
+                </h3>
+                <p className="text-white/60  text-sm">Direct deposit to our church account</p>
+              </div>
+              <div className="bg-white/10 rounded-full p-2 group-hover:bg-white/20 group-hover:translate-x-1 transition-transform duration-300">
+                <ArrowRightCircleIcon size={44} className="text-white  duration-300" />
               </div>
             </div>
-          </section>
+          </div>
+        </div>
+      )}
 
-          {/* Message */}
-          <section className="bg-background rounded-2xl border border-border p-6 sm:p-8">
-            <h2 className="font-display text-xl text-ink mb-1">
-              Leave a Note <span className="text-base font-normal text-ink-muted">(optional)</span>
-            </h2>
-            <p className="text-sm text-ink-muted mb-4">Share what's on your heart as you give.</p>
-            <Textarea
-              placeholder="e.g. Grateful for God's blessing this month…"
-              rows={3}
-              {...register("message")}
-            />
-          </section>
-
-          {/* Submit */}
-          <div className="flex flex-col items-center gap-3 pb-8">
-            <Button
-              type="submit"
-              size="lg"
-              className="w-full sm:w-auto sm:min-w-64 gap-2 text-base"
-              disabled={submit.isPending}
+      {/* Mobile Money detail */}
+      {selectedChannel === "momo" && (
+        <div className="mx-auto max-w-3xl px-4 py-8 space-y-6">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setSeletedeChannel(null)}
+              className="text-muted-foreground hover:text-primary transition-colors"
             >
-              <Heart className="h-4 w-4" />
-              {submit.isPending ? "Processing…" : "Complete My Gift"}
-            </Button>
-            <p className="text-xs text-ink-muted text-center max-w-xs">
-              Your giving is secure and goes directly to support the ministry of Grace Cathedral.
+              <ArrowLeftCircleIcon className="h-7 w-7" />
+            </button>
+            <div>
+              <h2 className="text-xl font-semibold">Mobile Money</h2>
+              <p className="text-sm text-muted-foreground">
+                Choose any number below to send your gift
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-2 items-center">
+            {[mtnLogo, telecel_Logo, artelTigoLgo].map((logo, i) => (
+              <img
+                key={i}
+                src={logo}
+                alt=""
+                className="h-8 w-8 rounded-full object-cover ring-2 ring-white shadow-sm"
+              />
+            ))}
+            <span className="text-xs text-muted-foreground ml-1">All major networks accepted</span>
+          </div>
+
+          {fetchingAccounts ? (
+            <div className="space-y-3">
+              {[1, 2].map((i) => (
+                <div key={i} className="h-36 rounded-2xl bg-gray-100 animate-pulse" />
+              ))}
+            </div>
+          ) : momoAccounts.length === 0 ? (
+            <div className="rounded-2xl border border-dashed py-12 text-center text-muted-foreground text-sm">
+              No mobile money accounts available at the moment.
+            </div>
+          ) : (
+            <div className="grid sm:grid-cols-2 gap-4">
+              {momoAccounts.map((account) => (
+                <MomoAccountCard key={account.id} account={account} />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Bank detail */}
+      {selectedChannel === "bank" && (
+        <div className="mx-auto max-w-3xl px-4 py-8 space-y-6">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setSeletedeChannel(null)}
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
+              <ArrowLeftCircleIcon className="h-7 w-7" />
+            </button>
+            <div>
+              <h2 className="text-xl font-semibold">Bank Transfer</h2>
+              <p className="text-sm text-muted-foreground">
+                Use the details below to make a direct deposit
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2.5 rounded-xl bg-blue-50 border border-blue-100 px-4 py-3">
+            <Building2 className="h-4 w-4 text-blue-500 shrink-0" />
+            <p className="text-xs text-blue-700">
+              After your transfer, kindly notify us via the church office or WhatsApp so we can
+              confirm receipt.
             </p>
           </div>
-        </form>
-      </div>
+
+          {fetchingAccounts ? (
+            <div className="space-y-3">
+              {[1, 2].map((i) => (
+                <div key={i} className="h-40 rounded-2xl bg-gray-100 animate-pulse" />
+              ))}
+            </div>
+          ) : bankAccounts.length === 0 ? (
+            <div className="rounded-2xl border border-dashed py-12 text-center text-muted-foreground text-sm">
+              No bank accounts available at the moment.
+            </div>
+          ) : (
+            <div className="grid sm:grid-cols-2 gap-4">
+              {bankAccounts.map((account) => (
+                <BankAccountCard key={account.id} account={account} />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

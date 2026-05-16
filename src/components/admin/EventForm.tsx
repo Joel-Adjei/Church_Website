@@ -18,9 +18,7 @@ const schema = z.object({
   flyer: z.string().optional(),
   location: z.string().trim().min(2, "Location is required").max(200),
   date: z.string().min(1, "Start date is required"),
-  end_date: z.string().optional(),
   start_time: z.string().min(1, "Start time is required"),
-  end_time: z.string().optional(),
   days: z.coerce.number().min(1),
 });
 type Values = z.infer<typeof schema>;
@@ -39,9 +37,7 @@ export function EventForm({ initial, mode }: { initial?: ChurchEvent; mode: "new
           flyer: initial.flyer ?? "",
           location: initial.location,
           date: initial.date,
-          end_date: initial.end_date,
           start_time: initial.start_time.slice(0, 5),
-          end_time: initial.end_time ? initial.end_time.slice(0, 5) : "",
           days: initial.days,
         }
       : {
@@ -50,9 +46,7 @@ export function EventForm({ initial, mode }: { initial?: ChurchEvent; mode: "new
           flyer: "",
           location: "",
           date: "",
-          end_date: "",
           start_time: "",
-          end_time: "",
           days: 1,
         },
   });
@@ -62,7 +56,6 @@ export function EventForm({ initial, mode }: { initial?: ChurchEvent; mode: "new
       ...values,
       flyer: values.flyer ?? "",
       start_time: `${values.start_time}:00`,
-      end_time: values.end_time ? `${values.end_time}:00` : undefined,
     };
     try {
       if (mode === "new") await create.mutateAsync(payload);
@@ -96,7 +89,8 @@ export function EventForm({ initial, mode }: { initial?: ChurchEvent; mode: "new
             <p className="text-xs text-destructive">{form.formState.errors.name.message}</p>
           )}
         </div>
-        <div className="grid sm:grid-cols-2 gap-4">
+
+        <div className="grid sm:grid-cols-3 gap-4">
           <div className="space-y-2">
             <Label htmlFor="date">Start Date</Label>
             <Input id="date" type="date" {...form.register("date")} />
@@ -105,28 +99,13 @@ export function EventForm({ initial, mode }: { initial?: ChurchEvent; mode: "new
             )}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="end_date">End Date</Label>
-            <Input id="end_date" type="date" {...form.register("end_date")} />
-            {form.formState.errors.end_date && (
-              <p className="text-xs text-destructive">{form.formState.errors.end_date.message}</p>
-            )}
-          </div>
-        </div>
-        <div className="grid sm:grid-cols-3 gap-4">
-          <div className="space-y-2">
             <Label htmlFor="start_time">Start Time</Label>
             <Input id="start_time" type="time" {...form.register("start_time")} />
             {form.formState.errors.start_time && (
               <p className="text-xs text-destructive">{form.formState.errors.start_time.message}</p>
             )}
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="end_time">End Time</Label>
-            <Input id="end_time" type="time" {...form.register("end_time")} />
-            {form.formState.errors.end_time && (
-              <p className="text-xs text-destructive">{form.formState.errors.end_time.message}</p>
-            )}
-          </div>
+
           <div className="space-y-2">
             <Label htmlFor="days">Days</Label>
             <Input id="days" type="number" min={1} {...form.register("days")} />
