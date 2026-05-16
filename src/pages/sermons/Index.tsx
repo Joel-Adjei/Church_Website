@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Seo } from "@/components/Seo";
-import { Search, PlayCircle, User, Loader2, VideoOff } from "lucide-react";
+import { Search, PlayCircle, User, VideoOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -16,6 +16,7 @@ import { SectionHeading } from "@/components/SectionHeading";
 import heroImg from "@/assets/bg_10.jpg";
 // import heroImg from "@/assets/sermon_bg.jpg";
 import { youtubeThumbnail } from "@/lib/utils";
+import { LoadingState } from "@/components/ui/loading-state";
 
 export default function SermonsIndex() {
   const { data: sermons = [], isLoading } = useSermons();
@@ -111,10 +112,7 @@ export default function SermonsIndex() {
         </div>
 
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-24 gap-4 text-ink-muted">
-            <Loader2 className="h-10 w-10 animate-spin text-primary" />
-            <p className="text-sm font-medium uppercase tracking-widest">Loading messages…</p>
-          </div>
+          <LoadingState message="Loading messages..." />
         ) : filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 gap-6">
             <div className="rounded-full bg-muted p-6">

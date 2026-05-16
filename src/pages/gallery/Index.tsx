@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
-import { Images, ImageOff, Loader2 } from "lucide-react";
+import { Images, ImageOff } from "lucide-react";
 import { Seo } from "@/components/Seo";
 import { useGallery } from "@/services/queries";
 import { SectionHeading } from "@/components/SectionHeading";
 import heroImg from "@/assets/bg_02.jpg";
+import { LoadingState } from "@/components/ui/loading-state";
 
 export default function GalleryIndex() {
   const { data: programs = [], isLoading } = useGallery();
@@ -27,12 +28,7 @@ export default function GalleryIndex() {
       </section>
 
       <section className="mx-auto max-w-7xl px-6 lg:px-10 py-16">
-        {isLoading && (
-          <div className="flex flex-col items-center justify-center py-24 gap-4 text-ink-muted">
-            <Loader2 className="h-10 w-10 animate-spin text-primary" />
-            <p className="text-sm font-medium">Loading gallery…</p>
-          </div>
-        )}
+        {isLoading && <LoadingState message="Loading gallery..." />}
         {!isLoading && programs.length === 0 && (
           <div className="flex flex-col items-center justify-center py-24 gap-4 text-ink-muted">
             <div className="rounded-full bg-muted p-5">

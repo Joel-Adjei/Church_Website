@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Calendar, LoaderCircle, User } from "lucide-react";
+import { ArrowLeft, Calendar, User } from "lucide-react";
 import { useSermonById, useSermons, useSeries } from "@/services/queries";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
@@ -16,18 +16,15 @@ function youtubeEmbedId(url: string): string {
   }
 }
 
+import { LoadingState } from "@/components/ui/loading-state";
+
 export default function SermonDetail({ viewID, toView }: { viewID?: string; toView?: boolean }) {
   const { id } = useParams<{ id: string }>();
   const { data: sermon, isLoading, error } = useSermonById(toView ? viewID : id);
   const { data: sermons = [] } = useSermons();
   const { data: series = [] } = useSeries();
 
-  if (isLoading)
-    return (
-      <div className="py-24 text-center text-ink-muted">
-        <LoaderCircle className="animate-spin" />
-      </div>
-    );
+  if (isLoading) return <LoadingState />;
   if (error || !sermon)
     return <div className="py-24 text-center text-ink-muted">Sermon not found.</div>;
 

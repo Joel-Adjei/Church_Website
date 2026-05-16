@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Loader2, BellOff } from "lucide-react";
+import { ArrowRight, BellOff } from "lucide-react";
 import { Seo } from "@/components/Seo";
 import { useAnnouncements } from "@/services/queries";
 import { format } from "date-fns";
 import heroImg from "@/assets/img_11.jpg";
+import { LoadingState } from "@/components/ui/loading-state";
 
 export default function AnnouncementsIndex() {
   const { data: announcements = [], isLoading } = useAnnouncements();
@@ -51,12 +52,7 @@ export default function AnnouncementsIndex() {
           <span className="text-xs text-ink-muted">{announcements.length} Articles</span>
         </div>
 
-        {isLoading && (
-          <div className="flex flex-col items-center justify-center py-24 gap-4 text-ink-muted">
-            <Loader2 className="h-10 w-10 animate-spin text-primary" />
-            <p className="text-sm font-medium">Loading announcements…</p>
-          </div>
-        )}
+        {isLoading && <LoadingState message="Loading announcements..." />}
 
         {!isLoading && announcements.length === 0 && (
           <div className="flex flex-col items-center justify-center py-24 gap-4">

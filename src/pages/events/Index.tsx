@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
-import { Calendar, MapPin, ArrowRight, Loader2, CalendarX } from "lucide-react";
+import { Calendar, MapPin, ArrowRight, CalendarX } from "lucide-react";
 import { Seo } from "@/components/Seo";
 import { useEvents } from "@/services/queries";
 import { format } from "date-fns";
 import { SectionHeading } from "@/components/SectionHeading";
 import heroImg from "@/assets/img_13.jpg";
 import img1 from "@/assets/img_01.jpg";
+import { LoadingState } from "@/components/ui/loading-state";
 
 export default function EventsIndex() {
   const { data: events = [], isLoading } = useEvents();
@@ -63,12 +64,7 @@ export default function EventsIndex() {
           </span>
         </div>
 
-        {isLoading && (
-          <div className="flex flex-col items-center justify-center py-24 gap-4 text-ink-muted">
-            <Loader2 className="h-10 w-10 animate-spin text-primary" />
-            <p className="text-sm font-medium uppercase tracking-widest">Discovering events…</p>
-          </div>
-        )}
+        {isLoading && <LoadingState message="Discovering events..." />}
 
         {!isLoading && events.length === 0 && (
           <div className="flex flex-col items-center justify-center py-24 gap-6">

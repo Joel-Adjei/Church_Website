@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { ShareButtons } from "@/components/ShareButtons";
 import imgSub from "@/assets/bg_07.jpg";
 
+import { LoadingState } from "@/components/ui/loading-state";
+
 export default function DevotionDetail() {
   const { id } = useParams<{ id: string }>();
   const { data: d, isLoading, error } = useDevotionById(id);
@@ -25,7 +27,7 @@ export default function DevotionDetail() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [id]);
 
-  if (isLoading) return <div className="py-24 text-center text-ink-muted">Loading…</div>;
+  if (isLoading) return <LoadingState />;
   if (error || !d)
     return <div className="py-24 text-center text-ink-muted">Devotion not found.</div>;
 
