@@ -59,7 +59,7 @@ export default function SermonsIndex() {
             {/* Editorial Badge */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/20 border border-accent/30 backdrop-blur-md animate-in slide-in-from-bottom-4 duration-700">
               <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
-              <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-accent-foreground dark:text-accent">
+              <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-secondary">
                 Message Library
               </span>
             </div>
