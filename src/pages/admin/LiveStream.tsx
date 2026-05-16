@@ -2,7 +2,14 @@ import { Link } from "react-router-dom";
 import { useLiveStreams, useDeleteLiveStream, useUpdateLiveStream } from "@/services/queries";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { DeleteConfirm } from "@/components/admin/DeleteConfirm";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Pencil, Radio } from "lucide-react";
@@ -23,7 +30,7 @@ export default function LiveStreamAdmin() {
   const sorted = [...streams].sort((a, b) => b.date.localeCompare(a.date));
 
   async function toggleLive(id: string, current: string) {
-    const newStatus = current === "live" ? "offline" : "live";
+    const newStatus = current === "live" ? "past" : "live";
     const stream = streams.find((s) => s.id === id);
     if (!stream) return;
     try {
@@ -60,20 +67,34 @@ export default function LiveStreamAdmin() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading && <TableRow><TableCell colSpan={4} className="text-center py-12 text-ink-muted">Loading…</TableCell></TableRow>}
+            {isLoading && (
+              <TableRow>
+                <TableCell colSpan={4} className="text-center py-12 text-ink-muted">
+                  Loading…
+                </TableCell>
+              </TableRow>
+            )}
             {!isLoading && sorted.length === 0 && (
-              <TableRow><TableCell colSpan={4} className="text-center py-12 text-ink-muted">No streams yet.</TableCell></TableRow>
+              <TableRow>
+                <TableCell colSpan={4} className="text-center py-12 text-ink-muted">
+                  No streams yet.
+                </TableCell>
+              </TableRow>
             )}
             {sorted.map((s) => (
               <TableRow key={s.id}>
                 <TableCell className="font-medium">{s.title}</TableCell>
                 <TableCell>
                   <Badge variant={statusVariant(s.status)} className="capitalize gap-1.5">
-                    {s.status === "live" && <span className="h-1.5 w-1.5 rounded-full bg-current animate-pulse" />}
+                    {s.status === "live" && (
+                      <span className="h-1.5 w-1.5 rounded-full bg-current animate-pulse" />
+                    )}
                     {s.status}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-ink-muted whitespace-nowrap">{format(parseISO(s.date), "MMM d, yyyy h:mm a")}</TableCell>
+                <TableCell className="text-ink-muted whitespace-nowrap">
+                  {format(parseISO(s.date), "MMM d, yyyy h:mm a")}
+                </TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-1">
                     <Button
@@ -87,7 +108,9 @@ export default function LiveStreamAdmin() {
                       {s.status === "live" ? "End stream" : "Go live"}
                     </Button>
                     <Button asChild variant="ghost" size="sm" className="gap-1.5">
-                      <Link to={`/admin/live/${s.id}`}><Pencil className="h-3.5 w-3.5" /> Edit</Link>
+                      <Link to={`/admin/live/${s.id}`}>
+                        <Pencil className="h-3.5 w-3.5" /> Edit
+                      </Link>
                     </Button>
                     <DeleteConfirm
                       title={`Delete "${s.title}"?`}

@@ -6,10 +6,12 @@ import { Button } from "@/components/ui/button";
 import { ShareButtons } from "@/components/ShareButtons";
 import { Seo } from "@/components/Seo";
 
+import { LoadingState } from "@/components/ui/loading-state";
+
 export default function AnnouncementDetail() {
   const { id } = useParams<{ id: string }>();
   const { data: a, isLoading, error } = useAnnouncementById(id);
-  if (isLoading) return <div className="py-24 text-center text-ink-muted">Loading…</div>;
+  if (isLoading) return <LoadingState />;
   if (error || !a) return <div className="py-24 text-center text-ink-muted">Announcement not found.</div>;
   return (
     <article className="mx-auto max-w-3xl px-6 lg:px-10 py-12 md:py-20">

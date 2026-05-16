@@ -6,7 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useCreateSermon, useUpdateSermon, useSeries } from "@/services/queries";
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
@@ -16,7 +22,6 @@ const schema = z.object({
   title: z.string().trim().min(2, "Title is required").max(200),
   preacher: z.string().trim().min(2, "Preacher is required").max(120),
   description: z.string().trim().min(10, "Description is too short").max(4000),
-  date: z.string().min(1, "Date is required"),
   series: z.string().optional(),
   video_link: z.string().trim().url("Must be a valid YouTube URL").or(z.literal("")),
   podcast_link: z.string().trim().url("Must be a valid URL").or(z.literal("")).optional(),
@@ -36,7 +41,6 @@ export function SermonForm({ initial, mode }: { initial?: Sermon; mode: "new" | 
           title: initial.title,
           preacher: initial.preacher,
           description: initial.description,
-          date: initial.date.slice(0, 10),
           series: initial.series ?? "none",
           video_link: initial.video_link,
           podcast_link: initial.podcast_link ?? "",
@@ -45,7 +49,6 @@ export function SermonForm({ initial, mode }: { initial?: Sermon; mode: "new" | 
           title: "",
           preacher: "",
           description: "",
-          date: new Date().toISOString().slice(0, 10),
           series: "none",
           video_link: "",
           podcast_link: "",
@@ -53,7 +56,11 @@ export function SermonForm({ initial, mode }: { initial?: Sermon; mode: "new" | 
   });
 
   async function onSubmit(values: SermonFormValues) {
-    const payload = { ...values, series: values.series === "none" ? null : (values.series ?? null), podcast_link: values.podcast_link ?? "" };
+    const payload = {
+      ...values,
+      series: values.series === "none" ? null : (values.series ?? null),
+      podcast_link: values.podcast_link ?? "",
+    };
     try {
       if (mode === "new") {
         await create.mutateAsync(payload);
@@ -71,55 +78,90 @@ export function SermonForm({ initial, mode }: { initial?: Sermon; mode: "new" | 
   return (
     <div>
       <Button asChild variant="ghost" size="sm" className="-ml-3 gap-1.5 mb-4">
-        <Link to="/admin/sermons"><ArrowLeft className="h-4 w-4" /> Sermons</Link>
+        <Link to="/admin/sermons">
+          <ArrowLeft className="h-4 w-4" /> Sermons
+        </Link>
       </Button>
-      <h1 className="font-display text-3xl text-ink mb-8">{mode === "new" ? "New sermon" : "Edit sermon"}</h1>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 max-w-2xl bg-background border border-border rounded-2xl p-6" noValidate>
+      <h1 className="font-display text-3xl text-ink mb-8">
+        {mode === "new" ? "New sermon" : "Edit sermon"}
+      </h1>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-5 max-w-2xl bg-background border border-border rounded-2xl p-6"
+        noValidate
+      >
         <div className="space-y-2">
           <Label htmlFor="title">Title</Label>
           <Input id="title" {...form.register("title")} />
-          {form.formState.errors.title && <p className="text-xs text-destructive">{form.formState.errors.title.message}</p>}
+          {form.formState.errors.title && (
+            <p className="text-xs text-destructive">{form.formState.errors.title.message}</p>
+          )}
         </div>
-        <div className="grid sm:grid-cols-2 gap-4">
+        <div className="">
           <div className="space-y-2">
             <Label htmlFor="preacher">Preacher</Label>
             <Input id="preacher" {...form.register("preacher")} />
-            {form.formState.errors.preacher && <p className="text-xs text-destructive">{form.formState.errors.preacher.message}</p>}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="date">Date</Label>
-            <Input id="date" type="date" {...form.register("date")} />
-            {form.formState.errors.date && <p className="text-xs text-destructive">{form.formState.errors.date.message}</p>}
+            {form.formState.errors.preacher && (
+              <p className="text-xs text-destructive">{form.formState.errors.preacher.message}</p>
+            )}
           </div>
         </div>
         <div className="space-y-2">
           <Label htmlFor="series">Series</Label>
           <Select value={form.watch("series")} onValueChange={(v) => form.setValue("series", v)}>
-            <SelectTrigger id="series"><SelectValue /></SelectTrigger>
+            <SelectTrigger id="series">
+              <SelectValue />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">No series</SelectItem>
-              {series.map((s) => <SelectItem key={s.id} value={s.id}>{s.title}</SelectItem>)}
+              {series.map((s) => (
+                <SelectItem key={s.id} value={s.id}>
+                  {s.title}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
           <Label htmlFor="video_link">Video Link</Label>
-          <Input id="video_link" type="url" placeholder="https://www.youtube.com/watch?v=..." {...form.register("video_link")} />
-          {form.formState.errors.video_link && <p className="text-xs text-destructive">{form.formState.errors.video_link.message}</p>}
+          <Input
+            id="video_link"
+            type="url"
+            placeholder="https://www.youtube.com/watch?v=..."
+            {...form.register("video_link")}
+          />
+          {form.formState.errors.video_link && (
+            <p className="text-xs text-destructive">{form.formState.errors.video_link.message}</p>
+          )}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="podcast_link">Podcast Link <span className="text-ink-muted font-normal">(optional)</span></Label>
-          <Input id="podcast_link" type="url" placeholder="https://..." {...form.register("podcast_link")} />
-          {form.formState.errors.podcast_link && <p className="text-xs text-destructive">{form.formState.errors.podcast_link.message}</p>}
+          <Label htmlFor="podcast_link">
+            Podcast Link <span className="text-ink-muted font-normal">(optional)</span>
+          </Label>
+          <Input
+            id="podcast_link"
+            type="url"
+            placeholder="https://..."
+            {...form.register("podcast_link")}
+          />
+          {form.formState.errors.podcast_link && (
+            <p className="text-xs text-destructive">{form.formState.errors.podcast_link.message}</p>
+          )}
         </div>
         <div className="space-y-2">
           <Label htmlFor="description">Description</Label>
           <Textarea id="description" rows={6} {...form.register("description")} />
-          {form.formState.errors.description && <p className="text-xs text-destructive">{form.formState.errors.description.message}</p>}
+          {form.formState.errors.description && (
+            <p className="text-xs text-destructive">{form.formState.errors.description.message}</p>
+          )}
         </div>
         <div className="flex gap-2 justify-end pt-2 border-t border-border">
-          <Button type="button" variant="outline" asChild><Link to="/admin/sermons">Cancel</Link></Button>
-          <Button type="submit" disabled={form.formState.isSubmitting}>{form.formState.isSubmitting ? "Saving…" : "Save"}</Button>
+          <Button type="button" variant="outline" asChild>
+            <Link to="/admin/sermons">Cancel</Link>
+          </Button>
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? "Saving…" : "Save"}
+          </Button>
         </div>
       </form>
     </div>

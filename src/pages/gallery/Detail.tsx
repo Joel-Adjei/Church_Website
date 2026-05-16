@@ -6,12 +6,14 @@ import { Button } from "@/components/ui/button";
 import { ShareButtons } from "@/components/ShareButtons";
 import { Seo } from "@/components/Seo";
 
+import { LoadingState } from "@/components/ui/loading-state";
+
 export default function GalleryDetail({ viewID, toView }: { viewID?: string; toView?: boolean }) {
   const { id } = useParams<{ id: string }>();
   const { data: program, isLoading, error } = useGalleryById(toView ? viewID : id);
   const [active, setActive] = useState<number | null>(null);
 
-  if (isLoading) return <div className="py-24 text-center text-ink-muted">Loading…</div>;
+  if (isLoading) return <LoadingState />;
   if (error || !program)
     return <div className="py-24 text-center text-ink-muted">Gallery not found.</div>;
 

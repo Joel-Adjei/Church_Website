@@ -46,6 +46,7 @@ export function useCreateSermon() {
         | "previous_sermon"
         | "resource"
         | "resource_details"
+        | "date"
       >,
     ) =>
       api<Sermon>(`${BASE_URL}/sermons/create/`, {

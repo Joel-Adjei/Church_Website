@@ -22,6 +22,10 @@ import { useEvents, useSermons, useSeries, useAnnouncements } from "@/services/q
 import { format } from "date-fns";
 import { youtubeThumbnail } from "@/lib/utils";
 import { useLiveStore } from "@/store/live";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
+import React, { useEffect } from "react";
+import { cn } from "@/lib/utils";
 
 const STORY_VIDEO_ID = "ScMzIvxBSi4";
 const STORY_THUMB = "https://images.unsplash.com/photo-1508963493744-76fce69379c0?w=1600&q=80";
@@ -73,6 +77,37 @@ export default function Home() {
   const news = announcements.slice(0, 3);
   const seriesTitle = (id?: string | null) => series.find((s) => s.id === id)?.title;
   const [videoOpen, setVideoOpen] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const slides = [
+    {
+      image:
+        settings.bannerImageUrl ||
+        "https://images.unsplash.com/photo-1548625361-195fe57656ef?w=1600&q=80",
+      eyebrow: "Welcome home",
+      title: settings.churchName,
+      tagline: settings.tagline,
+    },
+    {
+      image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=1600&q=80",
+      eyebrow: "Join our community",
+      title: "Life Together",
+      tagline: "Discover a place where you belong and can grow in your faith.",
+    },
+    {
+      image: "https://images.unsplash.com/photo-1515162305285-0293e4767cc2?w=1600&q=80",
+      eyebrow: "Experience worship",
+      title: "Heartfelt Praise",
+      tagline: "Join us this Sunday for transformative worship and powerful teaching.",
+    },
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [slides.length]);
 
   return (
     <>
@@ -81,41 +116,85 @@ export default function Home() {
         description="Grace Cathedral is a welcoming community in the heart of the city. Join us for worship, sermons, events, and life together."
         noSuffix
       />
-      <section className="relative min-h-140 w-full flex flex-col justify-center isolate overflow-hidden">
-        <div
-          className="absolute inset-0 -z-10 bg-cover bg-center"
-          style={{ backgroundImage: `url(${settings.bannerImageUrl})` }}
-        />
-        <div className="absolute inset-0 -z-10 bg-linear-to-b from-primary/60 via-primary/80 to-primary/90" />
-        <div className="mx-auto max-w-6xl px-6 lg:px-10 py-24 md:py-40">
-          <div className="max-w-3xl mx-auto w-full flex flex-col items-center justify-centers">
-            <span className="inline-block text-center text-xs uppercase tracking-[0.25em] text-accent font-semibold mb-5">
-              Welcome home
-            </span>
-            <h1 className="font-display text-center text-5xl md:text-7xl lg:text-8xl text-primary-foreground leading-[1.02]">
-              {settings.churchName}
-            </h1>
-            <p className="mt-6 text-lg text-center md:text-xl text-primary-foreground/85 max-w-xl leading-relaxed">
-              {settings.tagline}
-            </p>
-            <div className="mt-10 flex flex-wrap gap-3">
-              {isLive && (
-                <Button asChild size="lg" variant={"secondary"} className="gap-2 py-6">
-                  <Link to="/live">
-                    <Radio className="h-4 w-4" /> Watch Live
-                  </Link>
-                </Button>
+      <section className="relative h-[90vh] min-h-[600px] w-full isolate overflow-hidden bg-primary">
+        {slides.map((slide, index) => (
+          <div
+            key={index}
+            className={cn(
+              "absolute inset-0 h-full w-full transition-opacity duration-1000 ease-in-out",
+              index === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0",
+            )}
+          >
+            {/* Background with Ken Burns */}
+            <div
+              className={cn(
+                "absolute inset-0 bg-cover bg-center",
+                index === currentSlide ? "animate-ken-burns" : "",
               )}
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="bg-transparent py-6! border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground hover:text-primary"
+              style={{ backgroundImage: `url(${slide.image})` }}
+            >
+              <div className="absolute inset-0 bg-linear-to-b from-primary/30 via-primary/60 to-primary/80" />
+            </div>
+
+            <div className="relative h-full flex items-center justify-center">
+              <div
+                key={index === currentSlide ? `content-${index}` : `content-hidden-${index}`}
+                className="mx-auto max-w-6xl px-6 lg:px-10 py-24 w-full flex flex-col items-center"
               >
-                <Link to="/sermons">Browse sermons</Link>
-              </Button>
+                <span className="inline-block text-center text-xs uppercase tracking-[0.2em] text-primary bg-white/40 py-2 px-4 rounded font-bold mb-6 animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-forwards">
+                  {slide.eyebrow}
+                </span>
+                <h1 className="font-display text-center text-5xl md:text-8xl lg:text-9xl text-primary-foreground leading-[0.95] animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200 fill-mode-forwards">
+                  {slide.title}
+                </h1>
+                <p className="mt-8 text-lg text-center md:text-2xl text-primary-foreground/90 max-w-2xl leading-relaxed animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-500 fill-mode-forwards">
+                  {slide.tagline}
+                </p>
+                <div className="mt-12 flex flex-wrap justify-center gap-4 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-700 fill-mode-forwards">
+                  {isLive && (
+                    <Button
+                      asChild
+                      size="lg"
+                      variant={"secondary"}
+                      className="gap-2 h-14 px-8 text-base"
+                    >
+                      <Link to="/live">
+                        <Radio className="h-4 w-4 animate-pulse" /> Watch Live
+                      </Link>
+                    </Button>
+                  )}
+                  <Button
+                    asChild
+                    size="lg"
+                    variant="outline"
+                    className="bg-white/10 backdrop-blur-md h-14 px-8 text-base border-white/20 text-white hover:bg-white hover:text-primary transition-all"
+                  >
+                    <Link to="/sermons">Browse sermons</Link>
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
+        ))}
+
+        {/* Slide indicators */}
+        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-20 flex gap-3">
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentSlide(i)}
+              className={cn(
+                "h-1.5 transition-all duration-500 rounded-full",
+                i === currentSlide ? "w-8 bg-accent" : "w-2 bg-white/30 hover:bg-white/50",
+              )}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
+        </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 animate-bounce flex flex-col items-center opacity-50">
+          <div className="w-px h-8 bg-linear-to-b from-white/0 via-white/50 to-white/0" />
         </div>
       </section>
 

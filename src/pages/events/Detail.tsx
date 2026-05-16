@@ -6,10 +6,12 @@ import { Button } from "@/components/ui/button";
 import { ShareButtons } from "@/components/ShareButtons";
 import { Seo } from "@/components/Seo";
 
+import { LoadingState } from "@/components/ui/loading-state";
+
 export default function EventDetail({ viewID, toView }: { viewID?: string; toView?: boolean }) {
   const { id } = useParams<{ id: string }>();
   const { data: event, isLoading, error } = useEventById(toView ? viewID : id);
-  if (isLoading) return <div className="py-24 text-center text-ink-muted">Loading…</div>;
+  if (isLoading) return <LoadingState />;
   if (error || !event)
     return <div className="py-24 text-center text-ink-muted">Event not found.</div>;
 

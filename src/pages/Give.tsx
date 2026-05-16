@@ -14,6 +14,8 @@ import heroImg from "@/assets/bg_11.jpg";
 import mtnLogo from "@/assets/mtn_logo.jpg";
 import telecel_Logo from "@/assets/tetecel_logo.jpg";
 import artelTigoLgo from "@/assets/AirtelTigo_logo.jpg";
+import mobileMoney from "@/assets/img_07.jpg";
+import bankMoney from "@/assets/img_05.jpg";
 import { useAccounts } from "@/services/queries";
 import type { Account } from "@/types";
 
@@ -106,7 +108,10 @@ function BankAccountCard({ account }: { account: Account }) {
 function MomoAccountCard({ account }: { account: Account }) {
   const logo = getNetworkLogo(account.network ?? "");
   return (
-    <div className="rounded-2xl border bg-white shadow-sm p-5 flex flex-col gap-4">
+    <div className="rounded-md border bg-white shadow-sm p-5 flex flex-col gap-4">
+      <div className="bg-primary rounded p-3">
+        <h3 className="text-md text-muted font-semibold">{account.name}</h3>
+      </div>
       <div className="flex items-center gap-3">
         {logo ? (
           <img
@@ -120,7 +125,7 @@ function MomoAccountCard({ account }: { account: Account }) {
           </div>
         )}
         <div>
-          <p className="font-semibold text-sm leading-tight">{account.network || "Mobile Money"}</p>
+          <p className="font-semibold text-md leading-tight">{account.network || "Mobile Money"}</p>
           <p className="text-xs text-muted-foreground">{account.currency || "GHS"}</p>
         </div>
       </div>
@@ -128,13 +133,13 @@ function MomoAccountCard({ account }: { account: Account }) {
       <div className="space-y-2 rounded-xl bg-gray-50 p-4">
         <div className="flex items-center justify-between">
           <span className="text-xs text-muted-foreground">Account Name</span>
-          <span className="text-sm font-medium">{account.account_name}</span>
+          <span className="text-md font-medium">{account.account_name}</span>
         </div>
         <div className="h-px bg-gray-100" />
         <div className="flex items-center justify-between gap-2">
           <span className="text-xs text-muted-foreground">Number</span>
           <div className="flex items-center gap-2">
-            <span className="font-mono text-sm font-semibold tracking-wider">
+            <span className="font-mono text-md font-semibold tracking-wider">
               {account.account_number}
             </span>
             <CopyButton value={account.account_number} />
@@ -199,8 +204,8 @@ export default function Give() {
           >
             <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="flex flex-col my-6 md:gap-8 gap-4 md:flex-row p-6 h-full max-w-3xl mx-auto items-center">
-              <div className="size-45 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300">
-                <img src={heroImg} alt="MoMo" className="rounded-xl object-cover" />
+              <div className="size-45 group-hover:scale-105 transition-transform duration-300">
+                <img src={mobileMoney} alt="MoMo" className="size-full rounded-xl object-cover" />
               </div>
               <div className="flex-1">
                 <h3 className="text-xl md:text-3xl font-semibold text-primary mb-2 group-hover:translate-x-1 transition-transform duration-300">
@@ -230,8 +235,8 @@ export default function Give() {
           >
             <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="flex flex-col md:gap-8 gap-4 md:flex-row my-5 p-6 h-full max-w-3xl mx-auto items-center">
-              <div className="size-45 rounded-2xl bg-white/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300">
-                <img src={heroImg} alt="MoMo" className="rounded-xl object-cover" />
+              <div className="size-45 group-hover:scale-105 transition-transform duration-300">
+                <img src={bankMoney} alt="MoMo" className="size-full  rounded-xl object-cover" />
               </div>
               <div className="flex-1">
                 <h3 className="text-xl md:text-3xl font-semibold text-white mb-1 group-hover:translate-x-1 transition-transform duration-300">
@@ -288,7 +293,7 @@ export default function Give() {
               No mobile money accounts available at the moment.
             </div>
           ) : (
-            <div className="grid sm:grid-cols-2 gap-4">
+            <div className=" space-y-4">
               {momoAccounts.map((account) => (
                 <MomoAccountCard key={account.id} account={account} />
               ))}
