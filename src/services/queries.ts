@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, BASE_URL } from "./api";
 import type {
+  Account,
   Announcement,
   ChurchEvent,
   Devotion,
@@ -168,6 +169,66 @@ export function useUpdateEvent() {
         auth: true,
       }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["events"] }),
+  });
+}
+
+export function useAccounts() {
+  return useQuery({
+    queryKey: ["accounts"],
+    queryFn: async () => {
+      const r = await api<Paginated<Account>>(`${BASE_URL}/contributions/channels/`);
+      return r.results;
+    },
+  });
+}
+
+export function useCreateAccount() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (body: Omit<Account, "id">) => {
+      api<Account>(`${BASE_URL}/contributions/create/`, {
+        method: "POST",
+        body: JSON.stringify(body),
+        auth: true,
+      });
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["accounts"] }),
+  });
+}
+
+export function useAccountById(id: string | undefined) {
+  return useQuery({
+    queryKey: ["account", id],
+    queryFn: () => api<Account>(`${BASE_URL}/contributions/channels/${id}/`),
+    enabled: !!id,
+  });
+}
+
+export function useUpdateAccount() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, ...body }: Partial<Account> & { id: string }) => {
+      api<Account>(`${BASE_URL}/contributions/channels/${id}/update/`, {
+        method: "PUT",
+        body: JSON.stringify(body),
+        auth: true,
+      });
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["accounts"] }),
+  });
+}
+
+export function useDeleteAccount() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      api<Account>(`${BASE_URL}/contributions/channels/${id}/update`, {
+        method: "DELETE",
+        auth: true,
+      });
+    },
+
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["accounts"] }),
   });
 }
 

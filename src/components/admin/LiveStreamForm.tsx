@@ -6,7 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useCreateLiveStream, useUpdateLiveStream } from "@/services/queries";
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
@@ -23,8 +29,7 @@ type Values = z.infer<typeof schema>;
 
 const STATUSES = [
   { value: "live", label: "Live" },
-  { value: "offline", label: "Offline" },
-  { value: "scheduled", label: "Scheduled" },
+  { value: "past", label: "Offline" },
 ];
 
 export function LiveStreamForm({ initial, mode }: { initial?: LiveStream; mode: "new" | "edit" }) {
@@ -76,15 +81,25 @@ export function LiveStreamForm({ initial, mode }: { initial?: LiveStream; mode: 
   return (
     <div>
       <Button asChild variant="ghost" size="sm" className="-ml-3 gap-1.5 mb-4">
-        <Link to="/admin/live"><ArrowLeft className="h-4 w-4" /> Live streams</Link>
+        <Link to="/admin/live">
+          <ArrowLeft className="h-4 w-4" /> Live streams
+        </Link>
       </Button>
-      <h1 className="font-display text-3xl text-ink mb-8">{mode === "new" ? "New live stream" : "Edit live stream"}</h1>
+      <h1 className="font-display text-3xl text-ink mb-8">
+        {mode === "new" ? "New live stream" : "Edit live stream"}
+      </h1>
 
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 max-w-2xl bg-background border border-border rounded-2xl p-6" noValidate>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-5 max-w-2xl bg-background border border-border rounded-2xl p-6"
+        noValidate
+      >
         <div className="space-y-2">
           <Label htmlFor="title">Title</Label>
           <Input id="title" placeholder="e.g. Sunday Morning Service" {...form.register("title")} />
-          {form.formState.errors.title && <p className="text-xs text-destructive">{form.formState.errors.title.message}</p>}
+          {form.formState.errors.title && (
+            <p className="text-xs text-destructive">{form.formState.errors.title.message}</p>
+          )}
         </div>
 
         <div className="space-y-2">
@@ -94,8 +109,14 @@ export function LiveStreamForm({ initial, mode }: { initial?: LiveStream; mode: 
 
         <div className="space-y-2">
           <Label htmlFor="stream_link">Stream embed URL</Label>
-          <Input id="stream_link" placeholder="https://www.youtube.com/embed/…" {...form.register("stream_link")} />
-          {form.formState.errors.stream_link && <p className="text-xs text-destructive">{form.formState.errors.stream_link.message}</p>}
+          <Input
+            id="stream_link"
+            placeholder="https://www.youtube.com/embed/…"
+            {...form.register("stream_link")}
+          />
+          {form.formState.errors.stream_link && (
+            <p className="text-xs text-destructive">{form.formState.errors.stream_link.message}</p>
+          )}
           <p className="text-xs text-ink-muted">Use the embed URL (not the share link).</p>
         </div>
 
@@ -103,23 +124,37 @@ export function LiveStreamForm({ initial, mode }: { initial?: LiveStream; mode: 
           <div className="space-y-2">
             <Label>Status</Label>
             <Select value={form.watch("status")} onValueChange={(v) => form.setValue("status", v)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
-                {STATUSES.map((s) => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
+                {STATUSES.map((s) => (
+                  <SelectItem key={s.value} value={s.value}>
+                    {s.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
-            {form.formState.errors.status && <p className="text-xs text-destructive">{form.formState.errors.status.message}</p>}
+            {form.formState.errors.status && (
+              <p className="text-xs text-destructive">{form.formState.errors.status.message}</p>
+            )}
           </div>
           <div className="space-y-2">
             <Label htmlFor="date">Date & time</Label>
             <Input id="date" type="datetime-local" {...form.register("date")} />
-            {form.formState.errors.date && <p className="text-xs text-destructive">{form.formState.errors.date.message}</p>}
+            {form.formState.errors.date && (
+              <p className="text-xs text-destructive">{form.formState.errors.date.message}</p>
+            )}
           </div>
         </div>
 
         <div className="flex gap-2 justify-end pt-4 border-t border-border">
-          <Button type="button" variant="outline" asChild><Link to="/admin/live">Cancel</Link></Button>
-          <Button type="submit" disabled={form.formState.isSubmitting}>{form.formState.isSubmitting ? "Saving…" : "Save"}</Button>
+          <Button type="button" variant="outline" asChild>
+            <Link to="/admin/live">Cancel</Link>
+          </Button>
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? "Saving…" : "Save"}
+          </Button>
         </div>
       </form>
     </div>

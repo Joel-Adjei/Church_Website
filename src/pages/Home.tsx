@@ -27,13 +27,6 @@ const STORY_VIDEO_ID = "ScMzIvxBSi4";
 const STORY_THUMB = "https://images.unsplash.com/photo-1508963493744-76fce69379c0?w=1600&q=80";
 
 const nextSteps = [
-  { icon: Heart, title: "I'm new", desc: "Start here — what to expect on Sunday.", to: "/about" },
-  {
-    icon: Users,
-    title: "Find a group",
-    desc: "Belong to a small community midweek.",
-    to: "/contact",
-  },
   {
     icon: BookOpen,
     title: "Listen in",
@@ -189,7 +182,7 @@ export default function Home() {
       <section className="border-y border-border bg-background">
         <div className="mx-auto max-w-7xl px-6 lg:px-10 py-16 md:py-20">
           <SectionHeading eyebrow="Next steps" title="However you arrive, there's a way forward." />
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 ">
             {nextSteps.map((s) => {
               const Icon = s.icon;
               return (

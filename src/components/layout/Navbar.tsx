@@ -150,15 +150,82 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-10">
-        <Link to="/" className="flex items-center gap-2 group" onClick={() => setOpen(false)}>
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground font-display text-lg">
-            G
-          </div>
-          <span className="font-display text-xl tracking-tight text-ink">
-            {settings.churchName}
-          </span>
-        </Link>
+        <div className="flex items-center gap-2">
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Open menu">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="p-0 w-72 flex flex-col">
+              <SheetHeader className="sr-only">
+                <SheetTitle>Navigation</SheetTitle>
+              </SheetHeader>
+              <div className="h-16 border-b border-border flex items-center px-6">
+                <Link to="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-display">
+                    G
+                  </div>
+                  <span className="font-display text-lg">{settings.churchName}</span>
+                </Link>
+              </div>
+              <nav className="flex-1 flex flex-col px-3 py-4 gap-0.5 overflow-y-auto">
+                {navItems.map((item) => {
+                  if (item.type === "link") {
+                    return (
+                      <Link
+                        key={item.to}
+                        to={item.to}
+                        onClick={() => setOpen(false)}
+                        className="px-3 py-3 text-base font-medium text-ink hover:bg-secondary rounded-md"
+                      >
+                        {item.label}
+                      </Link>
+                    );
+                  }
+                  return (
+                    <MobileDropdown
+                      key={item.label}
+                      item={item}
+                      pathname={pathname}
+                      onNavigate={() => setOpen(false)}
+                    />
+                  );
+                })}
+              </nav>
+              <div className="border-t border-border p-4 flex flex-col gap-2">
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
+                  className="gap-1.5 border-primary text-primary"
+                >
+                  <Link to="/give" onClick={() => setOpen(false)}>
+                    <Heart className="h-4 w-4" />
+                    Give
+                  </Link>
+                </Button>
+                {isLive && (
+                  <Button asChild className="gap-1.5" size="lg">
+                    <Link to="/live" onClick={() => setOpen(false)}>
+                      <Radio className="h-4 w-4" />
+                      Watch Live
+                    </Link>
+                  </Button>
+                )}
+              </div>
+            </SheetContent>
+          </Sheet>
 
+          <Link to="/" className="flex items-center gap-2 group" onClick={() => setOpen(false)}>
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground font-display text-lg">
+              G
+            </div>
+            <span className="font-display text-xl tracking-tight text-ink">
+              {settings.churchName}
+            </span>
+          </Link>
+        </div>
         <nav className="hidden lg:flex items-center gap-1">
           {navItems.map((item) => {
             if (item.type === "link") {
@@ -198,72 +265,6 @@ export function Navbar() {
             </Button>
           )}
         </nav>
-
-        <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Open menu">
-              <Menu className="h-5 w-5" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="p-0 w-72 flex flex-col">
-            <SheetHeader className="sr-only">
-              <SheetTitle>Navigation</SheetTitle>
-            </SheetHeader>
-            <div className="h-16 border-b border-border flex items-center px-6">
-              <Link to="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-display">
-                  G
-                </div>
-                <span className="font-display text-lg">{settings.churchName}</span>
-              </Link>
-            </div>
-            <nav className="flex-1 flex flex-col px-3 py-4 gap-0.5 overflow-y-auto">
-              {navItems.map((item) => {
-                if (item.type === "link") {
-                  return (
-                    <Link
-                      key={item.to}
-                      to={item.to}
-                      onClick={() => setOpen(false)}
-                      className="px-3 py-3 text-base font-medium text-ink hover:bg-secondary rounded-md"
-                    >
-                      {item.label}
-                    </Link>
-                  );
-                }
-                return (
-                  <MobileDropdown
-                    key={item.label}
-                    item={item}
-                    pathname={pathname}
-                    onNavigate={() => setOpen(false)}
-                  />
-                );
-              })}
-            </nav>
-            <div className="border-t border-border p-4 flex flex-col gap-2">
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="gap-1.5 border-primary text-primary"
-              >
-                <Link to="/give" onClick={() => setOpen(false)}>
-                  <Heart className="h-4 w-4" />
-                  Give
-                </Link>
-              </Button>
-              {isLive && (
-                <Button asChild className="gap-1.5" size="lg">
-                  <Link to="/live" onClick={() => setOpen(false)}>
-                    <Radio className="h-4 w-4" />
-                    Watch Live
-                  </Link>
-                </Button>
-              )}
-            </div>
-          </SheetContent>
-        </Sheet>
       </div>
     </header>
   );
