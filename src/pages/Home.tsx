@@ -179,7 +179,7 @@ export default function Home() {
 
         {/* Slide indicators */}
         <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-20 flex gap-3">
-          {slides.map((_, i) => (
+          {slides.map(({ image }, i) => (
             <button
               key={i}
               onClick={() => setCurrentSlide(i)}

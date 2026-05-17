@@ -13,6 +13,8 @@ import NotFound from "@/pages/NotFound";
 
 import SermonsIndex from "@/pages/sermons/Index";
 import SermonDetail from "@/pages/sermons/Detail";
+import SeriesIndex from "@/pages/series/Index";
+import SeriesDetail from "@/pages/series/Detail";
 import EventsIndex from "@/pages/events/Index";
 import EventDetail from "@/pages/events/Detail";
 import AnnouncementsIndex from "@/pages/announcements/Index";
@@ -65,6 +67,8 @@ export const router = createBrowserRouter([
       { path: "live", element: <Live /> },
       { path: "sermons", element: <SermonsIndex /> },
       { path: "sermons/:id", element: <SermonDetail /> },
+      { path: "series", element: <SeriesIndex /> },
+      { path: "series/:id", element: <SeriesDetail /> },
       { path: "events", element: <EventsIndex /> },
       { path: "events/:id", element: <EventDetail /> },
       { path: "announcements", element: <AnnouncementsIndex /> },
