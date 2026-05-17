@@ -41,8 +41,9 @@ export default function SermonsIndex() {
         title="Sermons & Series"
         description="Browse sermons, message series, and teachings from Grace Cathedral. Stream or listen to recent and past messages."
       />
-      <section className="relative h-[50vh] lg:h-[70vh] flex items-end overflow-hidden bg-ink">
+      <section className="relative min-h-[50vh] lg:h-[75vh] overflow-hidden bg-ink">
         {/* Background Image with cinematic entrance animation */}
+
         <div className="absolute inset-0 z-0">
           <img
             src={heroImg}
@@ -54,63 +55,68 @@ export default function SermonsIndex() {
           <div className="absolute inset-0 bg-linear-to-t from-primary/90 to-transparent z-10" />
         </div>
 
-        <div className="relative mx-auto max-w-7xl px-6 lg:px-10 py-16 md:py-24 z-20 w-full">
-          <div className="max-w-4xl space-y-6">
-            {/* Editorial Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/20 border border-accent/30 backdrop-blur-md animate-in slide-in-from-bottom-4 duration-700">
-              <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
-              <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-secondary">
-                Message Library
-              </span>
+        <div className="flex items-end ">
+          <div className="relative mx-auto max-w-7xl px-6 lg:px-10 py-16 md:py-24 z-20 w-full">
+            <div className="max-w-4xl space-y-6">
+              {/* Editorial Badge */}
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/20 border border-accent/30 backdrop-blur-md animate-in slide-in-from-bottom-4 duration-700">
+                <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
+                <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-secondary">
+                  Message Library
+                </span>
+              </div>
+
+              <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-white leading-[0.95] drop-shadow-sm animate-in slide-in-from-bottom-6 duration-1000 delay-100">
+                Sermons
+              </h1>
+
+              <p className="max-w-2xl text-sm md:text-lg text-white/80 leading-relaxed animate-in slide-in-from-bottom-8 duration-1000 delay-200">
+                Explore our library of archived Sunday messages, teaching series, and biblical
+                insights from Grace Cathedral.
+              </p>
             </div>
-
-            <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-white leading-[0.95] drop-shadow-sm animate-in slide-in-from-bottom-6 duration-1000 delay-100">
-              Sermons
-            </h1>
-
-            <p className="max-w-2xl text-sm md:text-lg text-white/80 leading-relaxed animate-in slide-in-from-bottom-8 duration-1000 delay-200">
-              Explore our library of archived Sunday messages, teaching series, and biblical
-              insights from Grace Cathedral.
-            </p>
           </div>
         </div>
 
         {/* Bottom decorative line */}
         <div className="absolute bottom-0 left-0 w-full h-px bg-linear-to-r from-transparent via-accent/50 to-transparent z-30" />
+
+        {/* Search and Filters */}
+        <div className="relative p-4">
+          <div className=" flex max-w-4xl mx-auto flex-col md:flex-row gap-4 p-2 rounded-2xl lg:rounded-full bg-surface/10 border border-accent shadow-sm">
+            <div className="relative flex-1 group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-accent group-focus-within:text-accent transition-colors" />
+              <Input
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                placeholder="Search sermons, preachers, topics…"
+                className="pl-11 h-12 border-none text-white bg-transparent shadow-none focus-visible:ring-0 text-lg placeholder:text-white/50"
+                aria-label="Search sermons"
+              />
+            </div>
+            <div className="h-12 w-px bg-accent hidden md:block" />
+            <div className="w-full h-px bg-accent md:hidden" />
+            <Select value={preacher} onValueChange={setPreacher}>
+              <SelectTrigger className="md:w-64 h-12 border-none bg-transparent shadow-none focus:ring-0 text-white font-medium">
+                <div className="flex items-center gap-2">
+                  <User className="h-4 w-4" />
+                  <SelectValue />
+                </div>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Preachers</SelectItem>
+                {preachers.map((p) => (
+                  <SelectItem key={p} value={p}>
+                    {p}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-6 lg:px-10 py-16 lg:py-24">
-        {/* Search and Filters */}
-        <div className="flex flex-col md:flex-row gap-4 mb-16 p-2 rounded-2xl bg-surface border shadow-sm">
-          <div className="relative flex-1 group">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-ink-muted group-focus-within:text-primary transition-colors" />
-            <Input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Search sermons, preachers, topics…"
-              className="pl-11 h-12 border-none bg-transparent shadow-none focus-visible:ring-0 text-lg"
-              aria-label="Search sermons"
-            />
-          </div>
-          <div className="h-12 w-px bg-border hidden md:block" />
-          <Select value={preacher} onValueChange={setPreacher}>
-            <SelectTrigger className="md:w-64 h-12 border-none bg-transparent shadow-none focus:ring-0 text-ink-muted font-medium">
-              <div className="flex items-center gap-2">
-                <User className="h-4 w-4" />
-                <SelectValue />
-              </div>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Preachers</SelectItem>
-              {preachers.map((p) => (
-                <SelectItem key={p} value={p}>
-                  {p}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
         {isLoading ? (
           <LoadingState message="Loading messages..." />
         ) : filtered.length === 0 ? (

@@ -19,6 +19,7 @@ const navItems: NavItem[] = [
     label: "Media",
     children: [
       { to: "/sermons", label: "Sermons" },
+      { to: "/series", label: "Series" },
       { to: "/devotions", label: "Devotions" },
       { to: "/gallery", label: "Gallery" },
     ],
@@ -226,7 +227,7 @@ export function Navbar() {
             </span>
           </Link>
         </div>
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav className="hidden h-full lg:flex items-center gap-1">
           {navItems.map((item) => {
             if (item.type === "link") {
               const active = item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
@@ -248,8 +249,8 @@ export function Navbar() {
           <Button
             asChild
             size="sm"
-            variant="outline"
-            className="ml-1 gap-1.5 border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+            // variant=""
+            className="ml-1 h-full! rounded-none gap-1.5 hover:bg-accent font-bold px-4 shadow-none  border-none hover:text-primary bg-primary text-primary-foreground"
           >
             <Link to="/give">
               <Heart className="h-3.5 w-3.5" />
@@ -257,7 +258,7 @@ export function Navbar() {
             </Link>
           </Button>
           {isLive && (
-            <Button asChild size="sm" className="ml-1 gap-1.5">
+            <Button asChild size="sm" className="hidden ml-1 gap-1.5">
               <Link to="/live">
                 <Radio className="h-3.5 w-3.5" />
                 Watch Live

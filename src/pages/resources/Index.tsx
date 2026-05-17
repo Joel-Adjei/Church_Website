@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 import type { Resource, ResourceCategory } from "@/types";
 import { cn } from "@/utils/utils";
-import heroImg from "@/assets/bg_14.jpg";
+import heroImg from "@/assets/img_03.jpg";
 
 const CATEGORIES: { value: ResourceCategory | "all"; label: string; icon: React.ElementType }[] = [
   { value: "all", label: "All", icon: Package },

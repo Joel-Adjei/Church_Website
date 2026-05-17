@@ -33,7 +33,7 @@ export function Footer() {
         <div>
           <h4 className="font-display text-base mb-4 text-ink">Explore</h4>
           <ul className="space-y-2 text-sm">
-            {[["/sermons","Sermons"],["/events","Events"],["/gallery","Gallery"],["/live","Live Service"],["/contact","Contact"]].map(([to,label]) => (
+            {[["/sermons","Sermons"],["/series","Series"],["/events","Events"],["/gallery","Gallery"],["/live","Live Service"],["/contact","Contact"]].map(([to,label]) => (
               <li key={to}><Link to={to} className="text-ink-muted hover:text-primary">{label}</Link></li>
             ))}
           </ul>
