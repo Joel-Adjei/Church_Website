@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Pencil, Radio } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { format, parseISO } from "date-fns";
 import { toast } from "sonner";
 
@@ -67,13 +68,14 @@ export default function LiveStreamAdmin() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading && (
-              <TableRow>
-                <TableCell colSpan={4} className="text-center py-12 text-ink-muted">
-                  Loading…
-                </TableCell>
+            {isLoading && Array.from({ length: 5 }).map((_, i) => (
+              <TableRow key={i}>
+                <TableCell><Skeleton className="h-4 w-48" /></TableCell>
+                <TableCell><Skeleton className="h-5 w-20 rounded-full" /></TableCell>
+                <TableCell><Skeleton className="h-4 w-32" /></TableCell>
+                <TableCell className="text-right"><Skeleton className="h-7 w-24 ml-auto" /></TableCell>
               </TableRow>
-            )}
+            ))}
             {!isLoading && sorted.length === 0 && (
               <TableRow>
                 <TableCell colSpan={4} className="text-center py-12 text-ink-muted">

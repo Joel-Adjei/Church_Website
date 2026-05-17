@@ -130,32 +130,13 @@ export type Devotion = {
   reflection?: string;
 };
 
-export type ResourceCategory =
-  | "books"
-  | "clothing"
-  | "food"
-  | "equipment"
-  | "digital"
-  | "stationery"
-  | "other";
-export type ResourceCondition = "new" | "like-new" | "good" | "fair";
-export type ResourceAvailability = "available" | "limited" | "claimed";
-
 export type Resource = {
   id: ID;
-  slug: string;
-  title: string;
-  description: string;
-  category: ResourceCategory;
-  condition: ResourceCondition;
-  availability: ResourceAvailability;
-  imageUrl?: string;
-  contactEmail?: string;
-  contactPhone?: string;
-  pickupLocation?: string;
-  quantity?: number;
-  featured: boolean;
-  createdAt: string;
+  name: string;
+  purchase_link: string;
+  price: string;
+  image?: string;
+  description?: string;
 };
 
 export type PrayerPrivacy = "private" | "anonymous";

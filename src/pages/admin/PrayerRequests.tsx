@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { usePrayerRequests, useDeletePrayerRequest } from "@/services/queries";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import { Skeleton } from "@/components/ui/skeleton";
 import { DeleteConfirm } from "@/components/admin/DeleteConfirm";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -98,7 +99,29 @@ export default function PrayerRequests() {
 
       {/* Cards grid */}
       {isLoading && (
-        <div className="text-center py-20 text-ink-muted">Loading prayer requests…</div>
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="bg-card border border-border rounded-2xl p-5 flex flex-col gap-4">
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-3 w-24" />
+              </div>
+              <div className="space-y-1.5">
+                <Skeleton className="h-3 w-full" />
+                <Skeleton className="h-3 w-5/6" />
+                <Skeleton className="h-3 w-4/6" />
+              </div>
+              <div className="flex items-center gap-2 pt-2 border-t border-border">
+                <Skeleton className="h-7 w-7 rounded-full" />
+                <Skeleton className="h-3 w-24" />
+              </div>
+              <div className="flex gap-2">
+                <Skeleton className="h-8 flex-1 rounded-md" />
+                <Skeleton className="h-8 w-9 rounded-md" />
+              </div>
+            </div>
+          ))}
+        </div>
       )}
       {!isLoading && filtered.length === 0 && (
         <div className="text-center py-20 text-ink-muted">

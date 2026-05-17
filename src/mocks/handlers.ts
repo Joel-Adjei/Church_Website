@@ -32,14 +32,14 @@ function listHandler(key: Key) {
   });
 }
 
-function getBySlug(key: Key) {
-  return http.get(`/api/${key}/:slug`, ({ params }) => {
-    const s = loadStore();
-    const item = (s[key] as Array<{ slug: string }>).find((i) => i.slug === params.slug);
-    if (!item) return HttpResponse.json({ error: "Not found" }, { status: 404 });
-    return HttpResponse.json(item);
-  });
-}
+// function getBySlug(key: Key) {
+//   return http.get(`/api/${key}/:slug`, ({ params }) => {
+//     const s = loadStore();
+//     const item = (s[key] as Array<{ slug: string }>).find((i) => i.slug === params.slug);
+//     if (!item) return HttpResponse.json({ error: "Not found" }, { status: 404 });
+//     return HttpResponse.json(item);
+//   });
+// }
 
 function createHandler(key: Key) {
   return http.post(`/api/${key}`, async ({ request }) => {
@@ -87,7 +87,7 @@ function deleteHandler(key: Key) {
 function crud(key: Key) {
   return [
     listHandler(key),
-    getBySlug(key),
+    // getBySlug(key),
     createHandler(key),
     updateHandler(key),
     deleteHandler(key),

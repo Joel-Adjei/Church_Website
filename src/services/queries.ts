@@ -354,9 +354,12 @@ export function useDevotionById(id: string | undefined) {
 
 type DevotionPayload = {
   title: string;
-  Bible_verse: { reference: string; verse_content: string };
+  Bible_verse: {
+    reference: string;
+    verse_content: string;
+  };
   content: string;
-  thumbnail: string;
+  thumbnail?: string;
   prayer?: string;
   reflection?: string;
 };
@@ -411,6 +414,64 @@ export function useDeleteSeries() {
     mutationFn: (id: string) =>
       api(`${BASE_URL}/series/${id}/update/`, { method: "DELETE", auth: true }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["series"] }),
+  });
+}
+
+export function useResources() {
+  return useQuery({
+    queryKey: ["resources"],
+    queryFn: () => api<Paginated<Resource>>(`${BASE_URL}/resources/`).then((r) => r.results),
+  });
+}
+
+export function useResourceById(id: string | undefined) {
+  return useQuery({
+    queryKey: ["resources", id],
+    queryFn: () => api<Resource>(`${BASE_URL}/resources/${id}/`),
+    enabled: !!id,
+  });
+}
+
+type ResourcePayload = {
+  name: string;
+  purchase_link: string;
+  price: string;
+  image?: string;
+  description?: string;
+};
+
+export function useCreateResource() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (body: ResourcePayload) =>
+      api<Resource>(`${BASE_URL}/resources/create/`, {
+        method: "POST",
+        body: JSON.stringify(body),
+        auth: true,
+      }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["resources"] }),
+  });
+}
+
+export function useUpdateResource() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, ...body }: ResourcePayload & { id: string }) =>
+      api<Resource>(`${BASE_URL}/resources/${id}/update/`, {
+        method: "PUT",
+        body: JSON.stringify(body),
+        auth: true,
+      }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["resources"] }),
+  });
+}
+
+export function useDeleteResource() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) =>
+      api(`${BASE_URL}/resources/${id}/update/`, { method: "DELETE", auth: true }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["resources"] }),
   });
 }
 

@@ -56,7 +56,7 @@ export default function SermonsIndex() {
         </div>
 
         <div className="flex items-end ">
-          <div className="relative mx-auto max-w-7xl px-6 lg:px-10 py-16 md:py-24 z-20 w-full">
+          <div className="relative mx-auto max-w-7xl px-6 pb-4 lg:px-10 pt-16 md:pt-24 z-20 w-full">
             <div className="max-w-4xl space-y-6">
               {/* Editorial Badge */}
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/20 border border-accent/30 backdrop-blur-md animate-in slide-in-from-bottom-4 duration-700">

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useSermons, useDeleteSermon, useList } from "@/services/queries";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { DeleteConfirm } from "@/components/admin/DeleteConfirm";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -51,13 +52,15 @@ export default function Sermons() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading && (
-              <TableRow>
-                <TableCell colSpan={5} className="text-center py-12 text-ink-muted">
-                  Loading…
-                </TableCell>
+            {isLoading && Array.from({ length: 5 }).map((_, i) => (
+              <TableRow key={i}>
+                <TableCell><Skeleton className="h-4 w-48" /></TableCell>
+                <TableCell><Skeleton className="h-4 w-32" /></TableCell>
+                <TableCell><Skeleton className="h-4 w-28" /></TableCell>
+                <TableCell><Skeleton className="h-4 w-24" /></TableCell>
+                <TableCell className="text-right"><Skeleton className="h-7 w-20 ml-auto" /></TableCell>
               </TableRow>
-            )}
+            ))}
             {!isLoading && sermons.length === 0 && (
               <TableRow>
                 <TableCell colSpan={5} className="text-center py-12 text-ink-muted">

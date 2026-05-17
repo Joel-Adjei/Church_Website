@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
 import { toast } from "sonner";
+import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import EventDetail from "../events/Detail";
@@ -42,13 +43,14 @@ export default function Events() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading && (
-              <TableRow>
-                <TableCell colSpan={4} className="py-12 text-center text-ink-muted">
-                  Loading…
-                </TableCell>
+            {isLoading && Array.from({ length: 5 }).map((_, i) => (
+              <TableRow key={i}>
+                <TableCell><Skeleton className="h-4 w-44" /></TableCell>
+                <TableCell><Skeleton className="h-4 w-32" /></TableCell>
+                <TableCell><Skeleton className="h-4 w-28" /></TableCell>
+                <TableCell className="text-right"><Skeleton className="h-7 w-20 ml-auto" /></TableCell>
               </TableRow>
-            )}
+            ))}
             {!isLoading && data.length === 0 && (
               <TableRow>
                 <TableCell colSpan={4} className="py-12 text-center text-ink-muted">
