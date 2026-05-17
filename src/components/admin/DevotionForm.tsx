@@ -1,4 +1,4 @@
-import { useForm, Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,16 +10,16 @@ import { useCreateDevotion, useUpdateDevotion } from "@/services/queries";
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
 import type { Devotion } from "@/types";
-import { ImageUploadField } from "@/components/admin/ImageUploadField";
+import { ImageUploadField } from "./ImageUploadField";
 
 const schema = z.object({
   title: z.string().trim().min(2, "Title is required").max(200),
-  reference: z.string().trim().min(2, "Bible verse is required").max(20),
-  verse_content: z.string().trim().min(2, "Verse content is required").max(100),
+  bible_verse_ref: z.string().trim().min(2, "Reference is required").max(120),
+  bible_verse_text: z.string().trim().min(5, "Verse text is required").max(1000),
   content: z.string().trim().min(20, "Content is too short").max(20000),
-  thumbnail: z.string().optional(),
   prayer: z.string().trim().max(4000).optional().or(z.literal("")),
   reflection: z.string().trim().max(2000).optional().or(z.literal("")),
+  thumbnail: z.string().trim().max(200000).optional().or(z.literal("")),
 });
 type Values = z.infer<typeof schema>;
 
@@ -33,8 +33,8 @@ export function DevotionForm({ initial, mode }: { initial?: Devotion; mode: "new
     defaultValues: initial
       ? {
           title: initial.title,
-          reference: initial.Bible_verse.reference,
-          verse_content: initial.Bible_verse.verse_content,
+          bible_verse_ref: initial.Bible_verse.reference,
+          bible_verse_text: initial.Bible_verse.verse_content,
           content: initial.content,
           thumbnail: initial.thumbnail ?? "",
           prayer: initial.prayer ?? "",
@@ -42,8 +42,8 @@ export function DevotionForm({ initial, mode }: { initial?: Devotion; mode: "new
         }
       : {
           title: "",
-          reference: "",
-          verse_content: "",
+          bible_verse_ref: "",
+          bible_verse_text: "",
           content: "",
           thumbnail: "",
           prayer: "",
@@ -55,8 +55,8 @@ export function DevotionForm({ initial, mode }: { initial?: Devotion; mode: "new
     const payload = {
       title: values.title,
       Bible_verse: {
-        reference: values.reference,
-        verse_content: values.verse_content,
+        reference: values.bible_verse_ref,
+        verse_content: values.bible_verse_text,
       },
       content: values.content,
       thumbnail: values.thumbnail || "",
@@ -102,26 +102,46 @@ export function DevotionForm({ initial, mode }: { initial?: Devotion; mode: "new
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="reference">Bible verse reference</Label>
-          <Input id="reference" placeholder="e.g. John 3:16" {...form.register("reference")} />
-          {form.formState.errors.reference && (
-            <p className="text-xs text-destructive">{form.formState.errors.reference.message}</p>
+          <Label htmlFor="bible_verse_ref">Bible reference</Label>
+          <Input
+            id="bible_verse_ref"
+            placeholder="e.g. John 3:16"
+            {...form.register("bible_verse_ref")}
+          />
+          {form.formState.errors.bible_verse_ref && (
+            <p className="text-xs text-destructive">
+              {form.formState.errors.bible_verse_ref.message}
+            </p>
           )}
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="verse_content">Bible verse content</Label>
+          <Label htmlFor="bible_verse_text">Verse text</Label>
           <Textarea
-            id="verse_content"
+            id="bible_verse_text"
             rows={3}
-            placeholder="Enter the full Bible verse."
-            {...form.register("verse_content")}
+            placeholder="The full verse text…"
+            {...form.register("bible_verse_text")}
           />
-          {form.formState.errors.verse_content && (
+          {form.formState.errors.bible_verse_text && (
             <p className="text-xs text-destructive">
-              {form.formState.errors.verse_content.message}
+              {form.formState.errors.bible_verse_text.message}
             </p>
           )}
+        </div>
+
+        <div className="mx-auto w-full space-y-2">
+          <Controller
+            control={form.control}
+            name="thumbnail"
+            render={({ field }) => (
+              <ImageUploadField
+                label="Thumbnail / Banner Image"
+                value={field.value ?? ""}
+                onChange={field.onChange}
+              />
+            )}
+          />
         </div>
 
         <div className="space-y-2">
@@ -140,27 +160,12 @@ export function DevotionForm({ initial, mode }: { initial?: Devotion; mode: "new
         <div className="space-y-2">
           <Label htmlFor="reflection">Reflection / Key Takeaway</Label>
           <Textarea id="reflection" rows={3} {...form.register("reflection")} />
-          {form.formState.errors.reflection && (
-            <p className="text-xs text-destructive">{form.formState.errors.reflection.message}</p>
-          )}
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="prayer">Prayer</Label>
           <Textarea id="prayer" rows={4} {...form.register("prayer")} />
         </div>
-
-        <Controller
-          control={form.control}
-          name="thumbnail"
-          render={({ field }) => (
-            <ImageUploadField
-              label="Thumbnail"
-              value={field.value ?? ""}
-              onChange={field.onChange}
-            />
-          )}
-        />
 
         <div className="flex gap-2 justify-end pt-4 border-t border-border">
           <Button type="button" variant="outline" asChild>

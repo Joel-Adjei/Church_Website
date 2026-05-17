@@ -93,8 +93,10 @@ export default function DevotionDetail() {
           <blockquote className="mt-3 font-display text-2xl md:text-3xl italic text-ink leading-snug">
             "{d.Bible_verse.verse_content}"
           </blockquote>
+          <p className="text-md text-right font-medium tracking-wider text-primary mt-3">
+            {d.Bible_verse.reference}
+          </p>
         </section>
-
         <div
           className="text-lg text-ink leading-[1.8] whitespace-pre-line"
           style={{ fontFamily: "var(--font-display)" }}

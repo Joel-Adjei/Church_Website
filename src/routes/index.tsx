@@ -7,6 +7,7 @@ import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import PrayerRequest from "@/pages/PrayerRequest";
 import ResourcesIndex from "@/pages/resources/Index";
+import ResourceDetail from "@/pages/resources/Detail";
 import Give from "@/pages/Give";
 import Live from "@/pages/Live";
 import NotFound from "@/pages/NotFound";
@@ -80,6 +81,7 @@ export const router = createBrowserRouter([
       { path: "give", element: <Give /> },
       { path: "prayer-request", element: <PrayerRequest /> },
       { path: "resources", element: <ResourcesIndex /> },
+      { path: "resources/:id", element: <ResourceDetail /> },
     ],
   },
   {

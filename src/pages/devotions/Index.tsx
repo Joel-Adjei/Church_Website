@@ -46,7 +46,7 @@ export default function DevotionsIndex() {
       <section className="relative overflow-hidden">
         <img src={devotionsHero} alt="" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-black/60" />
-        <div className="relative mx-auto max-w-5xl px-6 lg:px-10 py-20 md:py-28 text-primary-foreground">
+        <div className="relative mx-auto max-w-5xl px-6 lg:px-10 py-20 md:py-28">
           <div className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-accent font-semibold">
             <Sparkles className="h-3.5 w-3.5" /> Today's Devotion
           </div>
@@ -63,7 +63,7 @@ export default function DevotionsIndex() {
             </div>
           ) : (
             <>
-              <h1 className="mt-4 font-display text-4xl md:text-6xl leading-[1.05]">
+              <h1 className="mt-4 font-display text-4xl  text-primary-foreground md:text-6xl leading-[1.05]">
                 {today.title}
               </h1>
               <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-primary-foreground/80">
@@ -72,7 +72,7 @@ export default function DevotionsIndex() {
                   {format(parseISO(today.date), "EEEE, MMMM d, yyyy")}
                 </span>
               </div>
-              <blockquote className="mt-10 border-l-2 border-accent pl-6 max-w-3xl">
+              <blockquote className="mt-10 border-l-2  text-primary-foreground border-accent pl-6 max-w-3xl">
                 <p className="font-display text-2xl md:text-3xl italic leading-snug">
                   "{today.Bible_verse.verse_content}"
                 </p>

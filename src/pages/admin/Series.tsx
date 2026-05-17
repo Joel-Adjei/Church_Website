@@ -5,6 +5,7 @@ import { DeleteConfirm } from "@/components/admin/DeleteConfirm";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 
 export default function Series() {
@@ -23,7 +24,13 @@ export default function Series() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading && <TableRow><TableCell colSpan={3} className="py-12 text-center text-ink-muted">Loading…</TableCell></TableRow>}
+            {isLoading && Array.from({ length: 5 }).map((_, i) => (
+              <TableRow key={i}>
+                <TableCell><Skeleton className="h-4 w-44" /></TableCell>
+                <TableCell><Skeleton className="h-4 w-64" /></TableCell>
+                <TableCell className="text-right"><Skeleton className="h-7 w-20 ml-auto" /></TableCell>
+              </TableRow>
+            ))}
             {!isLoading && series.length === 0 && <TableRow><TableCell colSpan={3} className="py-12 text-center text-ink-muted">No series yet.</TableCell></TableRow>}
             {series.map((s) => (
               <TableRow key={s.id}>

@@ -81,7 +81,7 @@ export default function Home() {
   const latest = sermons[0];
   const upcoming = events.slice(0, 3);
   const news = announcements.slice(0, 3);
-  const seriesTitle = (id?: string | null) => series.find((s) => s.id === id)?.title;
+  const seriesTitle = (id?: string | null) => series?.find((s) => s.id === id)?.title || null;
   const [videoOpen, setVideoOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
 
