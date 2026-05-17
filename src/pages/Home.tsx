@@ -22,10 +22,10 @@ import { useEvents, useSermons, useSeries, useAnnouncements } from "@/services/q
 import { format } from "date-fns";
 import { youtubeThumbnail } from "@/lib/utils";
 import { useLiveStore } from "@/store/live";
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { cn } from "@/lib/utils";
+import img from "@/assets/img_06.jpg";
+import imgbd from "@/assets/devotions-hero.jpg";
 
 const STORY_VIDEO_ID = "ScMzIvxBSi4";
 const STORY_THUMB = "https://images.unsplash.com/photo-1508963493744-76fce69379c0?w=1600&q=80";
@@ -63,6 +63,12 @@ const testimonials = [
     name: "Priya S.",
     role: "Mercy ministries volunteer",
   },
+];
+
+const SERVICE_IMAGES = [
+  img,
+  "https://images.unsplash.com/photo-1438032005730-c779502df39b?w=800&auto=format&fit=crop&q=80",
+  imgbd, // Bible Study: cozy group conversation with coffee/books
 ];
 
 export default function Home() {
@@ -198,19 +204,63 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="border-b border-border bg-surface-elevated">
-        <div className="mx-auto max-w-7xl px-6 lg:px-10 py-10 grid gap-6 md:grid-cols-3">
-          {settings.serviceTimes.map((s, i) => (
-            <div key={i} className="flex items-start gap-3">
-              <Clock className="h-5 w-5 text-accent mt-0.5 shrink-0" />
-              <div>
-                <div className="text-xs uppercase tracking-wider text-ink-muted">
-                  Service {i + 1}
+      <section className="bg-background pb-7 md:pb-9 border-b border-border">
+        <div className="bg-accent flex flex-col p-3.5 items-center text-center mb-5">
+          <h2 className="font-display text-3xl text-ink leading-tight">Weekly Service Times</h2>
+          {/* <div className="mt-4 w-12 h-0.5 bg-mute/60 rounded" /> */}
+        </div>
+        <div className="mx-auto max-w-7xl px-6 lg:px-10">
+          <div className="grid gap-2 md:grid-cols-3">
+            {settings.serviceTimes.map((s, i) => {
+              const parts = s.includes(" — ") ? s.split(" — ") : s.split(" - ");
+              const time = parts[0]?.trim() || s;
+              const name = parts[1]?.trim() || `Service ${i + 1}`;
+              const image = SERVICE_IMAGES[i % SERVICE_IMAGES.length];
+
+              return (
+                <div
+                  key={i}
+                  className="group relative overflow-hidden rounded-lg aspect-[16/11] md:aspect-[4/3] lg:aspect-[16/11] shadow-card hover:shadow-elevated transition-all duration-500 border border-border/10 flex flex-col justify-end p-6 md:p-8"
+                >
+                  {/* Background Image with Zoom Effect */}
+                  <div
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-105"
+                    style={{ backgroundImage: `url(${image})` }}
+                  />
+                  {/* Premium Gradient Overlay */}
+                  <div className="absolute inset-0 bg-linear-to-t from-primary via-primary/65 to-transparent opacity-90 group-hover:opacity-95 transition-opacity duration-500" />
+                  <div className="absolute inset-0 bg-primary/10 mix-blend-overlay" />
+
+                  {/* Sleek Golden Border Glow on Hover */}
+                  <div className="absolute inset-0 border border-white/10 rounded-2xl group-hover:border-accent/40 transition-colors duration-500 pointer-events-none" />
+
+                  {/* Card Content */}
+                  <div className="relative z-10 flex flex-col h-full justify-between">
+                    {/* Top Row: Service Badge & Icon */}
+                    <div className="flex items-center justify-end">
+                      <Clock className="h-5 w-5 text-accent/80 group-hover:text-accent group-hover:rotate-12 transition-all duration-500" />
+                    </div>
+
+                    {/* Bottom Row: Text and Micro-interactions */}
+                    <div className="mt-8">
+                      <h3 className="font-display text-2xl md:text-3xl text-white leading-tight group-hover:text-accent transition-colors duration-300">
+                        {name}
+                      </h3>
+                      <p className="mt-2 text-sm md:text-base text-white/80 font-medium tracking-wide">
+                        {time}
+                      </p>
+
+                      {/* Animated Visit Action Link */}
+                      <div className="mt-4 flex items-center gap-1.5 text-xs font-semibold text-accent opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                        <span>Plan your visit</span>
+                        <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="font-display text-lg text-ink">{s}</div>
-              </div>
-            </div>
-          ))}
+              );
+            })}
+          </div>
         </div>
       </section>
 

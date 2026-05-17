@@ -33,7 +33,7 @@ const navItems: NavItem[] = [
       { to: "/prayer-request", label: "Prayer Requests" },
     ],
   },
-  { type: "link", to: "/resources", label: "Resources" },
+  // { type: "link", to: "/resources", label: "Resources" },
   { type: "link", to: "/contact", label: "Contact" },
 ];
 

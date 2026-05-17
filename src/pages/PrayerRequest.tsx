@@ -19,7 +19,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { SectionHeading } from "@/components/SectionHeading";
 import { useSubmitPrayerRequest } from "@/services/queries";
-import heroImg from "@/assets/bg_12.jpg";
+import heroImg from "@/assets/img_09.jpg";
 import type { PrayerPrivacy } from "@/types";
 
 const PRIVACY_OPTIONS: {
@@ -42,14 +42,26 @@ const PRIVACY_OPTIONS: {
   },
 ];
 
-const schema = z.object({
-  name: z.string().min(2, "Please enter your full name"),
-  phone: z.string().optional(),
-
-  subject: z.string().min(3, "Please give your request a title"),
-  request: z.string().min(20, "Please share a few more details so we can pray specifically"),
-  privacy: z.enum(["private", "anonymous"]),
-});
+const schema = z
+  .object({
+    name: z.string().optional(),
+    phone: z.string().optional(),
+    subject: z.string().min(3, "Please give your request a title"),
+    request: z.string().min(20, "Please share a few more details so we can pray specifically"),
+    privacy: z.enum(["private", "anonymous"]),
+  })
+  .refine(
+    (data) => {
+      if (data.privacy === "private") {
+        return !!data.name && data.name.trim().length >= 2;
+      }
+      return true;
+    },
+    {
+      message: "Please enter your full name",
+      path: ["name"],
+    },
+  );
 type FormData = z.infer<typeof schema>;
 
 export default function PrayerRequest() {
@@ -70,7 +82,11 @@ export default function PrayerRequest() {
   const selectedPrivacy = watch("privacy");
 
   const onSubmit = async (data: FormData) => {
-    const payload = data.privacy === "anonymous" ? { ...data, name: "Anonymous" } : data;
+    const payload = {
+      ...data,
+      name: data.privacy === "anonymous" ? "Anonymous" : (data.name as string),
+      phone: data.privacy === "anonymous" ? "Anonymous" : data.phone,
+    };
     await submit.mutateAsync(payload);
     toast.success("Your prayer request has been received. Our team is praying with you.", {
       duration: 5000,
@@ -106,22 +122,6 @@ export default function PrayerRequest() {
         </div>
       </section>
 
-      {/* Promise strip */}
-      <div className="bg-accent/10 border-y border-accent/20">
-        <div className="mx-auto max-w-7xl px-6 lg:px-10 py-4 flex flex-wrap gap-6 text-sm text-ink-muted">
-          <span className="flex items-center gap-2">
-            <Heart className="h-4 w-4 text-accent" /> All requests treated with care and
-            confidentiality
-          </span>
-          <span className="flex items-center gap-2">
-            <ShieldCheck className="h-4 w-4 text-accent" /> Your privacy choices are always honoured
-          </span>
-          <span className="flex items-center gap-2">
-            <BookOpen className="h-4 w-4 text-accent" /> Backed by Scripture and intercession
-          </span>
-        </div>
-      </div>
-
       <div className="mx-auto max-w-7xl px-6 lg:px-10 py-16 md:py-20 grid gap-12 lg:grid-cols-5">
         {/* Form */}
         <div className="lg:col-span-3">
@@ -137,7 +137,7 @@ export default function PrayerRequest() {
             {/* Name + Phone */}
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <Label htmlFor="name">Full name *</Label>
+                <Label htmlFor="name">Full name {selectedPrivacy !== "anonymous" && " *"}</Label>
                 <Input
                   id="name"
                   {...register("name")}
