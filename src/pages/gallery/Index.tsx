@@ -8,7 +8,6 @@ import { LoadingState } from "@/components/ui/loading-state";
 import { useEffect, useState } from "react";
 import { settings } from "@/utils/mockData";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 
 export default function GalleryIndex() {
   const { data: programs = [], isLoading } = useGallery();
@@ -24,16 +23,16 @@ export default function GalleryIndex() {
       tagline: "A look back at the seasons and celebrations that shape our community.",
     },
     {
-      image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=1600&q=80",
-      eyebrow: "Join our community",
-      title: "Life Together",
-      tagline: "Discover a place where you belong and can grow in your faith.",
+      image: "https://images.unsplash.com/photo-1529070538774-1843cb3265df?w=1600&q=80",
+      eyebrow: "Browse our gallery",
+      title: "Moments of Grace",
+      tagline: "Captured memories of our community walking together in faith.",
     },
     {
-      image: "https://images.unsplash.com/photo-1515162305285-0293e4767cc2?w=1600&q=80",
-      eyebrow: "Experience worship",
-      title: "Heartfelt Praise",
-      tagline: "Join us this Sunday for transformative worship and powerful teaching.",
+      image: heroImg,
+      eyebrow: "Relive the experience",
+      title: "Captured in Worship",
+      tagline: "Relive the moments where hearts were lifted and God was glorified.",
     },
   ];
 
@@ -70,18 +69,19 @@ export default function GalleryIndex() {
               <div className="absolute inset-0 bg-linear-to-b from-primary/30 via-primary/60 to-primary/80" />
             </div>
 
-            <div className="relative h-full flex items-center px-12 ">
+            <div className="relative w-full max-w-4xl h-full flex items-center px-6 lg:px-12">
               <div
                 key={index === currentSlide ? `content-${index}` : `content-hidden-${index}`}
                 className=" max-w-6xl px-6 lg:px-10 py-24 w-full flex flex-col items-left"
               >
-                <span className="inline-block text-left text-xs uppercase tracking-[0.2em] text-primary bg-accent/40 py-2 px-4 rounded font-bold mb-6 animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-forwards">
-                  {slide.eyebrow}
-                </span>
-                <h1 className="font-display text-left text-5xl md:text-8xl lg:text-9xl text-primary-foreground leading-[0.95] animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200 fill-mode-forwards">
-                  {slide.title}
-                </h1>
-                <p className="mt-8 text-lg text-left md:text-2xl text-primary-foreground/90 max-w-2xl leading-relaxed animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-500 fill-mode-forwards">
+                <div className="flex gap-2 h-fit ">
+                  <div className="w-6 h-6 bg-accent " />
+                  <h1 className="font-display text-left text-7xl md:text-8xl lg:text-9xl text-primary-foreground leading-[0.95] animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200 fill-mode-forwards">
+                    {slide.title}
+                  </h1>
+                </div>
+
+                <p className="mt-8 text-md text-left md:text-xl text-primary-foreground/90 max-w-2xl leading-relaxed animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-500 fill-mode-forwards">
                   {slide.tagline}
                 </p>
               </div>
@@ -99,7 +99,7 @@ export default function GalleryIndex() {
                 " transition-all rounded-lg overflow-hidden duration-500",
                 i === currentSlide
                   ? "w-20 h-25 bg-accent"
-                  : "w-10 h-15  bg-white/30 hover:bg-white/50",
+                  : "w-10 h-15  bg-white/30 hover:bg-white/50 opacity-30",
               )}
               aria-label={`Go to slide ${i + 1}`}
             >
@@ -118,7 +118,7 @@ export default function GalleryIndex() {
                 " transition-all rounded-2xl overflow-hidden duration-500 ",
                 i === currentSlide
                   ? "w-45 h-50 bg-accent"
-                  : ":w-20 h-25 hover:cursor-zoom-in bg-white hover:opacity-70",
+                  : ":w-20 h-25 hover:cursor-zoom-in bg-white opacity-30",
               )}
               aria-label={`Go to slide ${i + 1}`}
             >

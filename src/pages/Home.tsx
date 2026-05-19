@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Seo } from "@/components/Seo";
 import {
   ArrowRight,
@@ -25,6 +25,7 @@ import { useLiveStore } from "@/store/live";
 import { useEffect } from "react";
 import { cn } from "@/lib/utils";
 import img from "@/assets/img_06.jpg";
+import imgB from "@/assets/img_10.jpg";
 import imgbd from "@/assets/devotions-hero.jpg";
 
 const STORY_VIDEO_ID = "ScMzIvxBSi4";
@@ -41,7 +42,7 @@ const nextSteps = [
     icon: HandHeart,
     title: "Serve & give",
     desc: "Use your gifts to bless the city.",
-    to: "/contact",
+    to: "/give",
   },
 ];
 
@@ -77,7 +78,7 @@ export default function Home() {
   const { data: announcements = [] } = useAnnouncements();
   const { data: series = [] } = useSeries();
   const isLive = useLiveStore((state) => state.isLive);
-
+  const navigate = useNavigate();
   const latest = sermons[0];
   const upcoming = events.slice(0, 3);
   const news = announcements.slice(0, 3);
@@ -205,8 +206,10 @@ export default function Home() {
       </section>
 
       <section className="bg-background pb-7 md:pb-9 border-b border-border">
-        <div className="bg-accent flex flex-col p-3.5 items-center text-center mb-5">
-          <h2 className="font-display text-3xl text-ink leading-tight">Weekly Service Times</h2>
+        <div className="bg-primary flex flex-col py-5 p-3.5 items-center text-center mb-5">
+          <h2 className="font-display font-bold text-3xl lg:text-5xl text-secondary leading-tight">
+            Service Times
+          </h2>
           {/* <div className="mt-4 w-12 h-0.5 bg-mute/60 rounded" /> */}
         </div>
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
@@ -243,7 +246,7 @@ export default function Home() {
 
                     {/* Bottom Row: Text and Micro-interactions */}
                     <div className="mt-8">
-                      <h3 className="font-display text-2xl md:text-3xl text-white leading-tight group-hover:text-accent transition-colors duration-300">
+                      <h3 className="font-display text-2xl md:text-3xl text-accent leading-tight group-hover:text-accent transition-colors duration-300">
                         {name}
                       </h3>
                       <p className="mt-2 text-sm md:text-base text-white/80 font-medium tracking-wide">
@@ -251,10 +254,13 @@ export default function Home() {
                       </p>
 
                       {/* Animated Visit Action Link */}
-                      <div className="mt-4 flex items-center gap-1.5 text-xs font-semibold text-accent opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                      <button
+                        onClick={() => navigate("contact")}
+                        className="mt-4 cursor-pointer flex items-center gap-1.5 text-xs font-semibold text-accent  translate-y-2  group-hover:translate-y-0 transition-all duration-300"
+                      >
                         <span>Plan your visit</span>
                         <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
-                      </div>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -483,24 +489,27 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-primary text-primary-foreground">
-        <div className="mx-auto max-w-7xl px-6 lg:px-10 py-16 grid gap-6 md:grid-cols-3 text-center">
-          {[
-            { to: "/live", label: "Watch Live", desc: "Join our service from anywhere" },
-            { to: "/contact", label: "Get in touch", desc: "We'd love to meet you" },
-            { to: "/about", label: "Our story", desc: "Who we are & what we believe" },
-          ].map((q) => (
-            <Link
-              key={q.to}
-              to={q.to}
-              className="group block py-6 px-4 rounded-2xl hover:bg-primary-foreground/5 transition-colors"
-            >
-              <h3 className="font-display text-2xl group-hover:text-accent transition-colors">
-                {q.label}
-              </h3>
-              <p className="mt-2 text-primary-foreground/70">{q.desc}</p>
-            </Link>
-          ))}
+      <section className="bg-primary  relative text-primary-foreground">
+        <img src={imgB} className="absolute z-0 top-0 left-0 w-full h-full object-cover" />
+        <div className="relative rounded bg-primary/50 py-12 px-4">
+          <div className=" z-10  mx-auto max-w-7xl px-6 lg:px-10 py-16 grid gap-6 md:grid-cols-3 text-center">
+            {[
+              { to: "/live", label: "Watch Live", desc: "Join our service from anywhere" },
+              { to: "/contact", label: "Get in touch", desc: "We'd love to meet you" },
+              { to: "/about", label: "Our story", desc: "Who we are & what we believe" },
+            ].map((q) => (
+              <Link
+                key={q.to}
+                to={q.to}
+                className="group block py-6 px-4 rounded-2xl hover:bg-primary-foreground/5 transition-colors"
+              >
+                <h3 className="font-display text-3xl group-hover:text-accent transition-colors">
+                  {q.label}
+                </h3>
+                <p className="mt-2 text-primary-foreground/70">{q.desc}</p>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
     </>
