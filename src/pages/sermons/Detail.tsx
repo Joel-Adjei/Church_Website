@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { ArrowLeft, Calendar, User } from "lucide-react";
 import { useSermonById, useSermons, useSeries } from "@/services/queries";
 import { format } from "date-fns";
@@ -19,14 +19,17 @@ function youtubeEmbedId(url: string): string {
 import { LoadingState } from "@/components/ui/loading-state";
 
 export default function SermonDetail({ viewID, toView }: { viewID?: string; toView?: boolean }) {
-  const { id } = useParams<{ id: string }>();
-  const { data: sermon, isLoading, error } = useSermonById(toView ? viewID : id);
+  const p = useParams<{ id: string; title: string }>();
+  const [URLSearchParams, SetURLSearchParams] = useSearchParams({ title: "tuuuu" });
+  const { data: sermon, isLoading, error } = useSermonById(toView ? viewID : p.id);
   const { data: sermons = [] } = useSermons();
   const { data: series = [] } = useSeries();
 
+  console.log(URLSearchParams.get("title"));
+
   if (isLoading) return <LoadingState />;
   if (error || !sermon)
-    return <div className="py-24 text-center text-ink-muted">Sermon not found.</div>;
+    return <div className="py-24 text-center text-ink-muted">{p.title} - Sermon not found.</div>;
 
   const seriesTitle = series.find((s) => s.id === sermon.series)?.title;
   const related = sermons

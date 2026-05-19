@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Seo } from "@/components/Seo";
 import { Search, PlayCircle, User, VideoOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -12,15 +12,14 @@ import {
 } from "@/components/ui/select";
 import { useSermons, useSeries } from "@/services/queries";
 import { format } from "date-fns";
-import { SectionHeading } from "@/components/SectionHeading";
 import heroImg from "@/assets/bg_10.jpg";
-// import heroImg from "@/assets/sermon_bg.jpg";
 import { youtubeThumbnail } from "@/lib/utils";
 import { LoadingState } from "@/components/ui/loading-state";
 
 export default function SermonsIndex() {
   const { data: sermons = [], isLoading } = useSermons();
   const { data: series = [] } = useSeries();
+  const [searchParams, setSearchParams] = useSearchParams({ title: "", preacher: "all" });
   const [q, setQ] = useState("");
   const [preacher, setPreacher] = useState<string>("all");
 
@@ -88,7 +87,14 @@ export default function SermonsIndex() {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-accent group-focus-within:text-accent transition-colors" />
               <Input
                 value={q}
-                onChange={(e) => setQ(e.target.value)}
+                onChange={(e) => {
+                  searchParams.set("title", e.target.value);
+                  setSearchParams((searchParams) => {
+                    searchParams.set("title", e.target.value);
+                    return searchParams;
+                  });
+                  setQ(e.target.value);
+                }}
                 placeholder="Search sermons, preachers, topics…"
                 className="pl-11 h-12 border-none text-white bg-transparent shadow-none focus-visible:ring-0 text-lg placeholder:text-white/50"
                 aria-label="Search sermons"
@@ -96,7 +102,13 @@ export default function SermonsIndex() {
             </div>
             <div className="h-12 w-px bg-accent hidden md:block" />
             <div className="w-full h-px bg-accent md:hidden" />
-            <Select value={preacher} onValueChange={setPreacher}>
+            <Select
+              value={preacher}
+              onValueChange={(value) => {
+                // searchParams.set("preacher", value);
+                setPreacher(value);
+              }}
+            >
               <SelectTrigger className="md:w-64 h-12 border-none bg-transparent shadow-none focus:ring-0 text-white font-medium">
                 <div className="flex items-center gap-2">
                   <User className="h-4 w-4" />
