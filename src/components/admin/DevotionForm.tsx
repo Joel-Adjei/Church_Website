@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
 import type { Devotion } from "@/types";
 import { ImageUploadField } from "./ImageUploadField";
+import TextEditor from "../ui/TextEditor";
 
 const schema = z.object({
   title: z.string().trim().min(2, "Title is required").max(200),
@@ -146,11 +147,16 @@ export function DevotionForm({ initial, mode }: { initial?: Devotion; mode: "new
 
         <div className="space-y-2">
           <Label htmlFor="content">Devotion content</Label>
-          <Textarea
+          {/* <Textarea
             id="content"
             rows={10}
             placeholder="Write the full devotion message."
             {...form.register("content")}
+          /> */}
+          <Controller
+            control={form.control}
+            name="content"
+            render={({ field }) => <TextEditor value={field.value} setValue={field.onChange} />}
           />
           {form.formState.errors.content && (
             <p className="text-xs text-destructive">{form.formState.errors.content.message}</p>

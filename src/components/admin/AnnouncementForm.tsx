@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ import { useCreateAnnouncement, useUpdateAnnouncement } from "@/services/queries
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
 import type { Announcement } from "@/types";
+import TextEditor from "../ui/TextEditor";
 
 const schema = z.object({
   title: z.string().trim().min(2, "Title is required").max(200),
@@ -17,7 +18,13 @@ const schema = z.object({
 });
 type Values = z.infer<typeof schema>;
 
-export function AnnouncementForm({ initial, mode }: { initial?: Announcement; mode: "new" | "edit" }) {
+export function AnnouncementForm({
+  initial,
+  mode,
+}: {
+  initial?: Announcement;
+  mode: "new" | "edit";
+}) {
   const navigate = useNavigate();
   const create = useCreateAnnouncement();
   const update = useUpdateAnnouncement();
@@ -42,23 +49,45 @@ export function AnnouncementForm({ initial, mode }: { initial?: Announcement; mo
   return (
     <div>
       <Button asChild variant="ghost" size="sm" className="-ml-3 gap-1.5 mb-4">
-        <Link to="/admin/announcements"><ArrowLeft className="h-4 w-4" /> Announcements</Link>
+        <Link to="/admin/announcements">
+          <ArrowLeft className="h-4 w-4" /> Announcements
+        </Link>
       </Button>
-      <h1 className="font-display text-3xl text-ink mb-8">{mode === "new" ? "New announcement" : "Edit announcement"}</h1>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 max-w-2xl bg-background border border-border rounded-2xl p-6" noValidate>
+      <h1 className="font-display text-3xl text-ink mb-8">
+        {mode === "new" ? "New announcement" : "Edit announcement"}
+      </h1>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-5 max-w-2xl bg-background border border-border rounded-2xl p-6"
+        noValidate
+      >
         <div className="space-y-2">
           <Label htmlFor="title">Title</Label>
           <Input id="title" {...form.register("title")} />
-          {form.formState.errors.title && <p className="text-xs text-destructive">{form.formState.errors.title.message}</p>}
+          {form.formState.errors.title && (
+            <p className="text-xs text-destructive">{form.formState.errors.title.message}</p>
+          )}
         </div>
         <div className="space-y-2">
           <Label htmlFor="content">Content</Label>
-          <Textarea id="content" rows={10} {...form.register("content")} />
-          {form.formState.errors.content && <p className="text-xs text-destructive">{form.formState.errors.content.message}</p>}
+          {/* <Textarea id="content" rows={10} {...form.register("content")} /> */}
+          <Controller
+            control={form.control}
+            name="content"
+            render={({ field }) => <TextEditor value={field.value} setValue={field.onChange} />}
+          />
+
+          {form.formState.errors.content && (
+            <p className="text-xs text-destructive">{form.formState.errors.content.message}</p>
+          )}
         </div>
         <div className="flex gap-2 justify-end pt-2 border-t border-border">
-          <Button type="button" variant="outline" asChild><Link to="/admin/announcements">Cancel</Link></Button>
-          <Button type="submit" disabled={form.formState.isSubmitting}>{form.formState.isSubmitting ? "Saving…" : "Save"}</Button>
+          <Button type="button" variant="outline" asChild>
+            <Link to="/admin/announcements">Cancel</Link>
+          </Button>
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? "Saving…" : "Save"}
+          </Button>
         </div>
       </form>
     </div>

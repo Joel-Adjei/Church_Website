@@ -81,7 +81,10 @@ export default function AnnouncementsIndex() {
                   <h2 className="font-display text-3xl md:text-4xl text-ink leading-tight group-hover:text-primary transition-colors duration-300">
                     {a.title}
                   </h2>
-                  <p className="text-lg text-ink-muted line-clamp-3 leading-relaxed">{a.content}</p>
+                  <div
+                    className="text-lg text-ink-muted line-clamp-3 leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: a.content }}
+                  />
                   <div className="pt-2 inline-flex items-center gap-2 text-sm font-bold text-accent uppercase tracking-wider group-hover:gap-4 transition-all duration-300">
                     Read the story <ArrowRight className="h-4 w-4" />
                   </div>
