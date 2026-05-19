@@ -98,11 +98,10 @@ export default function DevotionDetail() {
           </p>
         </section>
         <div
-          className="text-lg text-ink leading-[1.8] whitespace-pre-line"
+          className="text-lg text-ink leading-[1.8] prose prose-lg max-w-none"
           style={{ fontFamily: "var(--font-display)" }}
-        >
-          {d.content}
-        </div>
+          dangerouslySetInnerHTML={{ __html: d.content }}
+        />
 
         {d.reflection && (
           <section className="mt-12 rounded-2xl border border-border bg-surface-elevated p-6 md:p-8">

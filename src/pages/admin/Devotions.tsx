@@ -20,9 +20,7 @@ export default function Devotions() {
   const { data: devotions = [], isLoading } = useDevotions();
   const remove = useDeleteDevotion();
 
-  const sorted = [...devotions].sort((a, b) =>
-    (b.date ?? "").localeCompare(a.date ?? "")
-  );
+  const sorted = [...devotions].sort((a, b) => (b.date ?? "").localeCompare(a.date ?? ""));
 
   return (
     <div>
@@ -43,14 +41,23 @@ export default function Devotions() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading && Array.from({ length: 5 }).map((_, i) => (
-              <TableRow key={i}>
-                <TableCell><Skeleton className="h-4 w-48" /></TableCell>
-                <TableCell><Skeleton className="h-4 w-32" /></TableCell>
-                <TableCell><Skeleton className="h-4 w-24" /></TableCell>
-                <TableCell className="text-right"><Skeleton className="h-7 w-20 ml-auto" /></TableCell>
-              </TableRow>
-            ))}
+            {isLoading &&
+              Array.from({ length: 5 }).map((_, i) => (
+                <TableRow key={i}>
+                  <TableCell>
+                    <Skeleton className="h-4 w-48" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-32" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-24" />
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Skeleton className="h-7 w-20 ml-auto" />
+                  </TableCell>
+                </TableRow>
+              ))}
             {!isLoading && sorted.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={4} className="text-center py-12 text-ink-muted">
@@ -62,7 +69,7 @@ export default function Devotions() {
                 <TableRow key={d.id}>
                   <TableCell className="font-medium">{d.title}</TableCell>
                   <TableCell className="text-ink-muted max-w-xs truncate">
-                    {d.Bible_verse.reference}
+                    {d?.Bible_verse?.reference || ""}
                   </TableCell>
                   <TableCell className="text-ink-muted whitespace-nowrap">
                     {format(parseISO(d.date), "MMM d, yyyy")}
