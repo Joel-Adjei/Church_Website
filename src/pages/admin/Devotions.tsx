@@ -72,7 +72,7 @@ export default function Devotions() {
                     {d?.Bible_verse?.reference || ""}
                   </TableCell>
                   <TableCell className="text-ink-muted whitespace-nowrap">
-                    {format(parseISO(d.date), "MMM d, yyyy")}
+                    {format(parseISO(d?.date), "MMM d, yyyy")}
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">

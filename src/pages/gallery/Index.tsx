@@ -1,35 +1,35 @@
 import { Link } from "react-router-dom";
 import { Images, ImageOff, Radio } from "lucide-react";
 import { Seo } from "@/components/Seo";
-import { useGallery } from "@/services/queries";
+import { useGallery, useSettings } from "@/services/queries";
 import { SectionHeading } from "@/components/SectionHeading";
-import heroImg from "@/assets/img_06.jpg";
+import heroImg from "@/assets/img_15.jpg";
+import img1 from "@/assets/img_16.jpg";
+import img2 from "@/assets/img_04.jpg";
 import { LoadingState } from "@/components/ui/loading-state";
 import { useEffect, useState } from "react";
-import { settings } from "@/utils/mockData";
 import { cn } from "@/lib/utils";
 
 export default function GalleryIndex() {
   const { data: programs = [], isLoading } = useGallery();
+  const { data: siteSettings } = useSettings();
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const slides = [
     {
-      image:
-        settings.bannerImageUrl ||
-        "https://images.unsplash.com/photo-1548625361-195fe57656ef?w=1600&q=80",
+      image: heroImg,
       eyebrow: "Moments together",
       title: "Gallery",
       tagline: "A look back at the seasons and celebrations that shape our community.",
     },
     {
-      image: "https://images.unsplash.com/photo-1529070538774-1843cb3265df?w=1600&q=80",
+      image: img1,
       eyebrow: "Browse our gallery",
       title: "Moments of Grace",
       tagline: "Captured memories of our community walking together in faith.",
     },
     {
-      image: heroImg,
+      image: img2,
       eyebrow: "Relive the experience",
       title: "Captured in Worship",
       tagline: "Relive the moments where hearts were lifted and God was glorified.",

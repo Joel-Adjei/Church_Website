@@ -71,20 +71,26 @@ export type GalleryProgram = {
 export type AdminUser = { id: ID; name: string };
 
 export type Settings = {
-  churchName: string;
+  id: number;
+  church_name: string;
   tagline: string;
-  logoUrl: string;
-  bannerImageUrl: string;
-  phone: string;
-  email: string;
-  address: string;
-  serviceTimes: string[];
-  socials: {
-    facebook: string;
-    instagram: string;
-    youtube: string;
-    twitter: string;
-  };
+  logo_url: string;
+  banner_image_url?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+  service_times: string[];
+  social_links?: Record<string, string>;
+  footer_note?: string;
+  default_seo_title?: string;
+  default_seo_description?: string;
+  default_og_image_url?: string;
+  show_announcements?: boolean;
+  show_gallery?: boolean;
+  show_resources?: boolean;
+  show_prayer_request?: boolean;
+  show_live_badge?: boolean;
+  updated_at: string;
 };
 
 export type LiveStream = {

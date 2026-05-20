@@ -4,8 +4,8 @@ import { Seo } from "@/components/Seo";
 import { SectionHeading } from "@/components/SectionHeading";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { Heart, Users, HandHeart, Globe } from "lucide-react";
-import heroImg from "@/assets/img_06.jpg";
-import { settings } from "@/utils/mockData";
+import heroImg from "@/assets/img_17.jpg";
+import { useSettings } from "@/services/queries";
 
 const leaders = [
   {
@@ -96,6 +96,7 @@ export default function About() {
   const autoplay = useRef(
     Autoplay({ delay: 3500, stopOnInteraction: false, stopOnMouseEnter: true }),
   );
+  const { data: siteSettings } = useSettings();
 
   return (
     <>
@@ -111,9 +112,15 @@ export default function About() {
         <div className="absolute z-0 bottom-0 w-full h-[70%] bg-linear-to-t from-background to-transparent " />
 
         <div className="relative z-10 mx-auto max-w-4xl px-6 lg:px-10  text-center">
-          <div className="size-36 mb-3 rounded-full mx-auto bg-white"></div>
-          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-primary leading-[0.95] drop-shadow-sm animate-in slide-in-from-bottom-6 duration-1000 delay-100">
-            {settings.churchName}
+          <div className="w-60 bg-white mb-3 rounded-full mx-auto ">
+            <img
+              src={siteSettings?.logo_url}
+              alt={siteSettings?.church_name}
+              className="w-full object-contain"
+            />
+          </div>
+          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-ink leading-[0.95] drop-shadow-sm animate-in slide-in-from-bottom-6 duration-1000 delay-100">
+            {siteSettings?.church_name ?? "Grace Cathedral"}
           </h1>
           <p className="mt-6 text-lg text-ink-muted max-w-2xl mx-auto">
             For more than sixty years, Grace Cathedral has been a place where ordinary people meet

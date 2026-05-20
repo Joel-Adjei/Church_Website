@@ -17,8 +17,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { SectionHeading } from "@/components/SectionHeading";
 import { Dialog, DialogContent, DialogTitle, DialogHeader } from "@/components/ui/dialog";
-import { settings } from "@/utils/mockData";
-import { useEvents, useSermons, useSeries, useAnnouncements } from "@/services/queries";
+import {
+  useEvents,
+  useSermons,
+  useSeries,
+  useAnnouncements,
+  useSettings,
+} from "@/services/queries";
 import { format } from "date-fns";
 import { youtubeThumbnail } from "@/lib/utils";
 import { useLiveStore } from "@/store/live";
@@ -26,6 +31,7 @@ import { useEffect } from "react";
 import { cn } from "@/lib/utils";
 import img from "@/assets/img_06.jpg";
 import imgB from "@/assets/img_10.jpg";
+import heroImg from "@/assets/img_12.jpg";
 import imgbd from "@/assets/devotions-hero.jpg";
 
 const STORY_VIDEO_ID = "ScMzIvxBSi4";
@@ -77,6 +83,7 @@ export default function Home() {
   const { data: events = [] } = useEvents();
   const { data: announcements = [] } = useAnnouncements();
   const { data: series = [] } = useSeries();
+  const { data: siteSettings } = useSettings();
   const isLive = useLiveStore((state) => state.isLive);
   const navigate = useNavigate();
   const latest = sermons[0];
@@ -88,12 +95,10 @@ export default function Home() {
 
   const slides = [
     {
-      image:
-        settings.bannerImageUrl ||
-        "https://images.unsplash.com/photo-1548625361-195fe57656ef?w=1600&q=80",
+      image: heroImg,
       eyebrow: "Welcome home",
-      title: settings.churchName,
-      tagline: settings.tagline,
+      title: siteSettings?.church_name || "Potters House",
+      tagline: siteSettings?.tagline ?? "A community of faith, hope, and love.",
     },
     {
       image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=1600&q=80",
@@ -214,7 +219,7 @@ export default function Home() {
         </div>
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="grid gap-2 md:grid-cols-3">
-            {settings.serviceTimes.map((s, i) => {
+            {(siteSettings?.service_times ?? []).map((s, i) => {
               const parts = s.includes(" — ") ? s.split(" — ") : s.split(" - ");
               const time = parts[0]?.trim() || s;
               const name = parts[1]?.trim() || `Service ${i + 1}`;
@@ -450,17 +455,16 @@ export default function Home() {
           </div>
           <div className="grid gap-8 md:grid-cols-3">
             {news.map((n) => (
-              <Link key={n.id} to={`/announcements/${n.id}`} className="group block">
+              <Link key={n.id} to={`/announcements/${n.id}`} className="group block max-w-[90%]">
                 <div className="text-xs text-ink-muted mb-3">
                   {format(new Date(n.date), "MMMM d, yyyy")}
                 </div>
                 <h3 className="font-display text-2xl text-ink leading-snug group-hover:text-primary transition-colors">
                   {n.title}
                 </h3>
-                <div
-                  className="mt-3 text-ink-muted line-clamp-3 prose prose-lg "
-                  dangerouslySetInnerHTML={{ __html: n.content }}
-                />
+                <p className="mt-3 text-ink-muted line-clamp-3 overflow-hidden wrap-break-word">
+                  {new DOMParser().parseFromString(n.content, "text/html").body.textContent?.trim()}
+                </p>
                 <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-accent">
                   Read more <ArrowRight className="h-3.5 w-3.5" />
                 </span>

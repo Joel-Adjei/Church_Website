@@ -4,8 +4,9 @@ import { Menu, Radio, Heart, ChevronDown } from "lucide-react";
 import { cn } from "@/utils/utils";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { settings } from "@/utils/mockData";
+import { useSettings } from "@/services/queries";
 import { useLiveStore } from "@/store/live";
+import { settings } from "@/utils/mockData";
 
 type NavItem =
   | { type: "link"; to: string; label: string }
@@ -13,7 +14,8 @@ type NavItem =
 
 const navItems: NavItem[] = [
   { type: "link", to: "/", label: "Home" },
-  { type: "link", to: "/about", label: "About" },
+  { type: "link", to: "/about", label: "Know Us" },
+
   {
     type: "dropdown",
     label: "Media",
@@ -33,6 +35,8 @@ const navItems: NavItem[] = [
       { to: "/prayer-request", label: "Prayer Requests" },
     ],
   },
+
+  { to: "/devotions", type: "link", label: "Devotions" },
   // { type: "link", to: "/resources", label: "Resources" },
   { type: "link", to: "/contact", label: "Contact" },
 ];
@@ -147,6 +151,7 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
   const isLive = useLiveStore((state) => state.isLive);
+  const { data: siteSettings } = useSettings();
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-md">
@@ -165,9 +170,15 @@ export function Navbar() {
               <div className="h-16 border-b border-border flex items-center px-6">
                 <Link to="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
                   <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-display">
-                    G
+                    <img
+                      src={siteSettings?.logo_url}
+                      alt={siteSettings?.church_name}
+                      className="size-full object-contain"
+                    />
                   </div>
-                  <span className="font-display text-lg">{settings.churchName}</span>
+                  <span className="font-display text-md">
+                    {siteSettings?.church_name ?? "Grace Cathedral"}
+                  </span>
                 </Link>
               </div>
               <nav className="flex-1 flex flex-col px-3 py-4 gap-0.5 overflow-y-auto">
@@ -219,11 +230,15 @@ export function Navbar() {
           </Sheet>
 
           <Link to="/" className="flex items-center gap-2 group" onClick={() => setOpen(false)}>
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground font-display text-lg">
-              G
+            <div className="flex h-full w-24 items-center justify-center  ">
+              <img
+                src={siteSettings?.logo_url}
+                alt={siteSettings?.church_name}
+                className="size-full object-contain"
+              />
             </div>
             <span className="font-display text-xl tracking-tight text-ink">
-              {settings.churchName}
+              {siteSettings?.church_name ?? "Grace Cathedral"}
             </span>
           </Link>
         </div>

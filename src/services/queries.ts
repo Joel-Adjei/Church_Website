@@ -531,13 +531,23 @@ export function useRemove<K extends keyof Resources>(key: K) {
 }
 
 export function useSettings() {
-  return useQuery({ queryKey: ["settings"], queryFn: () => api<Settings>("/api/settings") });
+  return useQuery({
+    queryKey: ["settings"],
+    queryFn: () => api<Settings>(`${BASE_URL}/site-config/settings/`, { auth: true }),
+  });
 }
+
+type SettingsPayload = Omit<Settings, "id" | "updated_at">;
+
 export function useUpdateSettings() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (body: Partial<Settings>) =>
-      api<Settings>("/api/settings", { method: "PUT", body: JSON.stringify(body), auth: true }),
+    mutationFn: (body: Partial<SettingsPayload>) =>
+      api<Settings>(`${BASE_URL}/site-config/settings/`, {
+        method: "PATCH",
+        body: JSON.stringify(body),
+        // auth: true,
+      }),
     onSuccess: (data) => {
       qc.setQueryData(["settings"], data);
     },
