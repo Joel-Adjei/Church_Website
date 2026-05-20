@@ -533,7 +533,10 @@ export function useRemove<K extends keyof Resources>(key: K) {
 export function useSettings() {
   return useQuery({
     queryKey: ["settings"],
-    queryFn: () => api<Settings>(`${BASE_URL}/site-config/settings/`, { auth: true }),
+    queryFn: () =>
+      api<Settings>(`${BASE_URL}/site-config/settings/`, {
+        //  auth: true
+      }),
   });
 }
 
@@ -546,7 +549,7 @@ export function useUpdateSettings() {
       api<Settings>(`${BASE_URL}/site-config/settings/`, {
         method: "PATCH",
         body: JSON.stringify(body),
-        // auth: true,
+        auth: true,
       }),
     onSuccess: (data) => {
       qc.setQueryData(["settings"], data);
