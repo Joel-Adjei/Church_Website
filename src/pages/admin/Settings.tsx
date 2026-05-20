@@ -20,7 +20,7 @@ const schema = z.object({
   church_name: z.string().trim().min(2, "Required").max(120),
   tagline: z.string().trim().min(2, "Required").max(280),
   logo_url: z.string(),
-  banner_image_url: z.string(),
+  // banner_image_url: z.string(),
   phone: z.string().trim().or(z.literal("")),
   email: z.string().trim().email("Must be a valid email").or(z.literal("")),
   address: z.string().trim().or(z.literal("")),
@@ -55,7 +55,7 @@ export default function Settings() {
       church_name: "",
       tagline: "",
       logo_url: "",
-      banner_image_url: "",
+      // banner_image_url: "",
       phone: "",
       email: "",
       address: "",
@@ -82,7 +82,7 @@ export default function Settings() {
         church_name: data.church_name,
         tagline: data.tagline,
         logo_url: data.logo_url ?? "",
-        banner_image_url: data.banner_image_url ?? "",
+        // banner_image_url: data.banner_image_url ?? "",
         phone: data.phone ?? "",
         email: data.email ?? "",
         address: data.address ?? "",
@@ -117,7 +117,7 @@ export default function Settings() {
         church_name: values.church_name,
         tagline: values.tagline,
         logo_url: values.logo_url,
-        banner_image_url: values.banner_image_url,
+        // banner_image_url: values.banner_image_url,
         phone: values.phone,
         email: values.email,
         address: values.address,
@@ -171,12 +171,12 @@ export default function Settings() {
             <TabsTrigger className="rounded py-2 " value="socials">
               Socials
             </TabsTrigger>
-            <TabsTrigger className="rounded py-2 " value="seo">
+            {/* <TabsTrigger className="rounded py-2 " value="seo">
               SEO
-            </TabsTrigger>
-            <TabsTrigger className="rounded py-2 " value="features">
+            </TabsTrigger> */}
+            {/* <TabsTrigger className="rounded py-2 " value="features">
               Features
-            </TabsTrigger>
+            </TabsTrigger> */}
           </TabsList>
 
           <TabsContent value="branding" className="space-y-5">
@@ -208,7 +208,7 @@ export default function Settings() {
                 />
               )}
             />
-            <Controller
+            {/* <Controller
               control={form.control}
               name="banner_image_url"
               render={({ field }) => (
@@ -219,7 +219,7 @@ export default function Settings() {
                   hint="Wide landscape image shown on the homepage hero."
                 />
               )}
-            />
+            /> */}
           </TabsContent>
 
           <TabsContent value="contact" className="space-y-5">
