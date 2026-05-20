@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, LogIn } from "lucide-react";
+import { useSiteSetting } from "@/store/setting";
 
 const schema = z.object({
   email: z.string().trim().min(1, "name is required"),
@@ -20,6 +21,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const { church_name, logo_url } = useSiteSetting();
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { email: "", password: "" },
@@ -40,10 +42,10 @@ export default function Login() {
     <div className="min-h-screen grid place-items-center bg-surface-elevated px-4">
       <div className="w-full max-w-md bg-background border border-border rounded-2xl shadow-card p-8">
         <Link to="/" className="flex items-center gap-2 mb-8">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground font-display">
-            G
+          <div className="flex h-9 w-9 items-center justify-center text-primary-foreground font-display">
+            <img src={logo_url} className="size-full object-contain" />
           </div>
-          <span className="font-display text-xl">Grace Cathedral</span>
+          <span className="font-display text-xl">{church_name || "Potters House Church"}</span>
         </Link>
         <h1 className="font-display text-3xl text-ink">Admin sign in</h1>
         <p className="mt-2 text-sm text-ink-muted">Sign in to manage your church content.</p>

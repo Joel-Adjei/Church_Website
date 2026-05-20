@@ -2,16 +2,19 @@ import { Outlet, useLocation, ScrollRestoration } from "react-router-dom";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import LiveIndicator from "@/components/LiveIndicator";
-import { useLive } from "@/services/queries";
+import { useLive, useSettings } from "@/services/queries";
 import { use, useEffect, useState } from "react";
 import { useLiveStore } from "@/store/live";
 import PageLoad from "@/components/PageLoad";
+import { useSiteSetting } from "@/store/setting";
 
 export default function RootLayout() {
   const { pathname } = useLocation();
   const isAdmin = pathname.startsWith("/admin");
   const { data: live } = useLive();
   const [loadingPage, setLoadingPage] = useState(true);
+  const {data: settings} = useSettings()
+  const setSettingsData = useSiteSetting(store => store.setData)
   const setLiveStatus = useLiveStore((state) => state.setLiveStatus);
   useEffect(() => {
     setTimeout(() => {
@@ -19,11 +22,14 @@ export default function RootLayout() {
     }, 1200);
   }, []);
 
-  useEffect(() => {
-    if (live) {
-      setLiveStatus(live);
-    }
-  }, [live, setLiveStatus]);
+useEffect(() => {
+  if (live) {
+    setLiveStatus(live);
+  }
+  if (settings) {
+    setSettingsData(settings);
+  }
+}, [live, setLiveStatus, settings]);
 
   if (loadingPage) {
     return <PageLoad />;
