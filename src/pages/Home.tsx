@@ -31,6 +31,7 @@ import { useEffect } from "react";
 import { cn } from "@/lib/utils";
 import img from "@/assets/img_06.jpg";
 import imgB from "@/assets/img_10.jpg";
+import heroImg from "@/assets/img_12.jpg";
 import imgbd from "@/assets/devotions-hero.jpg";
 
 const STORY_VIDEO_ID = "ScMzIvxBSi4";
@@ -94,11 +95,9 @@ export default function Home() {
 
   const slides = [
     {
-      image:
-        siteSettings?.banner_image_url ||
-        "https://images.unsplash.com/photo-1548625361-195fe57656ef?w=1600&q=80",
+      image: heroImg,
       eyebrow: "Welcome home",
-      title: siteSettings?.church_name ?? "Grace Cathedral",
+      title: siteSettings?.church_name || "Potters House",
       tagline: siteSettings?.tagline ?? "A community of faith, hope, and love.",
     },
     {

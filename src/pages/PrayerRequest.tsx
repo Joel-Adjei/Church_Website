@@ -19,7 +19,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { SectionHeading } from "@/components/SectionHeading";
 import { useSubmitPrayerRequest } from "@/services/queries";
-import heroImg from "@/assets/img_09.jpg";
+import heroImg from "@/assets/img_02.jpg";
 import type { PrayerPrivacy } from "@/types";
 
 const PRIVACY_OPTIONS: {

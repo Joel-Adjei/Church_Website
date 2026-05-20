@@ -4,7 +4,7 @@ import { Seo } from "@/components/Seo";
 import { SectionHeading } from "@/components/SectionHeading";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { Heart, Users, HandHeart, Globe } from "lucide-react";
-import heroImg from "@/assets/img_06.jpg";
+import heroImg from "@/assets/img_17.jpg";
 import { useSettings } from "@/services/queries";
 
 const leaders = [
@@ -119,7 +119,7 @@ export default function About() {
               className="w-full object-contain"
             />
           </div>
-          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-primary leading-[0.95] drop-shadow-sm animate-in slide-in-from-bottom-6 duration-1000 delay-100">
+          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-ink leading-[0.95] drop-shadow-sm animate-in slide-in-from-bottom-6 duration-1000 delay-100">
             {siteSettings?.church_name ?? "Grace Cathedral"}
           </h1>
           <p className="mt-6 text-lg text-ink-muted max-w-2xl mx-auto">
