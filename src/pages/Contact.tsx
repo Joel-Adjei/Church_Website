@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { settings } from "@/utils/mockData";
+import { useSettings } from "@/services/queries";
 import { SectionHeading } from "@/components/SectionHeading";
 import heroImg from "@/assets/bg_13.jpg";
 
@@ -21,6 +21,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 export default function Contact() {
+  const { data: siteSettings } = useSettings();
   const {
     register,
     handleSubmit,
@@ -107,19 +108,19 @@ export default function Contact() {
             <ul className="space-y-4 text-ink-muted">
               <li className="flex gap-3">
                 <MapPin className="h-5 w-5 text-accent shrink-0 mt-0.5" />
-                <span>{settings.address}</span>
+                <span>{siteSettings?.address}</span>
               </li>
               <li className="flex gap-3">
                 <Phone className="h-5 w-5 text-accent shrink-0 mt-0.5" />
-                <span>{settings.phone}</span>
+                <span>{siteSettings?.phone}</span>
               </li>
               <li className="flex gap-3">
                 <Mail className="h-5 w-5 text-accent shrink-0 mt-0.5" />
-                <span>{settings.email}</span>
+                <span>{siteSettings?.email}</span>
               </li>
             </ul>
           </div>
-          <div className="rounded-2xl overflow-hidden border border-border aspect-[4/3]">
+          <div className="rounded-2xl overflow-hidden border border-border aspect-4/3">
             <iframe
               title="Map"
               className="w-full h-full"

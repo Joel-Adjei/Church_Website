@@ -1,22 +1,22 @@
 import { Link } from "react-router-dom";
 import { Images, ImageOff, Radio } from "lucide-react";
 import { Seo } from "@/components/Seo";
-import { useGallery } from "@/services/queries";
+import { useGallery, useSettings } from "@/services/queries";
 import { SectionHeading } from "@/components/SectionHeading";
 import heroImg from "@/assets/img_06.jpg";
 import { LoadingState } from "@/components/ui/loading-state";
 import { useEffect, useState } from "react";
-import { settings } from "@/utils/mockData";
 import { cn } from "@/lib/utils";
 
 export default function GalleryIndex() {
   const { data: programs = [], isLoading } = useGallery();
+  const { data: siteSettings } = useSettings();
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const slides = [
     {
       image:
-        settings.bannerImageUrl ||
+        siteSettings?.banner_image_url ||
         "https://images.unsplash.com/photo-1548625361-195fe57656ef?w=1600&q=80",
       eyebrow: "Moments together",
       title: "Gallery",

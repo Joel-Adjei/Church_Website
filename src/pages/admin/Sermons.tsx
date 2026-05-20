@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useSermons, useDeleteSermon, useList } from "@/services/queries";
+import { useSermons, useDeleteSermon, useSeries } from "@/services/queries";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { DeleteConfirm } from "@/components/admin/DeleteConfirm";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -21,7 +21,7 @@ import SermonDetail from "../sermons/Detail";
 
 export default function Sermons() {
   const { data: sermons = [], isLoading } = useSermons();
-  const { data: series = [] } = useList("series");
+  const { data: series = [] } = useSeries();
   const remove = useDeleteSermon();
   const seriesTitle = (id?: string | null) => series.find((s) => s.id === id)?.title || "—";
 

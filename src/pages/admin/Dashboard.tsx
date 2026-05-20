@@ -1,5 +1,13 @@
 import { Link } from "react-router-dom";
-import { useList, useLive } from "@/services/queries";
+import {
+  useSermons,
+  useSeries,
+  useEvents,
+  useAnnouncements,
+  useGallery,
+  useDevotions,
+  useLive,
+} from "@/services/queries";
 import {
   Mic,
   BookMarked,
@@ -13,12 +21,12 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Dashboard() {
-  const sermons = useList("sermons");
-  const series = useList("series");
-  const events = useList("events");
-  const announcements = useList("announcements");
-  const gallery = useList("gallery");
-  const devotions = useList("devotions");
+  const sermons = useSermons();
+  const series = useSeries();
+  const events = useEvents();
+  const announcements = useAnnouncements();
+  const gallery = useGallery();
+  const devotions = useDevotions();
   const live = useLive();
 
   const cards = [
@@ -77,9 +85,7 @@ export default function Dashboard() {
   return (
     <div>
       <h1 className="font-display text-4xl text-ink">Dashboard</h1>
-      <p className="mt-2 text-ink-muted">
-        Manage church content. All changes save to local storage.
-      </p>
+      <p className="mt-2 text-ink-muted">Manage church content.</p>
       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {cards.map((c) => {
           const Icon = c.icon;

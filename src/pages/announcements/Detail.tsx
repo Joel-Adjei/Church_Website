@@ -29,7 +29,7 @@ export default function AnnouncementDetail() {
       </div>
       <h1 className="mt-3 font-display text-4xl md:text-6xl text-ink leading-[1.05]">{a.title}</h1>
       <div
-        className="mt-10 text-lg text-ink-muted leading-relaxed  prose prose-lg max-w-none"
+        className="mt-10 text-lg text-ink-muted leading-relaxed prose prose-lg max-w-none wrap-break-word overflow-hidden"
         dangerouslySetInnerHTML={{ __html: a.content }}
       />
     </article>
