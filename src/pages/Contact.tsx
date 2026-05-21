@@ -124,7 +124,9 @@ export default function Contact() {
             <iframe
               title="Map"
               className="w-full h-full"
-              src="https://www.openstreetmap.org/export/embed.html?bbox=-89.66%2C39.78%2C-89.62%2C39.81&layer=mapnik"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              src={`https://maps.google.com/maps?q=${encodeURIComponent("Potter's House Church, Accra")}&output=embed`}
             />
           </div>
         </aside>
