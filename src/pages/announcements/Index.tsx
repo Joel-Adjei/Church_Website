@@ -85,7 +85,7 @@ export default function AnnouncementsIndex() {
                   </h2>
                   <div
                     className="text-lg text-ink-muted line-clamp-3 leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: a.content }}
+                    dangerouslySetInnerHTML={{ __html: a.content.replace(/&nbsp;/g, " ") }}
                   />
                   <div className="pt-2 inline-flex items-center gap-2 text-sm font-bold text-accent uppercase tracking-wider group-hover:gap-4 transition-all duration-300">
                     Read the story <ArrowRight className="h-4 w-4" />
