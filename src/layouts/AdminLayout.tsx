@@ -39,7 +39,7 @@ const navItems = [
   { to: "/admin/gallery", label: "Gallery", icon: Images },
   { to: "/admin/givings", label: "Givings", icon: HandCoins },
   { to: "/admin/prayer-requests", label: "Prayer Requests", icon: HeartHandshake },
-  { to: "/admin/resources", label: "Resources", icon: Package },
+  // { to: "/admin/resources", label: "Resources", icon: Package },
   { to: "/admin/live", label: "Live stream", icon: Radio },
   { to: "/admin/settings", label: "Settings", icon: SettingsIcon },
 ];
