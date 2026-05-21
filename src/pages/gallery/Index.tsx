@@ -103,7 +103,7 @@ export default function GalleryIndex() {
               )}
               aria-label={`Go to slide ${i + 1}`}
             >
-              <img src={image} alt={`image-${i}`} className="size-full object-cover" />
+              <img src={image} alt={`image-${i}`} loading="lazy" decoding="async" className="size-full object-cover" />
             </button>
           ))}
         </div>
@@ -122,7 +122,7 @@ export default function GalleryIndex() {
               )}
               aria-label={`Go to slide ${i + 1}`}
             >
-              <img src={image} alt={`image-${i}`} className="size-full object-cover" />
+              <img src={image} alt={`image-${i}`} loading="lazy" decoding="async" className="size-full object-cover" />
             </button>
           ))}
         </div>
@@ -173,6 +173,8 @@ export default function GalleryIndex() {
                     <img
                       src={cover}
                       alt={p.title}
+                      loading="lazy"
+                      decoding="async"
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   )}

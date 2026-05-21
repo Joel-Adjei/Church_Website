@@ -23,6 +23,8 @@ export default function EventsIndex() {
             src={heroImg}
             className="h-full w-full object-cover object-center animate-in fade-in zoom-in-110 duration-1000 ease-out"
             alt="Events Background"
+            fetchPriority="high"
+            decoding="async"
           />
           {/* Multi-layered overlay for depth and legibility */}
           <div className="absolute inset-0 bg-ink/40 z-10" />
@@ -89,6 +91,8 @@ export default function EventsIndex() {
                     <img
                       src={e.flyer}
                       alt={e.name}
+                      loading="lazy"
+                      decoding="async"
                       onError={(e) => {
                         e.currentTarget.src = img1;
                       }}

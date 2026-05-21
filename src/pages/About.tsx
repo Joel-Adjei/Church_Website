@@ -108,6 +108,8 @@ export default function About() {
         <img
           className="absolute w-full h-full -z-10 object-cover object-center opacity-"
           src={heroImg}
+          fetchPriority="high"
+          decoding="async"
         />
         <div className="absolute z-0 bottom-0 w-full h-[70%] bg-linear-to-t from-background to-transparent " />
 
@@ -212,7 +214,7 @@ export default function About() {
             {leaders.map((p) => (
               <div key={p.name}>
                 <div className="aspect-[4/5] overflow-hidden rounded-2xl bg-muted">
-                  <img src={p.img} alt={p.name} className="h-full w-full object-cover" />
+                  <img src={p.img} alt={p.name} loading="lazy" decoding="async" className="h-full w-full object-cover" />
                 </div>
                 <h3 className="mt-5 font-display text-xl text-ink">{p.name}</h3>
                 <p className="text-sm text-accent font-medium">{p.role}</p>
