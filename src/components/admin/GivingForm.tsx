@@ -26,13 +26,13 @@ const schema = z.object({
   channel_type: z.enum(["momo", "bank", "card", "other"]),
   account_name: z.string().min(2, "Account name is required"),
   account_number: z.string().min(2, "Account number is required"),
-  bank_name: z.string().min(2, "Bank name is required"),
-  branch: z.string().min(2, "Branch is required"),
-  network: z.string().min(2, "Network is required"),
-  currency: z.string().min(2, "Currency is required"),
+  bank_name: z.string().optional(),
+  branch: z.string().optional(),
+  network: z.string().optional(),
+  currency: z.string().optional(),
   instructions: z.string().trim().min(2, "Instructions are required").max(8000),
   is_active: z.literal(true),
-  display_order: z.number().min(0, "Display order must be a positive number"),
+  // display_order: z.number().min(0, "Display order must be a positive number"),
 });
 type Values = z.infer<typeof schema>;
 
@@ -54,7 +54,7 @@ export function GivingForm({ initial, mode }: { initial?: Account; mode: "new" |
           currency: initial.currency,
           instructions: initial.instructions,
           is_active: initial.is_active,
-          display_order: initial.display_order,
+          // display_order: initial.display_order,
         }
       : {
           name: "",
@@ -67,7 +67,7 @@ export function GivingForm({ initial, mode }: { initial?: Account; mode: "new" |
           currency: "GHC",
           instructions: "",
           is_active: true,
-          display_order: 0,
+          // display_order: 0,
         },
   });
 
@@ -253,7 +253,7 @@ export function GivingForm({ initial, mode }: { initial?: Account; mode: "new" |
           )}
         </div>
 
-        <div className="space-y-2">
+        {/* <div className="space-y-2">
           <Label htmlFor="display_order">Display Order</Label>
           <Input
             id="display_order"
@@ -266,7 +266,7 @@ export function GivingForm({ initial, mode }: { initial?: Account; mode: "new" |
               {form.formState.errors.display_order.message}
             </p>
           )}
-        </div>
+        </div> */}
 
         <div className="flex gap-2 justify-end pt-2 border-t border-border">
           <Button type="button" variant="outline" asChild>
