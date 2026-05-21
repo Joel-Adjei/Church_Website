@@ -41,7 +41,7 @@ export default function EventDetail({ viewID, toView }: { viewID?: string; toVie
             <h1 className="font-display text-4xl md:text-6xl leading-[1.05]">{event.name}</h1>
           </div>
         </div>
-      ) : (
+      ) : toView ? null : (
         <div className="bg-primary py-20 px-6">
           <div className="mx-auto max-w-4xl">
             <span className="text-xs uppercase tracking-[0.2em] text-accent font-semibold mb-3 block">

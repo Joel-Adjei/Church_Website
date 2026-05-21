@@ -98,7 +98,7 @@ export default function DevotionDetail() {
           </p>
         </section>
         <div
-          className="text-lg text-ink leading-[1.8] prose prose-lg max-w-none"
+          className="text-lg text-ink leading-[1.8] prose prose-lg max-w-none overflow-hidden wrap-break-word [&_img]:max-w-full [&_table]:w-full [&_table]:block [&_table]:overflow-x-auto [&_pre]:overflow-x-auto"
           style={{ fontFamily: "var(--font-display)" }}
           dangerouslySetInnerHTML={{ __html: d.content }}
         />
