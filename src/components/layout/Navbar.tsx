@@ -22,7 +22,7 @@ const navItems: NavItem[] = [
     children: [
       { to: "/sermons", label: "Sermons" },
       { to: "/series", label: "Series" },
-      { to: "/devotions", label: "Devotions" },
+      // { to: "/devotions", label: "Devotions" },
       { to: "/gallery", label: "Gallery" },
     ],
   },
