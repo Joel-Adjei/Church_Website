@@ -163,7 +163,7 @@ export function DevotionForm({ initial, mode }: { initial?: Devotion; mode: "new
           )}
         </div>
 
-        <div className="space-y-2">
+        {/* <div className="space-y-2">
           <Label htmlFor="reflection">Reflection / Key Takeaway</Label>
           <Textarea id="reflection" rows={3} {...form.register("reflection")} />
         </div>
@@ -171,7 +171,7 @@ export function DevotionForm({ initial, mode }: { initial?: Devotion; mode: "new
         <div className="space-y-2">
           <Label htmlFor="prayer">Prayer</Label>
           <Textarea id="prayer" rows={4} {...form.register("prayer")} />
-        </div>
+        </div> */}
 
         <div className="flex gap-2 justify-end pt-4 border-t border-border">
           <Button type="button" variant="outline" asChild>
