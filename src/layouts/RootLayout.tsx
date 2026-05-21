@@ -1,4 +1,4 @@
-import { Outlet, useLocation, ScrollRestoration } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import LiveIndicator from "@/components/LiveIndicator";
@@ -11,6 +11,10 @@ import { useSiteSetting } from "@/store/setting";
 export default function RootLayout() {
   const { pathname } = useLocation();
   const isAdmin = pathname.startsWith("/admin");
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [pathname]);
   const { data: live } = useLive();
   const [loadingPage, setLoadingPage] = useState(true);
   const {data: settings} = useSettings()
@@ -47,7 +51,6 @@ useEffect(() => {
           <LiveIndicator />
         </div>
       )}
-      <ScrollRestoration />
     </div>
   );
 }
