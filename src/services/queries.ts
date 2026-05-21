@@ -186,7 +186,7 @@ export function useAccounts() {
 export function useCreateAccount() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (body: Omit<Account, "id">) => {
+    mutationFn: async (body: Omit<Account, "id" | "display_order">) => {
       api<Account>(`${BASE_URL}/contributions/create/`, {
         method: "POST",
         body: JSON.stringify(body),

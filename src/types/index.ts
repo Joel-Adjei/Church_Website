@@ -186,11 +186,11 @@ export type Account = {
   channel_type: "momo" | "bank" | "card" | "other";
   account_name: string;
   account_number: string;
-  bank_name: string;
-  branch: string;
-  network: string;
-  currency: string;
-  instructions: string;
+  bank_name?: string;
+  branch?: string;
+  network?: string;
+  currency?: string;
+  instructions?: string;
   is_active: true;
-  display_order: number;
+  display_order?: number;
 };
