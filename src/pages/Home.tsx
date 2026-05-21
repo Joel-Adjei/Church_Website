@@ -466,8 +466,8 @@ export default function Home() {
                 <h3 className="font-display text-2xl text-ink leading-snug group-hover:text-primary transition-colors">
                   {n.title}
                 </h3>
-                <p className="mt-3 text-ink-muted line-clamp-3 overflow-hidden wrap-break-word">
-                  {new DOMParser().parseFromString(n.content, "text/html").body.textContent?.trim()}
+                <p className="mt-3 text-ink-muted line-clamp-3 overflow-hidden">
+                  {new DOMParser().parseFromString(n.content, "text/html").body.textContent?.replace(/ /g, " ").trim()}
                 </p>
                 <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-accent">
                   Read more <ArrowRight className="h-3.5 w-3.5" />
