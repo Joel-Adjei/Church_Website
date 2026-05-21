@@ -293,6 +293,8 @@ export default function Home() {
               <img
                 src={youtubeThumbnail(latest.video_link)}
                 alt={latest.title}
+                loading="lazy"
+                decoding="async"
                 className="absolute inset-0 h-full w-full object-cover z-0 transition-transform duration-500 group-hover:scale-105"
               />
             </Link>
@@ -364,6 +366,8 @@ export default function Home() {
             <img
               src={STORY_THUMB}
               alt="Our story"
+              loading="lazy"
+              decoding="async"
               className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-linear-to-t from-primary/70 via-primary/20 to-transparent" />
@@ -497,7 +501,7 @@ export default function Home() {
       </section>
 
       <section className="bg-primary  relative text-primary-foreground">
-        <img src={imgB} className="absolute z-0 top-0 left-0 w-full h-full object-cover" />
+        <img src={imgB} loading="lazy" decoding="async" className="absolute z-0 top-0 left-0 w-full h-full object-cover" />
         <div className="relative rounded bg-primary/50 py-12 px-4">
           <div className=" z-10  mx-auto max-w-7xl px-6 lg:px-10 py-16 grid gap-6 md:grid-cols-3 text-center">
             {[

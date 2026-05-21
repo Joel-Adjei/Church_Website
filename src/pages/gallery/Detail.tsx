@@ -63,6 +63,8 @@ export default function GalleryDetail({ viewID, toView }: { viewID?: string; toV
             <img
               src={img.image}
               alt={img.title || program.title}
+              loading="lazy"
+              decoding="async"
               className="w-full transition-transform duration-500 group-hover:scale-105"
             />
           </button>

@@ -49,6 +49,8 @@ export default function SeriesIndex() {
             src="https://images.unsplash.com/photo-1438032005730-c779502df39b?w=1600&q=80"
             className="h-full w-full object-cover object-center animate-ken-burns"
             alt="Sermon Series Hero"
+            fetchPriority="high"
+            decoding="async"
           />
           {/* Multi-layered elegant gradient overlays */}
           <div className="absolute inset-0 bg-gradient-to-b from-ink/30 via-ink/50 to-ink/90 z-10" />
@@ -117,6 +119,8 @@ export default function SeriesIndex() {
                       <img
                         src={seriesImage}
                         alt={s.title}
+                        loading="lazy"
+                        decoding="async"
                         className="absolute inset-0 h-full w-full object-cover transition-all duration-700 group-hover:scale-105 group-hover:opacity-40"
                       />
                       

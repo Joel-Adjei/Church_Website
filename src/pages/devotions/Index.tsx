@@ -44,7 +44,7 @@ export default function DevotionsIndex() {
         description="Read daily devotions from Grace Cathedral — scripture, reflection, and prayer to grow your faith each day."
       />
       <section className="relative overflow-hidden">
-        <img src={devotionsHero} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <img src={devotionsHero} alt="" fetchPriority="high" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-black/60" />
         <div className="relative mx-auto max-w-5xl px-6 lg:px-10 py-20 md:py-28">
           <div className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-accent font-semibold">

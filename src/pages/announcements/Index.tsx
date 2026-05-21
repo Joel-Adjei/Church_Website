@@ -21,6 +21,8 @@ export default function AnnouncementsIndex() {
             src={heroImg}
             className="h-full w-full object-cover object-center animate-in fade-in zoom-in-110 duration-1000 ease-out"
             alt="Hero Background"
+            fetchPriority="high"
+            decoding="async"
           />
           {/* Multi-layered overlay for depth and legibility */}
           <div className="absolute inset-0 bg-linear-to-b from-ink/30 via-ink/10 to-ink/70 z-10" />
