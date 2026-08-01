@@ -6,7 +6,7 @@ type AuthCtx = {
   user: AdminUser | null;
   isAuthenticated: boolean;
   loading: boolean;
-  login: (username: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<void>;
   logout: () => void;
 };
 
@@ -18,11 +18,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const BASE_URL = import.meta.env.VITE_SERVER_URL;
 
-  async function login(username: string, password: string) {
+  async function login(email: string, password: string) {
     setLoading(true);
     const { access, refresh } = await api<{ access: string; refresh: string }>(
       `${BASE_URL}/auth/jwt/create/`,
-      { method: "POST", body: JSON.stringify({ username, password }) },
+      { method: "POST", body: JSON.stringify({ email, password }) },
     );
     setToken(access);
     setRefreshToken(refresh);
