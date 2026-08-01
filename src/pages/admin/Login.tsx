@@ -11,7 +11,7 @@ import { Eye, EyeOff, LogIn } from "lucide-react";
 import { useSiteSetting } from "@/store/setting";
 
 const schema = z.object({
-  email: z.string().trim().min(1, "name is required"),
+  email: z.string().email().trim().min(1, "Email is required"),
   password: z.string().min(1, "Password is required"),
 });
 type FormValues = z.infer<typeof schema>;
@@ -52,8 +52,8 @@ export default function Login() {
 
         <form onSubmit={form.handleSubmit(onSubmit)} className="mt-8 space-y-4" noValidate>
           <div className="space-y-2">
-            <Label htmlFor="email">Name</Label>
-            <Input id="email" autoComplete="username" {...form.register("email")} />
+            <Label htmlFor="email">Email</Label>
+            <Input id="email" type="email" autoComplete="email" {...form.register("email")} />
             {form.formState.errors.email && (
               <p className="text-xs text-destructive">{form.formState.errors.email.message}</p>
             )}
@@ -74,7 +74,7 @@ export default function Login() {
                 className="absolute inset-y-0 right-0 flex items-center px-3 text-ink-muted hover:text-ink"
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
-                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                {!showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </div>
             {form.formState.errors.password && (
