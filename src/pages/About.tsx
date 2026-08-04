@@ -114,7 +114,7 @@ export default function About() {
         <div className="absolute z-0 bottom-0 w-full h-[70%] bg-linear-to-t from-background to-transparent " />
 
         <div className="relative z-10 mx-auto max-w-4xl px-6 lg:px-10  text-center">
-          <div className="w-60 bg-white mb-3 rounded-full mx-auto ">
+          <div className="w-60 bg-white mb-3 rounded-full overflow-hidden mx-auto ">
             <img
               src={siteSettings?.logo_url}
               alt={siteSettings?.church_name}
@@ -214,7 +214,13 @@ export default function About() {
             {leaders.map((p) => (
               <div key={p.name}>
                 <div className="aspect-[4/5] overflow-hidden rounded-2xl bg-muted">
-                  <img src={p.img} alt={p.name} loading="lazy" decoding="async" className="h-full w-full object-cover" />
+                  <img
+                    src={p.img}
+                    alt={p.name}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-full w-full object-cover"
+                  />
                 </div>
                 <h3 className="mt-5 font-display text-xl text-ink">{p.name}</h3>
                 <p className="text-sm text-accent font-medium">{p.role}</p>

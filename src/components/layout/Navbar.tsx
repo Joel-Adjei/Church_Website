@@ -169,7 +169,7 @@ export function Navbar() {
               </SheetHeader>
               <div className="h-16 border-b border-border flex items-center px-6">
                 <Link to="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-display">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full overflow-hidden bg-primary text-primary-foreground font-display">
                     <img
                       src={siteSettings?.logo_url}
                       alt={siteSettings?.church_name}
@@ -230,14 +230,14 @@ export function Navbar() {
           </Sheet>
 
           <Link to="/" className="flex items-center gap-2 group" onClick={() => setOpen(false)}>
-            <div className="flex h-full w-24 items-center justify-center  ">
+            <div className="flex h-full w-19 rounded-full overflow-hidden items-center justify-center  ">
               <img
                 src={siteSettings?.logo_url}
                 alt={siteSettings?.church_name}
                 className="size-full object-contain"
               />
             </div>
-            <span className="font-display text-xl tracking-tight text-ink">
+            <span className="font-display text-xl font-extrabold tracking-tight uppercase text-foreground group-hover:text-primary transition-colors">
               {siteSettings?.church_name ?? "Grace Cathedral"}
             </span>
           </Link>
